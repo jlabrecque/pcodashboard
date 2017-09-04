@@ -33,8 +33,6 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "email",                  limit: 100, default: "", null: false
     t.string   "username",               limit: 25
     t.string   "password_digest"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
     t.string   "encrypted_password",                              null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -47,6 +45,8 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.boolean  "admin"
     t.boolean  "pledge"
     t.boolean  "core"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
     t.index ["username"], name: "index_admin_users_on_username", using: :btree
@@ -69,8 +69,6 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "start_date"
     t.string   "end_date"
     t.string   "fund_id"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
     t.boolean  "closed",                    default: false, null: false
     t.datetime "closeddate"
     t.integer  "num_pledges",               default: 0
@@ -80,21 +78,24 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.float    "avgpledge",      limit: 24, default: 0.0
     t.float    "totalprogress",  limit: 24, default: 0.0
     t.float    "qtrprogress",    limit: 24, default: 0.0
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   create_table "campus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "campus_id"
     t.string   "campus_name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
     t.string   "street"
     t.string   "city"
     t.string   "state"
     t.string   "zip"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "check_ins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "checkin_id"
+    t.integer  "person_id"
     t.string   "checkin_time"
     t.string   "checkin_kind"
     t.string   "first_name"
@@ -104,7 +105,6 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "location"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-    t.integer  "person_id"
     t.index ["pco_id"], name: "index_check_ins_on_pco_id", using: :btree
   end
 
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20170829160544) do
 
   create_table "donations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "donation_id"
+    t.integer  "person_id"
     t.decimal  "amount_cents",        precision: 10
     t.string   "donation_created_at"
     t.string   "donation_updated_at"
@@ -146,7 +147,6 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "pco_id"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
-    t.integer  "person_id"
   end
 
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -169,12 +169,12 @@ ActiveRecord::Schema.define(version: 20170829160544) do
   create_table "geo_maps", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "pco_id"
     t.string   "campus_id"
+    t.integer  "person_id"
     t.string   "full_address"
     t.float    "latitude",     limit: 24
     t.float    "longitude",    limit: 24
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.integer  "person_id"
     t.index ["person_id"], name: "index_geo_maps_on_person_id", using: :btree
   end
 
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 20170829160544) do
   end
 
   create_table "mailchimplists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "person_id"
     t.string   "email_type"
     t.string   "lname"
     t.string   "fname"
@@ -229,13 +230,12 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "country"
     t.float    "longitude",     limit: 24
     t.float    "latitude",      limit: 24
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
     t.string   "email_address"
     t.string   "unique_id"
     t.string   "list_id"
     t.datetime "info_changed"
-    t.integer  "person_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "mccampaigns", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "last_name"
     t.string   "middle_name"
     t.string   "nickname"
+    t.string   "fullname"
     t.string   "email"
     t.string   "hphone"
     t.string   "mphone"
@@ -321,21 +322,20 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "last_attended"
     t.string   "first_donation"
     t.string   "last_donation"
+    t.string   "email_array"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.string   "fullname"
-    t.string   "email_array"
   end
 
-  create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "plid"
     t.string   "stid"
     t.string   "pldates"
     t.string   "pl_sort_date"
     t.string   "pl_updated_at"
+    t.integer  "service_type_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "service_type_id"
     t.index ["service_type_id"], name: "index_plans_on_service_type_id", using: :btree
   end
 
@@ -387,9 +387,9 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "campus_fd"
     t.string   "mailchimpapikey"
     t.string   "mailchimp_list"
-    t.string   "mc_status_fd",            limit: 25
-    t.string   "mc_cleanunsubaddress_fd", limit: 25
-    t.string   "mc_cleanunsubdate_fd",    limit: 25
+    t.string   "mc_status_fd"
+    t.string   "mc_cleanunsubaddress_fd"
+    t.string   "mc_cleanunsubdate_fd"
     t.string   "mailgun_api"
     t.string   "mailgun_url"
     t.string   "mailgun_domain"
@@ -397,15 +397,15 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "mailgun_pwd"
     t.string   "googlemaps_api"
     t.string   "admin_email"
-    t.string   "nexmo_url",               limit: 50
-    t.string   "nexmo_key",               limit: 50
-    t.string   "nexmo_secret",            limit: 50
+    t.string   "nexmo_url"
+    t.string   "nexmo_key"
+    t.string   "nexmo_secret"
     t.integer  "pullcount_max"
     t.integer  "rate_interval"
     t.integer  "exceptionbuffer"
     t.integer  "sleepbuffer"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "teammembers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -426,14 +426,6 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.datetime "updated_at",      null: false
     t.index ["person_id"], name: "index_teammembers_on_person_id", using: :btree
     t.index ["plan_id"], name: "index_teammembers_on_plan_id", using: :btree
-  end
-
-  create_table "visits", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "country"
-    t.datetime "visited_at"
-    t.decimal  "load_time",  precision: 10
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
   end
 
 end
