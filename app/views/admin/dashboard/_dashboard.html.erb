@@ -1,0 +1,31 @@
+<h1><center><%="PCO People Geo Distribution" %> </center></h1>
+
+
+<% @geo_array = [] %>
+<% @people_hash = {} %>
+<% loc_counter = 0 %>
+<% Person.all.each do |person| %>
+<%   @people_hash.store(person.pco_id,person.last_name)  %>
+<% end %>
+<% GeoMap.all.each do | geo | %>
+<%     if geo.campus_id == "na"# record is person %>
+<%      @geo_array << [geo.latitude, geo.longitude,@people_hash[geo.pco_id]] %>
+<%     else  #record is campus %>
+<%       campus = Campu.where(:campus_id => geo.campus_id)[0].campus_name %>
+<%       @geo_array << [geo.latitude, geo.longitude,campus] %>
+<%     end %>
+<% end %>
+
+
+
+<div id='geochart'></div>
+<% data_table = GoogleVisualr::DataTable.new %>
+<% data_table.new_column('number', 'Lat' )%>
+<% data_table.new_column('number', 'Lon' )%>
+<% data_table.new_column('string', 'Name') %>
+<% data_table.add_rows(@geo_array)%>
+
+<% opts   = { :height => 800, :showTip => true, :mapType => 'normal', :useMapTypeControl => true } %>
+
+<% @geochart = GoogleVisualr::Interactive::Map.new(data_table, opts)  %>
+<%= render_chart(@geochart, 'geochart') %>

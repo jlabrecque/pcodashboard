@@ -1,0 +1,10 @@
+<% settings = Setting.x %>
+<h3><%="PCO Field Data List" %> </h3>
+
+<% display = custom_tab_walker(settings.pcoauthtok,settings.pcoauthsec) %>
+
+<% display.each do |d| %>
+    <%= d %><br>
+<%end%>
+<br/>
+<hr />

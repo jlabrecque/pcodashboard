@@ -1,0 +1,2 @@
+class CampaignMetum < ApplicationRecord
+end

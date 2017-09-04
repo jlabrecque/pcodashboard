@@ -1,0 +1,15 @@
+<% settings = Setting.x %>
+<h3><%="PCO API Credentials" %> </h3>
+
+<% success,response = pcoapitest(settings.pcoauthtok,settings.pcoauthsec) %>
+
+<% if success %>
+  <h4><b>Successfully pulled <% response.count %> records</b>, which means the API Tokens are working!</h4>
+  <p>First record collected is below:</p>
+  <%= response["data"][0]["attributes"] %>
+<% else %>
+  <p>API Pull Failed! The error message we got back was: <%= response %></p>
+  <p>Please verify the PCO API Tokens were entered and saved in the app before continuing.</p>
+<% end %>
+<br/>
+<hr />

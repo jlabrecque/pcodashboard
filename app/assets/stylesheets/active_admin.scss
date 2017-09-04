@@ -1,0 +1,190 @@
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebar-width: 242px;
+
+// Active Admin's got SASS!
+@import "active_admin/mixins";
+@import "active_admin/base";
+
+// Overriding any non-variable SASS must be done after the fact.
+// For example, to change the default status-tag color:
+//
+//   .status_tag { background: #6090DB; }
+/* Primary stylesheet */
+
+/* Colors */
+$red: #c31618;
+$green: #94b26f;
+$light_green: #b6d491;
+$yellow: #f2dc87;
+$dark_brown: #332318;
+$light_brown: #4c2516;
+$white: #fff;
+
+
+img { border: none; }
+table { border-collapse: collapse; }
+th, td, caption {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+
+}
+.people_index {
+  width: 1000px;
+}
+
+.people_show {
+	font-family: "Verdana Lucida";
+	margin-left: 50px;
+	margin-right: 50px;
+}
+.people_show_header {
+font-family: "Verdana Lucida";
+	}
+.people_show_titles {
+	font-family: "Verdana Lucida";
+	width: 150px;
+	background: #EBF0FC;
+	float: left;
+	padding: 10px 10px 10px 10px; }
+
+  .pages_title {
+    	font-family: "Verdana Lucida";
+    	width: 150px;
+    	background: #EBF0FC;
+    	float: left;
+    	padding: 10px 10px 10px 10px; }
+
+.checkin_grid tr, th, td {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+}
+.checkin_grid_ids tr, th, td {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  width: 50px;
+  height: 30px;
+}
+.checkin_grid_names tr, th, td {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  width: auto !important;
+  height: 25px !important;
+}
+.checkin_grid_dates tr, th, td {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  width: 30px;
+  height: 30px;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+span.checkin_grid_dates.volunteer { background: darkseagreen; color: darkseagreen;}
+span.checkin_grid_dates.regular { background: cornflowerblue; color: cornflowerblue;}
+span.checkin_grid_dates.false { background: white; color:white;}
+
+span.donation_grid_dates.true { background: darkkhaki; color: darkkhaki;}
+span.donation_grid_dates.false { background: white; color:white;}
+
+.person_show_image {
+  max-width: 80px;
+  height:auto;
+  border-radius: 5%;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 12px;
+}
+.badge_image {
+  max-width: 200px;
+  height:auto;
+}
+
+#row1 {
+  width: 100%;
+    background-color: #fff;
+    margin: auto;
+}
+
+.peopleshowcolumn_header {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+}
+.peopleshowcolumn_content_prefix {
+  text-align: left;
+  font-weight: normal;
+  color: #efefef;
+  font-family: sans-serif;
+  font-size: 12pt;
+  margin-left: 15px;
+  width: 80px;
+}
+.peopleshowcolumn_content_indent {
+  text-align: left;
+  font-weight: normal;
+  color: grey;
+  font-family: sans-serif;
+  font-size: 11pt;
+  margin-left: 20px;
+  width: 80px;
+}
+.peopleshowcolumn_content {
+  text-align: right;
+  font-weight: normal;
+  color: #484e53;
+  font-family: sans-serif;
+  font-size: 14pt;
+  margin-left: 15px;
+}
+.peopleshowcolumn {
+  border-style: solid;
+  border-color: grey;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 230px;
+  float: left;
+  height: 300px;
+  background-color: #a97878;
+
+}
+.peopleshowcolumn_serving {
+  background-color: #b2b7ab !important;
+}
+.peopleshowcolumn_groups {
+  background-color: #FEAE8C !important;
+}
+.peopleshowcolumn_people {
+  background-color: #799AD9 !important;
+}
+.peopleshowcolumn_mc {
+  background-color: #b5ab9f !important;
+}
+
+
+
+.personthumbnail {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#clear {
+  clear: both;
+}
+
+body.active_admin #collection_selection_toggle_panel {
+  display: none
+}

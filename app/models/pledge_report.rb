@@ -1,0 +1,2 @@
+class PledgeReport < ApplicationRecord
+end

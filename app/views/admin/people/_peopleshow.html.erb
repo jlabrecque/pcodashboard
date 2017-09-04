@@ -1,0 +1,150 @@
+
+<% @page_title = "Show Person" %>
+<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<% pid = @person[:pco_id] %>
+<% id = @person[:id] %>
+<div id="row1">
+  <div class="peopleshowcolumn">
+    <% if !@person.people_thumbnail.nil? %>
+        <%= image_tag(@person.people_thumbnail, :alt => "thumbnail", :class => "person_show_image") %>
+    <% else %>
+        <%= image_tag('no_photo_thumbnail_gray.svg', :alt => "thumbnail", :class => "person_show_image") %>
+    <% end %>
+    </br></br>
+    <span class="peopleshowcolumn_content_prefix">PCO_id:  <%=  link_to @person.pco_id, @person.peopleapp_link %></br></span>
+    <span class="peopleshowcolumn_content_prefix"><%=  link_to "#{@person.email}", "mailto:"+@person.email  %></br></span>
+    <span class="peopleshowcolumn_content_prefix"><%= !@person.mphone.nil? ?  "#{@person.mphone}" : "Ph:  " %></br></span>
+    <span class="peopleshowcolumn_content_prefix">Birthdate: <%= !@person.birthdate.nil? ? @person.birthdate : " " %></br></span>
+    <% !@person.city.nil? ? city = @person.city : city = "" %>
+    <span class="peopleshowcolumn_content_prefix">Lives in: <%= city %></span>
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_people">
+    <p class="peopleshowcolumn_header">Member Status</p>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Campus:</span>
+        <span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span>
+    </p>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Status:</span>
+        <span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span>
+    </p>
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_serving">
+        <p class="peopleshowcolumn_header">Serving</p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Last Served:</span>
+            <span class="peopleshowcolumn_content"></span>
+        </p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Service Roles:</br></span>
+          <%   positions = [] %>
+            <% @person.teammembers.each do |p| %>
+              <%     positions << p.position %>
+            <% end %>
+            <%   positions.uniq.first(8).each do |role| %>
+                  <span class="peopleshowcolumn_content_indent"><%= role %></br></span>
+            <% end %>
+
+            <span class="peopleshowcolumn_content"></span>
+        </p>
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_groups">
+        <p class="peopleshowcolumn_header">Groups</p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Member of:</span>
+        </p>
+        <% if @person.ingroups.empty? %>
+            <span class="peopleshowcolumn_content_indent">n/a</span>
+        <% else %>
+            <% @person.ingroups.each do |group| %>
+                <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
+            <% end %>
+        <% end %>
+        <br/>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Group Leader:</span>
+        </p>
+        <% leading = @person.group_memberships.where(:leader => 1) %>
+        <% if leading.empty? %>
+            <span class="peopleshowcolumn_content_indent">n/a</span>
+        <% else %>
+            <%  leading.each do |leads| %>
+              <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
+            <% end %>
+        <% end %>
+
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_mc">
+        <p class="peopleshowcolumn_header">Communication</p>
+        <% if Mailchimplist.where(:email_address => @person.email).empty? %>
+        <%     open_rate = "" %>
+        <%     click_rate = "" %>
+        <% else %>
+        <%     mailchimpstats = Mailchimplist.where(:email_address => @person.email) %>
+        <%     click_rate = mailchimpstats[0].click_rate %>
+        <%     open_rate = mailchimpstats[0].open_rate %>
+        <% end  %>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">MC Open Rate:</span>
+            <span class="peopleshowcolumn_content"><%= open_rate %> %</span>
+        </p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">MC Click Rate:</span>
+            <span class="peopleshowcolumn_content"><%= click_rate %> %</span>
+        </p>
+  </div>
+  <div id="clear"></div>
+</div>
+
+
+
+
+<div class="people_show">
+
+
+  </br></br></br></br></br>
+
+            <% @checkincal = checkin_grid(pid) %>
+            <% @donationcal = donation_grid(pid) %>
+            <% @servingcal = [] %>
+            <% @groupscal = [] %>
+
+            <% data_table_checkin = GoogleVisualr::DataTable.new         %>
+            <%     data_table_checkin.new_column('date'  , 'Date')      %>
+            <%     data_table_checkin.new_column('number', 'Vol/Att')   %>
+            <%     data_table_checkin.add_rows(@checkincal)             %>
+            <% data_table_donation = GoogleVisualr::DataTable.new       %>
+            <%     data_table_donation.new_column('date'  , 'Date')     %>
+            <%     data_table_donation.new_column('number', 'Vol/Att')  %>
+            <%     data_table_donation.add_rows(@donationcal)           %>
+            <% data_table_donation = GoogleVisualr::DataTable.new       %>
+            <%     data_table_donation.new_column('date'  , 'Date')     %>
+            <%     data_table_donation.new_column('number', 'Vol/Att')  %>
+            <%     data_table_donation.add_rows(@servingcal)           %>
+            <% data_table_donation = GoogleVisualr::DataTable.new       %>
+            <%     data_table_donation.new_column('date'  , 'Date')     %>
+            <%     data_table_donation.new_column('number', 'Vol/Att')  %>
+            <%     data_table_donation.add_rows(@groupscal)           %>
+
+            <%     opts   = { :title => "Check-Ins", :width => 800, :height => 300, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } } %>
+            <%     @chart_checkin = GoogleVisualr::Interactive::Calendar.new(data_table_checkin, opts) %>
+
+            <%     opts   = { :title => "Donations", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+            <%     @chart_donation = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
+
+            <%     opts   = { :title => "Serving", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+            <%     @chart_serving = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
+
+            <%     opts   = { :title => "Groups**", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+            <%     @chart_groups = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
+
+  <div id='chart' style="height: auto;"></div>
+  <%= render_chart @chart_checkin, 'chart' %>
+  <div id='chart2'></div>
+  <%= render_chart @chart_donation, 'chart2' %>
+  <div id='chart3'></div>
+  <%= render_chart @chart_serving, 'chart3' %>
+  <div id='chart4'></div>
+  <%= render_chart @chart_groups, 'chart4' %>

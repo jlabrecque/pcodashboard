@@ -1,0 +1,3 @@
+#!/bin/bash
+export APPROOT="/var/www"
+export RAILSROOT="/root/.rbenv/shims/"

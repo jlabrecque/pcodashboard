@@ -1,0 +1,56 @@
+
+<% @page_title = "All People" %>
+
+  <span style="background: darkseagreen;">______</span><span style="background: #fff;"> = Volunteered</span><span style="background: cornflowerblue;margin-left:20px;">______</span><span style="background: #fff;"> = Attended</span>
+
+      <table class="checkin_grid" summary="Person list">
+        <% @calendar,lastsunday = get_calendar() %>
+         <tr>
+           <th class="checkin_grid_ids">PCO ID</th>
+           <th class="checkin_grid_names">Name</th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 119).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 112).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 105).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 98).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 91).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 84).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 77).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 70).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 63).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 56).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 49).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 42).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 35).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 28).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 21).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 14).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 7).strftime("%m/%d") %></th>
+           <th class="checkin_grid_dates"><%= (lastsunday.to_date - 0).strftime("%m/%d") %></th>
+         </tr>
+         <% @people.each do |person|%>
+         <% @calendar,lastsunday = get_calendar() %>
+         <% stuff_checkins(person.pco_id,@calendar) %>
+         <tr>
+           <td  class="checkin_grid_ids"><%=  link_to person.pco_id, person.peopleapp_link %></td>
+           <td  class="checkin_grid_names"><%= link_to(person.first_name + " " + person.last_name, admin_person_path(person), :class => 'action show') %></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 119).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 112).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 105).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 98).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 91).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 84).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 77).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 70).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 63).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 56).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 49).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 42).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 35).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 28).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 21).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 14).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 7).strftime("%Y%m%d")][:attend])%></td>
+            <td class="checkin_grid_dates"><%= ccolor_status(@calendar[(lastsunday.to_date - 0).strftime("%Y%m%d")][:attend])%></td>
+         </tr>
+         <% end%>
+      </table>

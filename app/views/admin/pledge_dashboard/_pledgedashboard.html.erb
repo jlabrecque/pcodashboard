@@ -1,0 +1,44 @@
+
+
+<h1><center><%="Total Open Campaign Progress" %> </center></h1>
+<% stack = dashboard_stack() %>
+<%= column_chart stack, stacked: false, library: {colors: ["#D80A5B", "#21C8A9", "#F39C12", "#A4C400"]} %>
+
+
+
+<h1><center><%="Campaign Detail" %> </center></h1>
+
+<div id='tablechart'></div>
+
+<% data_table = GoogleVisualr::DataTable.new %>
+<% data_table.new_column('string'  , 'Campaign') %>
+<% data_table.new_column('string'  , 'Start') %>
+<% data_table.new_column('number' , 'TotalCommitted') %>
+<% data_table.new_column('number' , 'NumPledges') %>
+<% data_table.new_column('number' , 'AvgPledge') %>
+<% data_table.new_column('number' , 'Progress') %>
+<% data_table.new_column('number' , '%Progress') %>
+<% row_counter = 0 %>
+<% Campaign.where(:closed => 0).each do |campaign| %>
+     <% campaign.totalcommitted == 0 ? percentprogress = 0.00 : percentprogress = campaign.totalprogress/campaign.totalcommitted %>
+     <% data_table.add_rows(1) %>
+     <% data_table.set_cell(row_counter, 0, campaign.campaign_name ) %>
+     <% data_table.set_cell(row_counter, 1, campaign.start_date) %>
+     <% data_table.set_cell(row_counter, 2, campaign.totalcommitted  ) %>
+     <% data_table.set_cell(row_counter, 3, campaign.num_pledges  ) %>
+     <% data_table.set_cell(row_counter, 4, campaign.avgpledge  ) %>
+     <% data_table.set_cell(row_counter, 5, campaign.totalprogress  ) %>
+     <% data_table.set_cell(row_counter, 6, percentprogress * 100 ) %>
+     <% row_counter += 1 %>
+<% end %>
+<% options = { :width => 1200, :showRowNumber => true } %>
+
+<% formatter = GoogleVisualr::NumberFormat.new( { :prefix => '$', :negativeColor => 'red', :negativeParens => true } ) %>
+<% formatter.columns(2,5) %>
+<% data_table.format(formatter) %>
+<% formatter = GoogleVisualr::NumberFormat.new( { :suffix => '%', :negativeColor => 'red', :negativeParens => true } ) %>
+<% formatter.columns(6) %>
+<% data_table.format(formatter) %>
+
+<% @chart1 = GoogleVisualr::Interactive::Table.new(data_table, options)  %>
+<%= render_chart(@chart1, 'tablechart') %>

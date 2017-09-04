@@ -1,0 +1,37 @@
+#!/bin/bash
+
+LOCALROOT="/var/pledge"
+REMOTEROOT="/var/www"
+CONTROLLERS="/app/controllers"
+MODELS="/app/models"
+
+rm $LOCALROOT/$CONTROLLERS/access_controller.rb
+rm $LOCALROOT/$CONTROLLERS/admin_user.rb
+rm $LOCALROOT/$CONTROLLERS/campaigns_controller.rb
+rm $LOCALROOT/$CONTROLLERS/donations_controller.rb
+rm $LOCALROOT/$CONTROLLERS/funds_controller.rb
+rm $LOCALROOT/$CONTROLLERS/people_controller.rb
+rm $LOCALROOT/$CONTROLLERS/pledges_controller.rb
+rm $LOCALROOT/$MODELS/campaign.rb
+rm $LOCALROOT/$MODELS/donation.rb
+rm $LOCALROOT/$MODELS/fund.rb
+rm $LOCALROOT/$MODELS/person.rb
+rm $LOCALROOT/$MODELS/pledge.rb
+rm $LOCALROOT/config/database.yml
+rm $LOCALROOT/db/schema.rb
+rm $LOCALROOT/lib/calendar_methods.rb
+
+ln -s $REMOTEROOT/$CONTROLLERS/access_controller.rb $LOCALROOT/$CONTROLLERS/access_controller.rb
+ln -s $REMOTEROOT/$CONTROLLERS/campaigns_controller.rb  $LOCALROOT/$CONTROLLERS/campaigns_controller.rb
+ln -s $REMOTEROOT/$CONTROLLERS/donations_controller.rb $LOCALROOT/$CONTROLLERS/donations_controller.rb
+ln -s $REMOTEROOT/$CONTROLLERS/funds_controller.rb $LOCALROOT/$CONTROLLERS/funds_controller.rb
+ln -s $REMOTEROOT/$CONTROLLERS/people_controller.rb $LOCALROOT/$CONTROLLERS/people_controller.rb
+ln -s $REMOTEROOT/$CONTROLLERS/pledges_controller.rb $LOCALROOT/$CONTROLLERS/pledges_controller.rb
+ln -s $REMOTEROOT/$MODELS/campaign.rb $LOCALROOT/$MODELS/campaign.rb
+ln -s $REMOTEROOT/$MODELS/donation.rb $LOCALROOT/$MODELS/donation.rb
+ln -s $REMOTEROOT/$MODELS/fund.rb $LOCALROOT/$MODELS/fund.rb
+ln -s $REMOTEROOT/$MODELS/person.rb $LOCALROOT/$MODELS/person.rb
+ln -s $REMOTEROOT/$MODELS/pledge.rb $LOCALROOT/$MODELS/pledge.rb
+ln -s $REMOTEROOT/config/database.yml $LOCALROOT/config/database.yml
+ln -s $REMOTEROOT/db/schema.rb $LOCALROOT/db/schema.rb
+ln -s $REMOTEROOT/lib/calendar_methods.rb $LOCALROOT/lib/calendar_methods.rb

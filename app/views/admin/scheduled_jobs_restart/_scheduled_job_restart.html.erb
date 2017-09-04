@@ -1,0 +1,17 @@
+
+<% @page_title = "Restarting Crono Scheduled Jobs, based on latest settings" %>
+
+<h2>Clearing all current Cron dB entries</h2>
+<span>Output:
+    <% if CronoJob.count > 0 %>
+    <%     CronoJob.delete_all %>
+    <%=   "All CronoJob records wiped" %>
+    <% end %>
+</span>
+
+<h2>Restarting Cron process</h2>
+<span>Output:
+
+    <% status = %x(bundle exec crono restart RAILS_ENV=development) %>
+    <%= status %>
+</span>
