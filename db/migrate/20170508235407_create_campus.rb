@@ -8,9 +8,16 @@ def self.up
     t.string "city"
     t.string "state"
     t.string "zip"
-
     t.timestamps
   end
+  main = Campu.create(
+    :campus_id       => "000000",
+    :campus_name     =>  "Main Campus",
+    :street          => "",
+    :city            => "",
+    :state           => "",
+    :zip             => ""
+  )
 end
 def self.down
   drop_table :campus

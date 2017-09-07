@@ -96,7 +96,7 @@ end
 def find_person_campus(pco_id)
   script_name="people_dbload.rb/campus"
   #### Field Definition SPECIFIC to Community Christian PCO instance custom tabs
-  target_fd = "66753"
+  target_fd = @settings.campus_fd
   # Gets single person data
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
@@ -163,7 +163,7 @@ def funds()
 end
 
 def events()
-  script_name="checkins_dbload.rb"
+  script_name="events_dbload.rb"
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
     events_unp = api.check_ins.v2.events.get()
@@ -176,6 +176,22 @@ def events()
   return JSON.parse(events_unp.to_json)
 
 end
+
+def eventtimes(page_size,offset_index)
+  script_name="eventtimes_dbload.rb"
+  api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+  begin
+    eventtimes_unp = api.check_ins.v2.event_times.get(per_page: page_size,offset: offset_index, include: 'event')
+  rescue PCO::API::Errors::BaseError => error
+    $retry_switch = exception_pause(error,script_name)
+    retry if $retry_switch == 1
+  end
+  $pullcount += 1
+  rate_check()
+  return JSON.parse(eventtimes_unp.to_json)
+end
+
+
 
 def service_type()
   script_name="volunteer_dbload.rb"
@@ -209,7 +225,7 @@ def check(checkid)
   script_name="checkins_dbload.rb"
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
-    check_unp = api.check_ins.v2.check_ins[checkid].get(include: 'location,event,person')
+    check_unp = api.check_ins.v2.check_ins[checkid].get(include: 'location,event,event_times,person')
   rescue PCO::API::Errors::BaseError => error
     $retry_switch = exception_pause(error,script_name)
     retry if $retry_switch == 1
@@ -280,16 +296,16 @@ end
 def campus_load()
   script_name="campus_dbload.rb"
   # Gets all service types (should be one pull)
-  api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
-  begin
-    service_type_unp = api.services.v2.tabs.get()
-  rescue PCO::API::Errors::BaseError => error
-    $retry_switch = exception_pause(error,script_name)
-    retry if $retry_switch == 1
+  if !@settings.campus_fd.empty?
+      api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+      begin
+        campus_unp = api.people.v2.field_definitions[@settings.campus_fd].field_options.get()
+      rescue PCO::API::Errors::BaseError => error
+        $retry_switch = exception_pause(error,script_name)
+        retry if $retry_switch == 1
+      end
+      return JSON.parse(campus_unp.to_json)
   end
-  $pullcount += 1
-  rate_check()
-  return JSON.parse(service_type_unp.to_json)
 end
 
 #Geocoding methods

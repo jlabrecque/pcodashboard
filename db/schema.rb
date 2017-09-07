@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829160544) do
+ActiveRecord::Schema.define(version: 20170904190629) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -33,11 +33,11 @@ ActiveRecord::Schema.define(version: 20170829160544) do
     t.string   "email",                  limit: 100, default: "", null: false
     t.string   "username",               limit: 25
     t.string   "password_digest"
-    t.string   "encrypted_password",                              null: false
+    t.string   "encrypted_password"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -94,17 +94,20 @@ ActiveRecord::Schema.define(version: 20170829160544) do
   end
 
   create_table "check_ins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "checkin_id"
+    t.integer  "eventtime_id"
+    t.string   "eventtime_id_pco"
+    t.string   "checkin_id_pco"
     t.integer  "person_id"
     t.string   "checkin_time"
+    t.string   "checkin_updated_at"
     t.string   "checkin_kind"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "pco_id"
-    t.string   "event"
     t.string   "location"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["eventtime_id"], name: "index_check_ins_on_eventtime_id", using: :btree
     t.index ["pco_id"], name: "index_check_ins_on_pco_id", using: :btree
   end
 
@@ -150,11 +153,25 @@ ActiveRecord::Schema.define(version: 20170829160544) do
   end
 
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "event_id"
+    t.string   "event_id_pco"
     t.string   "event_name"
     t.string   "event_updated_at"
+    t.string   "frequency"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+  end
+
+  create_table "eventtimes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "event_id"
+    t.string   "event_id_pco"
+    t.string   "eventtime_id_pco"
+    t.string   "starts_at"
+    t.integer  "guest_count"
+    t.integer  "regular_count"
+    t.integer  "volunteer_count"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["event_id"], name: "index_eventtimes_on_event_id", using: :btree
   end
 
   create_table "funds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

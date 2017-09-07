@@ -55,6 +55,12 @@ LOGGER.info("script to keep within the limit")
 LOGGER.info("=============================================================")
 LOGGER.info("Last offset processed: #{offset_index}")
 
+#Creating new tracking meta
+meta = Metum.create(:modeltype => "donations",
+:total_created => 0,
+:last_id_imported => 0,
+:last_offset => offset_index)
+
 while !next_check.nil?
   don = donations(page_size,offset_index)
   next_check = don["links"]["next"]
@@ -123,6 +129,11 @@ while !next_check.nil?
     end
     last_index = offset_index
     offset_index += page_size
+    meta = Metum.update(meta.id,
+    :total_created => totcreated,
+    :total_updated => totupdated,
+    :total_processed => totcreated + totupdated,
+    :last_offset => offset_index)
 end
 LOGGER.info("** All records processed **")
 LOGGER.info("Total created: #{totcreated}")
@@ -130,11 +141,6 @@ LOGGER.info("=============================================================")
 LOGGER.info("Script ended at #{datestamp}")
 LOGGER.info("=============================================================")
 #open_log.close
-#Write DonationMetum record
-postdonationmeta = Metum.create(
-  :modeltype => "donations",
-  :total_created => totcreated,
-  :last_id_imported => lastdonationid,
-  :last_offset => last_index)
+
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver

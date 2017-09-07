@@ -35,23 +35,25 @@ ev = events()
     inner_loop_index = 0
     # per event loop
     ev["data"].each do |u|
-        evcheck = Event.where(:event_id => u["id"])
+        evcheck = Event.where(:event_id_pco => u["id"])
         if !evcheck.exists?
           puts "Creating new record"
           # stuff the people array with required field data
             eventrecord = Event.create(
-                :event_id  => u["id"],
+                :event_id_pco  => u["id"],
                 :event_name  => u["attributes"]["name"],
-                :event_updated_at  => u["attributes"]["updated_at"]
+                :event_updated_at  => u["attributes"]["updated_at"],
+                :frequency        =>  u["attributes"]["frequency"]
             )
             totcreated += 1
         elsif  !(evcheck[0].event_updated_at == u["attributes"]["updated_at"])
           puts "Updating existing record"
           # stuff the people array with required field data
           eventrecord = Event.update(
-          :event_id  => u["id"],
-          :event_name  => u["attributes"]["name"],
-          :event_updated_at  => u["attributes"]["updated_at"]
+                :event_id_pco  => u["id"],
+                :event_name  => u["attributes"]["name"],
+                :event_updated_at  => u["attributes"]["updated_at"],
+                :frequency        =>  u["attributes"]["frequency"]
           )
         else
           puts "*** No action ***"

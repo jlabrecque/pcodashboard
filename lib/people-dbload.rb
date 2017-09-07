@@ -14,6 +14,7 @@ totprocessed = 0
 totcreated = 0
 totupdated = 0
 next_check = 0
+last_offset_index = 0
 $pullcount = 0
 datestamp = Time.now
 set_endtime()
@@ -54,18 +55,22 @@ LOGGER.info("counter, and if approach the rate limit, will sleep the")
 LOGGER.info("script to keep within the limit")
 LOGGER.info("=============================================================")
 
-#OUTER LOOP - per page size (ie 25, 50 records)
+#Creating new tracking meta
+meta = Metum.create(:modeltype => "people",
+:total_created => 0,
+:last_id_imported => 0,
+:last_offset => offset_index)
+
 #if next exists (not at end)...
   while !next_check.nil?
     # pull groups of records
     ppl = people(page_size,offset_index)
     next_check = ppl["links"]["next"]
-    last_offset_index = offset_index
-    offset_index += page_size
     # per person loop
     ppl["data"].each do |u|
     pco_id = u["id"]
       prs = person(pco_id)
+      emlarray = []
       camp = find_person_campus(pco_id)
       fname = u["attributes"]["first_name"]
       lname = u["attributes"]["last_name"]
@@ -73,6 +78,15 @@ LOGGER.info("=============================================================")
       personcheck = Person.where(:pco_id => pco_id)
         # Populate variables
         email = JSON.parse(prs["included"].select {|k| k["type"] == "Email"}.to_json).select { |j| j["attributes"]["location"] == "Home"}[0].nil? ? "" : JSON.parse(prs["included"].select {|k| k["type"] == "Email"}.to_json).select { |j| j["attributes"]["location"] == "Home"}[0]["attributes"]["address"]
+        if !prs.nil?
+            prs["included"].each do |data|
+              if data["type"] == "Email"
+                  emlentry = {"address" => data["attributes"]["address"], "location" => data["attributes"]["location"], "primary" => data["attributes"]["primary"]}
+                  emlarray << emlentry
+              end
+            end
+        end
+
         ## Check if phone is nil, and if so, set to "". If not, grab mobile and home info
         phone = JSON.parse(prs["included"].select {|k| k["type"] == "PhoneNumber"}.to_json)
         if !phone.select {|m| m["attributes"]["location"] == "Mobile"}.empty?
@@ -105,7 +119,7 @@ LOGGER.info("=============================================================")
 ## If exists
       if !personcheck.exists?
         # pco_id not in db, so use create
-        LOGGER.info("Creating new record for #{fname} #{lname} Offset: #{last_offset_index}")
+        LOGGER.info("Creating new record for #{fname} #{lname} Offset: #{offset_index}")
         # stuff the people array with required field data
         personnew = Person.create(
         :pco_id            => pco_id,
@@ -115,6 +129,7 @@ LOGGER.info("=============================================================")
         :nickname          => prs["data"]["attributes"]["nickname"],
         :fullname          => fullname,
         :email             => email,
+        :email_array       => emlarray,
         :hphone            => @hphone,
         :mphone            => @mphone_number,
         :carrier           => @mphone_carrier,
@@ -135,7 +150,7 @@ LOGGER.info("=============================================================")
         totcreated += 1
       elsif    !(personcheck[0].pco_updated_at == prs["data"]["attributes"]["updated_at"])
         # exists, but not uptodate
-          LOGGER.info("Updating record for #{fname} #{lname}  Offset: #{last_offset_index}")
+          LOGGER.info("Updating record for #{fname} #{lname}  Offset: #{offset_index}")
       # stuff the people array with required field data
           personup = Person.update(personcheck[0].id,
           :pco_id            => pco_id,
@@ -145,6 +160,7 @@ LOGGER.info("=============================================================")
           :nickname          => prs["data"]["attributes"]["nickname"],
           :fullname          => fullname,
           :email             => email,
+          :email_array       => emlarray,
           :hphone            => @hphone,
           :mphone            => @mphone_number,
           :carrier           => @mphone_carrier,
@@ -164,11 +180,18 @@ LOGGER.info("=============================================================")
           )
           totupdated += 1
       else
-          LOGGER.info("** No action for #{fname} #{lname}  Offset: #{last_offset_index} **")
+          LOGGER.info("** No action for #{fname} #{lname}  Offset: #{offset_index} **")
       end
       high_pco_count = prs["data"]["id"]
       totprocessed += 1
   end
+  last_offset_index = offset_index
+  offset_index += page_size
+  meta = Metum.update(meta.id,
+  :total_created => totcreated,
+  :total_updated => totupdated,
+  :total_processed => totcreated + totupdated,
+  :last_offset => last_offset_index)
 end
 LOGGER.info("Total processed: #{totprocessed}")
 LOGGER.info("Total members: #{totmembers}")
@@ -176,13 +199,5 @@ LOGGER.info("Total created: #{totcreated}")
 LOGGER.info("Total updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
-#Write peoplemeta record
-peoplemeta = Metum.create(
-    :modeltype => "people",
-    :last_offset => last_offset_index,
-    :last_id_imported => high_pco_count,
-    :total_processed => totprocessed,
-    :total_created => totcreated,
-    :total_updated => totupdated)
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
