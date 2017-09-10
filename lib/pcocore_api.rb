@@ -43,6 +43,11 @@ def admin_email()
   return @eml_address
 end
 
+def campus_fd()
+  @campus_fd = @settings.campus_fd
+  return @campus_fd
+end
+
 # People Pull
 def people(page_size,offset_index)
   $retry_switch = 1
@@ -58,7 +63,6 @@ def people(page_size,offset_index)
   $pullcount += 1
   rate_check()
   return JSON.parse(people_unp.to_json)
-
 end
 
 def person(pco_id)
@@ -92,31 +96,37 @@ def find_person_email(target_email)
     return target_id
 end
 
-
 def find_person_campus(pco_id)
-  script_name="people_dbload.rb/campus"
-  #### Field Definition SPECIFIC to Community Christian PCO instance custom tabs
-  target_fd = @settings.campus_fd
-  # Gets single person data
-  api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
-  begin
-    person_unp = api.people.v2.people[pco_id].field_data.get(include: 'field_definition')
-  rescue PCO::API::Errors::BaseError => error
-    $retry_switch = exception_pause(error,script_name)
-    retry if $retry_switch == 1
-
-  end
-  fd = JSON.parse(person_unp.to_json)["data"]
-  camp = ""
-    fd.each do |f|
-    fd_id = f["relationships"]["field_definition"]["data"]["id"]
-      if fd_id == target_fd
-        camp = f["attributes"]["value"]
+  if !@settings.campus_fd.empty?
+      script_name="people_dbload.rb/campus"
+      #### Field Definition SPECIFIC to Community Christian PCO instance custom tabs
+      target_fd = @settings.campus_fd
+      # Gets single person data
+      api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+      begin
+        person_unp = api.people.v2.people[pco_id].field_data.get(include: 'field_definition')
+      rescue PCO::API::Errors::BaseError => error
+        $retry_switch = exception_pause(error,script_name)
+        retry if $retry_switch == 1
       end
-    end
-  $pullcount += 1
-  rate_check()
-  return camp
+      fd = JSON.parse(person_unp.to_json)["data"]
+      campus = ""
+        fd.each do |f|
+        fd_id = f["relationships"]["field_definition"]["data"]["id"]
+          if fd_id == target_fd
+            campus = f["attributes"]["value"]
+          end
+        end
+      if !campus.empty? #to determine id value
+          c = Campu.where(:campus_name => campus)
+          campus_id = c[0].id
+      end
+      return campus,campus_id
+  else  #no defined fd, use single default value
+    campus = "Main Campus"
+    campus_id = 1
+    return campus,campus_id
+  end
 end
 
 # PCO API pull of PCO Giving / People / Donations

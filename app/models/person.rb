@@ -8,10 +8,11 @@ class Person < ApplicationRecord
   has_many :teammembers
   has_many :mailchimplists
   has_one :geo_map
+  has_one :campu
 
   serialize :email_array
   scope :active, lambda { where(:people_status => "active")}
-  scope :inactive, lambda { where(:people_status => "inactive")}  
+  scope :inactive, lambda { where(:people_status => "inactive")}
   scope :sorted, lambda { order("pco_id ASC") }
   scope :newest_first, lambda { order("created_at DESC") }
   scope :campbell, -> { where(:campus => "Campbell")}

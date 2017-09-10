@@ -6,7 +6,7 @@ ActiveAdmin.register Campu, as: "Campus" do
    actions :index, :update, :edit
 
 index do
-  column :campus_id
+  column :campus_id_pco
   column :campus_name
   column :street
   column :city

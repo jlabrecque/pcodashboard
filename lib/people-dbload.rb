@@ -55,6 +55,42 @@ LOGGER.info("counter, and if approach the rate limit, will sleep the")
 LOGGER.info("script to keep within the limit")
 LOGGER.info("=============================================================")
 
+LOGGER.info("Adding/Updating Campus records...")
+if !campus_fd().empty? #Multicampus configured Field Def
+      field_options = campus_load()
+      field_options["data"].each do |fo|
+      campusexists = Campu.where(:campus_id_pco => fo["id"] )
+        if campusexists.empty? #create
+            LOGGER.info("Creating Campus: #{fo["attributes"]["value"]}")
+            Campu.create(
+            :campus_id_pco    =>  fo["id"],
+            :campus_name  =>  fo["attributes"]["value"]
+            )
+            totcreated += 1
+        else #update
+            LOGGER.info("Updating Campus: #{fo["attributes"]["value"]}")
+            Campu.update(campusexists[0]["id"],
+            :campus_id_pco    =>  fo["id"],
+            :campus_name  =>  fo["attributes"]["value"]
+            )
+            totupdated += 1
+        end
+      end
+      #remove default Main Campus
+      xcampus = Campu.where(:campus_id_pco => "000000")
+      if xcampus.count > 0
+        LOGGER.info("Updating Campus: #{fo["attributes"]["value"]}")
+
+        puts "Removing default campus"
+        xcampus[0].delete
+      end
+end
+LOGGER.info("Campuses Created: #{totcreated}")
+LOGGER.info("Campuses Updated: #{totupdated}")
+LOGGER.info("=============================================================")
+LOGGER.info("Adding/Updating People records...")
+totcreated = 0
+totupdated = 0
 #Creating new tracking meta
 meta = Metum.create(:modeltype => "people",
 :total_created => 0,
@@ -71,7 +107,7 @@ meta = Metum.create(:modeltype => "people",
     pco_id = u["id"]
       prs = person(pco_id)
       emlarray = []
-      camp = find_person_campus(pco_id)
+      @campus_name,@campus_id = find_person_campus(pco_id)
       fname = u["attributes"]["first_name"]
       lname = u["attributes"]["last_name"]
       fullname = "#{fname} #{lname}"
@@ -140,7 +176,8 @@ meta = Metum.create(:modeltype => "people",
         :city              => city,
         :state             => state,
         :zip               => zip,
-        :campus            => camp,
+        :campus            => @campus_name,
+        :campus_id         => @campus_id,
         :peopleapp_link    => peopleapp_link,
         :people_thumbnail  => prs["data"]["attributes"]["avatar"],
         :people_status     => prs["data"]["attributes"]["status"],
@@ -171,7 +208,8 @@ meta = Metum.create(:modeltype => "people",
           :city              => city,
           :state             => state,
           :zip               => zip,
-          :campus            => camp,
+          :campus            => @campus_name,
+          :campus_id         => @campus_id,
           :peopleapp_link    => peopleapp_link,
           :people_thumbnail  => prs["data"]["attributes"]["avatar"],
           :people_status     => prs["data"]["attributes"]["status"],
@@ -193,10 +231,10 @@ meta = Metum.create(:modeltype => "people",
   :total_processed => totcreated + totupdated,
   :last_offset => last_offset_index)
 end
-LOGGER.info("Total processed: #{totprocessed}")
-LOGGER.info("Total members: #{totmembers}")
-LOGGER.info("Total created: #{totcreated}")
-LOGGER.info("Total updated: #{totupdated}")
+LOGGER.info("Total People processed: #{totprocessed}")
+LOGGER.info("Total Members: #{totmembers}")
+LOGGER.info("Total People Created: #{totcreated}")
+LOGGER.info("Total People Updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
 eml_body = File.read(logfile)

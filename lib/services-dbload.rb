@@ -1,32 +1,28 @@
 require 'rubygems'
 require 'json'
 require 'pp'
-require 'date'
+require 'csv'
 require 'pcocore_api.rb'
 
-
-#set inner and outer indexes to 0
+#CONSTANTS
 offset_index = 0
-page_size = 25
+plcount = 0
+page_size = 50
+totprocessed = 0
+totcreated = 0
+totupdated = 0
 $pullcount = 0
-$endtime = Time.now + 60
-planwindow = Date.today - 90
-next_check = 0
-tot_created = 0
-tot_updated = 0
-tot_skipped = 0
+logfile_prefix = "services"
 datestamp = Time.now
 set_endtime()
-logfile_prefix = "Teammember"
 logfile = "log/#{logfile_prefix}_dbload_#{datestamp.strftime("%y%m%d%H%M")}.log"
 eml_address = admin_email()
 eml_subject = "#{logfile_prefix}_dbload logfile #{datestamp}"
 
-LOGGER = Log4r::Logger.new('Teammember_dbload.log')
+LOGGER = Log4r::Logger.new('Services_dbload.log')
 LOGGER.outputters << Log4r::StdoutOutputter.new('stdout')
 LOGGER.outputters << Log4r::FileOutputter.new('file', :filename => logfile)
 
-#Start ...
 LOGGER.info("=============================================================")
 LOGGER.info("teammember_dbload.rb is a Ruby script to load the current ")
 LOGGER.info("Planning Center Services team assignment data within ")
@@ -41,7 +37,117 @@ LOGGER.info("counter, and if approach the rate limit, will sleep the")
 LOGGER.info("script to keep within the limit")
 LOGGER.info("=============================================================")
 
-LOGGER.info("Starting processing...")
+
+#Start ...
+LOGGER.info("Starting ServiceTypes...")
+st = service_type()
+    inner_loop_index = 0
+    st["data"].each do |u|
+
+      stcheck = ServiceType.where(:stid => u["id"])
+
+# If exists
+        if !stcheck.exists?
+            LOGGER.info("Creating new ST record")
+            servicepost = ServiceType.create(
+            :stid           =>  u["id"],
+            :st_name        =>  u["attributes"]["name"],
+            :st_updated_at  =>  u["attributes"]["updated_at"],
+            :st_freq        =>  u["attributes"]["frequency"]
+            )
+            totcreated += 1
+
+
+        elsif  !(stcheck[0].st_updated_at == st["data"][inner_loop_index]["attributes"]["updated_at"])
+          LOGGER.info("Updated new ST record")
+
+          servicepost = ServiceType.update(stcheck[0].id,
+          :stid             =>  u["id"],
+          :st_name          =>  u["attributes"]["name"],
+          :st_updated_at    =>  u["attributes"]["updated_at"],
+          :st_freq          =>  u["attributes"]["frequency"]
+          )
+        else
+          LOGGER.info("NO action")
+        end
+            inner_loop_index += 1
+
+    end
+    LOGGER.info("** All records processed  **")
+    LOGGER.info("Total ServiceTypes created: #{totcreated}")
+
+totprocessed = 0
+totcreated = 0
+totupdated = 0
+LOGGER.info("=================================================")
+LOGGER.info("Starting process Plans...")
+st = ServiceType.all
+
+st.each do |s|
+        stid = s["stid"]
+        next_check = 0
+        while !next_check.nil?
+                  pl = plans(stid,page_size,offset_index)
+                  next_check = pl["links"]["next"]
+                  pl["data"].each do |p|
+                      plid = p["id"]
+                      plcount += 1
+                      pldates = p["attributes"]["dates"]
+                      pl_sort_date = p["attributes"]["sort_date"]
+                      pupdate = p["attributes"]["updated_at"]
+                      plancheck = Plan.where(:plid => plid)
+                      #if the plans updated_at is less than the delta window, and the plan exists in DB skip the update
+                      if !plancheck.exists?
+                        LOGGER.info("Creating new Plan record for ID #{stid} #{plid} #{pldates} #{pl_sort_date} #{pupdate}")
+                        plannew = Plan.create(
+                            :plid               =>  plid,
+                            :stid               =>  stid,
+                            :pldates            =>  pldates,
+                            :pl_sort_date       =>  pl_sort_date,
+                            :pl_updated_at      =>  pupdate,
+                            :service_type_id    =>  s["id"]
+                        )
+                        totcreated += 1
+                      elsif  !(plancheck.first.pl_updated_at == pupdate)
+                        LOGGER.info("Updating existing Plan record for ID #{stid} #{plid} #{pldates} #{pl_sort_date} #{pupdate}")
+
+                        planexist = Plan.update(plancheck[0].id,
+                            :plid               =>  plid,
+                            :stid               =>  stid,
+                            :pldates            =>  pldates,
+                            :pl_sort_date       =>  pl_sort_date,
+                            :pl_updated_at      =>  pupdate,
+                            :service_type_id    =>  s["id"]
+                        )
+                        totupdated += 1
+                      else
+                        LOGGER.info("No action for Plan ID #{stid} #{plid} #{pldates} #{pl_sort_date} #{pupdate} ")
+                      end
+
+                  end
+            offset_index += page_size
+        end
+        offset_index = 0
+        next_check = 0
+end
+
+
+LOGGER.info("** All Plans processed  **")
+LOGGER.info("Total Plans created: #{totcreated}")
+LOGGER.info("Total Plans updated: #{totupdated}")
+
+#set inner and outer indexes to 0
+
+planwindow = Date.today - 90
+next_check = 0
+totcreated = 0
+totupdated = 0
+totskipped = 0
+datestamp = Time.now
+set_endtime()
+
+LOGGER.info("=================================================")
+LOGGER.info("Starting processing Team members...")
 ServiceType.all.each do |st|
     Plan.where(:stid => st["stid"]).each do |pl|
       if pl["pl_updated_at"].to_date.strftime("%Y-%m-%d") < planwindow.to_s
@@ -81,7 +187,7 @@ ServiceType.all.each do |st|
                             :decline_reason     =>   tmreason,
                             :plan_updated_at    =>   member["attributes"]["updated_at"]
                         )
-                        tot_created += 1
+                        totcreated += 1
                           # pco_id not in db, so use create
                       elsif  !(membercheck[0].plan_updated_at == member["attributes"]["updated_at"])
                         LOGGER.info("Updating existing record for TeamMember ID #{tmid}")
@@ -100,10 +206,10 @@ ServiceType.all.each do |st|
                         :plan_updated_at    =>   member["attributes"]["updated_at"]
                         )
 
-                        tot_updated += 1
+                        totupdated += 1
                       else
                         LOGGER.info("No action for TeamMember ID #{tmid}")
-                        tot_skipped += 1
+                        totskipped += 1
                       end
                 end
             offset_index += page_size
@@ -114,6 +220,9 @@ ServiceType.all.each do |st|
     end
 end
 # puts "** ALl records processed -- CSV file complete **"
-LOGGER.info("Total Created: #{tot_created}")
-LOGGER.info("Total Updated: #{tot_updated}")
-LOGGER.info("Total Skipped: #{tot_skipped}")
+LOGGER.info("Total Teammembers Created: #{totcreated}")
+LOGGER.info("Total Teammembers Updated: #{totupdated}")
+LOGGER.info("Total Teammembers Skipped: #{totskipped}")
+
+eml_body = File.read(logfile)
+PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver

@@ -14,6 +14,7 @@ class CreatePeople < ActiveRecord::Migration[5.0]
       t.string "gender"
       t.string "birthdate"
       t.string "campus"
+      t.integer "campus_id"
       t.string "membership"
       t.string "street"
       t.string "city"
