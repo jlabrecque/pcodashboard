@@ -1,0 +1,2 @@
+class Workflowcardnote < ApplicationRecord
+end

@@ -318,6 +318,20 @@ def campus_load()
   end
 end
 
+#Build CampusDb methods
+def workflows(page_size,offset_index)
+  script_name="workflows-dbload.rb"
+  # Gets all service types (should be one pull)
+      api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+      begin
+        workflows_unp = api.people.v2.workflows.get(per_page: page_size,offset: offset_index,include: 'steps')
+      rescue PCO::API::Errors::BaseError => error
+        $retry_switch = exception_pause(error,script_name)
+        retry if $retry_switch == 1
+      end
+      return JSON.parse(workflows_unp.to_json)
+end
+
 #Geocoding methods
 def geocode_people(id,street,city,state,zip)
   geocoder = Graticule.service(:google).new @settings.googlemaps_api

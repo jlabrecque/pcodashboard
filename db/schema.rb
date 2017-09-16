@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170904190629) do
+ActiveRecord::Schema.define(version: 20170911172139) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -83,14 +83,14 @@ ActiveRecord::Schema.define(version: 20170904190629) do
   end
 
   create_table "campus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "campus_id"
+    t.string   "campus_id_pco"
     t.string   "campus_name"
     t.string   "street"
     t.string   "city"
     t.string   "state"
     t.string   "zip"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "check_ins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -342,6 +342,7 @@ ActiveRecord::Schema.define(version: 20170904190629) do
     t.string   "email_array"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "campus_id"
   end
 
   create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -443,6 +444,57 @@ ActiveRecord::Schema.define(version: 20170904190629) do
     t.datetime "updated_at",      null: false
     t.index ["person_id"], name: "index_teammembers_on_person_id", using: :btree
     t.index ["plan_id"], name: "index_teammembers_on_plan_id", using: :btree
+  end
+
+  create_table "workflowcardnotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "workflowcard_id"
+    t.string   "workflowcard_id_pco"
+    t.string   "workflowcardnote_id_pco"
+    t.string   "workflowcard_note"
+    t.string   "workflowcard_created_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "workflowcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "workflow_id"
+    t.string   "workflow_id_pco"
+    t.string   "workflowcard_id_pco"
+    t.string   "workflowcard_stage"
+    t.string   "workflowcard_assignee"
+    t.integer  "person_id"
+    t.string   "workflowcard_person_id_pco"
+    t.string   "workflowcard_completed_at"
+    t.string   "workflowcard_created_at"
+    t.string   "workflowcard_updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "workflows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "workflow_id_pco"
+    t.string   "workflow_name"
+    t.integer  "workflow_completed_cards"
+    t.integer  "workflow_ready_cards"
+    t.string   "workflow_created_at"
+    t.string   "workflow_updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "workflowsteps", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "workflow_id"
+    t.string   "workflow_id_pco"
+    t.string   "workflowstep_id_pco"
+    t.string   "workflowstep_name"
+    t.string   "workflowstep_default_assignee"
+    t.string   "workflowstep_sequence"
+    t.integer  "workflowstep_total_ready_card"
+    t.integer  "workflowstep_total_snoozed_card"
+    t.string   "workflowstep_created_at"
+    t.string   "workflowstep_updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
 end

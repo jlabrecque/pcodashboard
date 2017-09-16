@@ -1,0 +1,2 @@
+class Workflowcard < ApplicationRecord
+end
