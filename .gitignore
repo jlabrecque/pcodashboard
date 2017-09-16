@@ -18,5 +18,7 @@
 /lib/archive/*
 /lib/defunct_migrations
 /lib/revised_migrations
+/lib/bash_scripts/*
+
 # Ignore Byebug command history file.
 .byebug_history
