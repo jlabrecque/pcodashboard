@@ -14,11 +14,11 @@
 !/tmp/.keep
 .env
 /config/database.yml
-/config/secrets.yml
+/db/schema.rb
 /lib/archive/*
 /lib/defunct_migrations
 /lib/revised_migrations
 /lib/bash_scripts/*
-
+/lib/nohup.out
 # Ignore Byebug command history file.
 .byebug_history
