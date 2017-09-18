@@ -11,7 +11,7 @@ def self.up
     t.timestamps
   end
   main = Campu.create(
-    :campus_id       => "000000",
+    :campus_id_pco   => "000000",
     :campus_name     =>  "Main Campus",
     :street          => "",
     :city            => "",
