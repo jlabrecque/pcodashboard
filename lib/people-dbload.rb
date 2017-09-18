@@ -79,7 +79,7 @@ if !campus_fd().empty? #Multicampus configured Field Def
       #remove default Main Campus
       xcampus = Campu.where(:campus_id_pco => "000000")
       if xcampus.count > 0
-        puts "Removing default campus"
+        LOGGER.info("Removing default campus")  
         xcampus[0].delete
       end
 end

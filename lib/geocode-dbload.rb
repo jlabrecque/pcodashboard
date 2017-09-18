@@ -63,31 +63,31 @@ Person.where("last_name REGEXP ?", regex).each do |person|
 end
 #Add per Campus georecords
 Campu.all.each do |campus|
-    address,long,lat = geocode_people(campus.campus_id,campus.street,campus.city,campus.state,campus.zip)
-    geoexists = GeoMap.where(:campus_id => campus.campus_id)
+    address,long,lat = geocode_people(campus.campus_id_pco,campus.street,campus.city,campus.state,campus.zip)
+    geoexists = GeoMap.where(:campus_id => campus.campus_id_pco)
     if !address.blank?
       if !geoexists.exists? #create new record
 
             georecord = GeoMap.create(
             :person_id      =>    0,
             :pco_id         =>    "na",
-            :campus_id      =>    campus.campus_id,
+            :campus_id      =>    campus.campus_id_pco,
             :full_address   =>    address,
             :latitude       =>    lat,
             :longitude      =>    long
             )
-          puts "*** Creating new Georecord #{campus.campus_id} #{address} ***"
+          puts "*** Creating new Georecord #{campus.campus_id_pco} #{address} ***"
           campus_geo_created += 1
       else
             georecord = GeoMap.update(geoexists[0].id,
             :person_id      =>    0,
             :pco_id         =>    "na",
-            :campus_id      =>    campus.campus_id,
+            :campus_id      =>    campus.campus_id_pco,
             :full_address   =>    address,
             :latitude       =>    lat,
             :longitude      =>    long
             )
-          puts "*** Updating Georecord  #{campus.campus_id} #{address} ***"
+          puts "*** Updating Georecord  #{campus.campus_id_pco} #{address} ***"
           campus_geo_updated += 1
       end
   end
