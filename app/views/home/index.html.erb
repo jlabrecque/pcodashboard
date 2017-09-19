@@ -13,55 +13,66 @@
 <% checkins_total = @checkins.count %>
 <% checkins_guest = @checkins.where(:checkin_kind => "Guest").count %>
 <% checkins_regular = checkins_total - checkins_guest %>
+<% mailchimplist_count = Mailchimplist.count %>
 
 
 <body class="body page-index clearfix">
+  <div class="landing_header_bar">
+    <p>
+      <br/>
+    </p>
+  </div>
+  <div class="landing_title">
+    <p>
+      PCODashboard
+    </p>
+  </div>
+  <div class="landing_login">
+    <p>
+      User Login
+    </p>
+  </div>
+  <div class="admin_login">
+  <p>
+    <%= link_to 'Admin Login', "/admin",style: "color: white" %>
+  </p>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
-  <div class="element element-2">
-      <p class="text text-110">Total People</p>
+<div class="admin_footer">
+  <div class="admin_footer_1">
+      <p class="footer_title">Total People</p>
       <p></p>
-      <p class="text text-11"><%= @people.count %></p>
+      <p class="footer_text"><%= @people.count %></p>
   </div>
-  <div class="element element-3">
-      <p class="text text-120">Total Donations</p>
+
+  <div class="admin_footer_2">
+      <p class="footer_title">Total Donations</p>
       <p></p>
-      <p class="text text-12"><%= donation_count %></p>
+      <p class="footer_text"><%= donation_count %></p>
   </div>
-  <div class="element element-4">
-      <p class="text text-130">Total CheckIns</p>
+  <div class="admin_footer_3">
+      <p class="footer_title">Total CheckIns</p>
       <p></p>
-      <p class="text text-13"><%= @checkins.count %></p>
+      <p class="footer_text"><%= @checkins.count %></p>
   </div>
-  <div class="element element-5">
-      <p class="text text-140">Total Active</p>
+  <div class="admin_footer_4">
+      <p class="footer_title">Total Mailchimp List</p>
       <p></p>
-      <p class="text text-14"><%= @people.where(:people_status => 'active').count %></p>
+      <p class="footer_text"><%= mailchimplist_count %></p>
   </div>
-  <div class="element element-6">
-      <p class="text text-150">Total $</p>
-      <p></p>
-      <p class="text text-15"><%= number_to_currency(donation_total) %></p>
-  </div>
-  <div class="element element-7">
-      <p class="text text-160">Guest CheckIns</p>
-      <p></p>
-      <p class="text text-16"><%= checkins_guest %></p>
-  </div>
-  <div class="element element-8">
-      <p class="text text-170">Total Members</p>
-      <p></p>
-      <p class="text text-17"><%= @people.where(:membership => 'Member').count %></p>
-  </div>
-  <div class="element element-9">
-      <p class="text text-180">Average Donations</p>
-      <p></p>
-      <p class="text text-18"><%= number_to_currency(donation_average) %></p>
-  </div>
-  <div class="element element-10">
-      <p class="text text-190">Regular Checkins</p>
-      <p></p>
-      <p class="text text-19"><%= checkins_regular %></p>
-  </div>
+</div>
 
 </body>
 </body>
