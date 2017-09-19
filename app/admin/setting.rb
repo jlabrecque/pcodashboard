@@ -15,6 +15,7 @@ ActiveAdmin.register Setting do
     div for: setting do
       h2("Sitewide Parameters", :class => "section_title")
       div simple_format  "SiteName: #{setting.site_name}"
+      div simple_format  "SiteURL: #{setting.site_url}"
       div simple_format  "SiteLogoURL: #{setting.site_logo_url}"
       div simple_format  "Admin Email Address: #{setting.admin_email}"
 
