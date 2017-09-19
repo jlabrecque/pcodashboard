@@ -43,6 +43,7 @@ end
 #============================================
 
 def pledge_report(q,y,cpick)
+    logger.info "#{q} #{y} #{cpick}"
     pledge_count = 0
     donation_count = 0
     $grand_total = 0
