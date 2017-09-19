@@ -2,7 +2,7 @@ ActiveAdmin.register Setting do
 
   menu parent: "Site Mgmt"
 
-  permit_params :first_run, :site_name, :site_logo_url, :pcoauthtok, :pcoauthsec, :campus_fd, :mailchimpapikey, :mailchimp_list, :mc_status_fd, :mc_cleanunsubaddress_fd, :mc_cleanunsubdate_fd, :mailgun_api, :mailgun_url, :mailgun_domain, :mailgun_username, :mailgun_pwd, :googlemaps_api, :admin_email
+  permit_params :first_run, :site_name, :site_url, :site_logo_url, :pcoauthtok, :pcoauthsec, :campus_fd, :mailchimpapikey, :mailchimp_list, :mc_status_fd, :mc_cleanunsubaddress_fd, :mc_cleanunsubdate_fd, :mailgun_api, :mailgun_url, :mailgun_domain, :mailgun_username, :mailgun_pwd, :googlemaps_api, :admin_email
   actions :index, :update, :edit
   action_item :view, only: :index do
     link_to 'Edit Settings', "/admin/settings/1/edit"
