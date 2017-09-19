@@ -1,17 +1,11 @@
 require 'rubygems'
-require 'pp'
-require 'date'
-require 'pcocore_api.rb'
 
-pid = 19468223
-page_size = 25
-offset_index = 0
-next_check = 0
-$pullcount = 0
-$endtime = Time.now + 60
-
-eml_address = "dhockenberry@gmail.com"
-eml_subject = "Another test email"
-eml_body    = "This is the body of the sample email I am contructing and want to expand this a bit.... blah, blah, blah"
-
-PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+#If cli parms not passed, so update from last offset ...
+  if ARGV.count == 1 and  == "update"
+    eml_subject = "Another test email"
+    eml_body    = "This is the body of the sample email I am contructing and want to expand this a bit.... blah, blah, blah"
+    PcocoreMailer.send_email(ARGV.first,eml_subject,eml_body).deliver
+  else
+    puts "mail-test requires at least one parameter for the target email address"
+    puts "Example: rails runner lib/mail-test.rb <targetemailaddress>"
+  end
