@@ -56,6 +56,7 @@ ActiveAdmin.register Setting do
       tab 'Sitewide' do
         f.inputs 'Sitewide Parameters' do
           f.input :site_name
+          f.input :site_url
           f.input :site_logo_url
           f.input :admin_email
           f.input :first_run
