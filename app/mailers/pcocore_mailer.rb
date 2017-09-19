@@ -1,8 +1,8 @@
 class PcocoreMailer < ApplicationMailer
 
-@settings = Setting.x
 
   def send_email(eml_address,eml_subject,eml_body)
+    @settings = Setting.x
     mg_client = Mailgun::Client.new @settings.mailgun_api
     message_params = {:from    => @settings.mailgun_username,
                       :to      => eml_address,
