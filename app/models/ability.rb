@@ -18,6 +18,8 @@ class Ability
         can :manage, Pledge
         can :manage, Campaign
         can :read, ActiveAdmin::Page, name: "Dashboard"
+        can :read, ActiveAdmin::Page, name: "Pledge Dashboard"
+        can :read, ActiveAdmin::Page, name: "Pledge Reports"
         can :read, ActiveAdmin::Page, name: "Reports", namespace_name: :admin
       end
 
