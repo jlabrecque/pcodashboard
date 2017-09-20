@@ -17,10 +17,9 @@ class Ability
       if user.pledge?
         can :manage, Pledge
         can :manage, Campaign
+        can :manage, PledgeReport
         can :read, ActiveAdmin::Page, name: "Dashboard"
         can :read, ActiveAdmin::Page, name: "Pledge Dashboard"
-        can :read, ActiveAdmin::Page, name: "Pledge Reports"
-        can :read, ActiveAdmin::Page, name: "Reports", namespace_name: :admin
       end
 
   end
