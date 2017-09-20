@@ -318,7 +318,7 @@ def campus_load()
   end
 end
 
-#Build CampusDb methods
+#Workflow method
 def workflows(page_size,offset_index)
   script_name="workflows-dbload.rb"
   # Gets all service types (should be one pull)
@@ -330,6 +330,20 @@ def workflows(page_size,offset_index)
         retry if $retry_switch == 1
       end
       return JSON.parse(workflows_unp.to_json)
+end
+
+#Workflowcard method
+def workflowcards(wf,page_size,offset_index)
+  script_name="workflowcards-dbload.rb"
+  # Gets all service types (should be one pull)
+      api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+      begin
+        workflowcards_unp = api.people.v2.workflows[wf].cards.get(per_page: page_size,offset: offset_index)
+      rescue PCO::API::Errors::BaseError => error
+        $retry_switch = exception_pause(error,script_name)
+        retry if $retry_switch == 1
+      end
+      return JSON.parse(workflowcards_unp.to_json)
 end
 
 #Geocoding methods
