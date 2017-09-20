@@ -125,7 +125,8 @@ LOGGER.info("=============================================================")
 
 # #Update all Checkins for association
 LOGGER.info("Updating :person_id associations from Person dB...")
-CheckIn.where(:person_id => nil).each do |chk|
+#CheckIn.where(:person_id => nil).each do |chk|
+CheckIn.all.each do |chk|
      p = Person.where(:pco_id => chk.pco_id)
      if p.count > 0 # matching pco_ids
         puts "Updating person_id for Checkin #{chk.id}"

@@ -7,6 +7,9 @@ class Person < ApplicationRecord
   has_many :attended, :through =>  :group_attendances, :source => :group
   has_many :teammembers
   has_many :mailchimplists
+  has_many :workflowcards
+  has_many :check_ins
+  has_many :donations
   has_one :geo_map
   has_one :campu
 

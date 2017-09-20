@@ -142,7 +142,7 @@ LOGGER.info("Script ended at #{datestamp}")
 LOGGER.info("=============================================================")
 #open_log.close
 LOGGER.info("Updating :person_id associations from Person dB...")
-Donation.where(:person_id => nil).each do |don|
+Donation.all.each do |don|
      p = Person.where(:pco_id => don.pco_id)
      if p.count > 0 # matching pco_ids
         puts "Updating person_id for Donation #{don.id}"
@@ -151,7 +151,6 @@ Donation.where(:person_id => nil).each do |don|
         puts "No associated PCO ID -- skipping"
      end
 end
-
 
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
