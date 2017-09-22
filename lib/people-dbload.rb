@@ -251,5 +251,6 @@ LOGGER.info("Total People Updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
 
+LOGGER.info("Emailing log file to #{eml_address}")
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
