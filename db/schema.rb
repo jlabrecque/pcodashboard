@@ -448,14 +448,14 @@ ActiveRecord::Schema.define(version: 20170920150658) do
     t.index ["plan_id"], name: "index_teammembers_on_plan_id", using: :btree
   end
 
-  create_table "workflowcardnotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "workflowcardnotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "workflowcard_id"
     t.string   "workflowcard_id_pco"
     t.string   "workflowcardnote_id_pco"
-    t.string   "workflowcard_note"
+    t.text     "workflowcard_note",       limit: 4294967295
     t.string   "workflowcard_created_at"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   create_table "workflowcards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

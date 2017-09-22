@@ -79,7 +79,7 @@ if !campus_fd().empty? #Multicampus configured Field Def
       #remove default Main Campus
       xcampus = Campu.where(:campus_id_pco => "000000")
       if xcampus.count > 0
-        LOGGER.info("Removing default campus")  
+        LOGGER.info("Removing default campus")
         xcampus[0].delete
       end
 end
@@ -229,11 +229,27 @@ meta = Metum.create(:modeltype => "people",
   :total_processed => totcreated + totupdated,
   :last_offset => last_offset_index)
 end
+Person.all.each do |p|
+  if !p.donations.empty?
+    LOGGER.info("Updating donation associations for #{p.id}")
+    first_donation = p.donations.first.donation_created_at
+    last_donation = p.donations.last.donation_created_at
+    p.update(:first_donation => first_donation, :last_donation => last_donation)
+  end
+  if !p.check_ins.empty?
+    LOGGER.info("Updating donation associations for #{p.id}")
+    first_checkin = p.check_ins.first.checkin_time
+    last_checkin = p.check_ins.last.checkin_time
+    p.update(:first_checkin => first_checkin, :last_checkin => last_checkin)
+  end
+end
+LOGGER.info("========================================")
 LOGGER.info("Total People processed: #{totprocessed}")
 LOGGER.info("Total Members: #{totmembers}")
 LOGGER.info("Total People Created: #{totcreated}")
 LOGGER.info("Total People Updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
+
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
