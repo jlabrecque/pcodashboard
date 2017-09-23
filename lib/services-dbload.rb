@@ -138,7 +138,7 @@ LOGGER.info("Total Plans updated: #{totupdated}")
 
 #set inner and outer indexes to 0
 
-planwindow = Date.today - 90
+planwindow = Date.today - 1000
 next_check = 0
 totcreated = 0
 totupdated = 0

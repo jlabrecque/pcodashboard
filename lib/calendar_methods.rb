@@ -14,7 +14,7 @@ def get_calendar()
     while sunday_pointer <= today do
       sunday_pointer_t = sunday_pointer.strftime("%Y%m%d")
       lastsunday = sunday_pointer_t
-      calendar[sunday_pointer_t] = {:date => sunday_pointer, :total => 0.00, :pledge => 0.00, :amount => 0.00, :group => FALSE, :attend => "N", :volunteer => "N/A", :index => index}
+      calendar[sunday_pointer_t] = {:date => sunday_pointer, :total => 0.00, :pledge => 0.00, :amount => 0.00, :group => "N", :attend => "N", :serve => "N", :index => index}
       sunday_pointer += 7
     end
     return calendar,lastsunday
@@ -27,11 +27,9 @@ def checkin_grid(pid)
       @checkincal = []
       calendar.each_key do |x|
         if calendar[x][:attend] == "V"
-            xval = 1
-        elsif calendar[x][:attend] == "R"
-            xval = -1
+            xval = 2
         else
-            xval = 0
+            xval = 1
         end
         newval =  [Date.parse(x), xval]
         @checkincal << newval
@@ -60,18 +58,33 @@ def donation_grid(pid)
       return @donationcal
 end
 #============================================
+def serving_grid(pid)
+      calendar,lastsunday = get_calendar()
+      stuff_serving(pid,calendar)
+
+      @servingcal = []
+      calendar.each_key do |x|
+        if calendar[x][:serve] == "Y"
+            xval = 2
+        else
+            xval = 1
+        end
+        newval =  [Date.parse(x), xval]
+        @servingcal << newval
+      end
+      return @servingcal
+end
+#============================================
 def groups_grid(pid)
       calendar,lastsunday = get_calendar()
       stuff_groups(pid,calendar)
 
       @groupscal = []
       calendar.each_key do |x|
-        if calendar[x][:attend] == "V"
-            xval = 1
-        elsif calendar[x][:attend] == "R"
-            xval = -1
+        if calendar[x][:group] == "Y"
+            xval = 2
         else
-            xval = 0
+            xval = 1
         end
         newval =  [Date.parse(x), xval]
         @groupscal << newval
@@ -82,7 +95,6 @@ end
 def stuff_checkins(pid,calendar)
     checkins = CheckIn.where(:pco_id => pid)
     checkins.each do |check|
-#      pp checkins
         pin = check[:checkin_time].to_date
         calendar.each_key do |week|
             this_week = calendar[week][:date]
@@ -101,7 +113,6 @@ def stuff_checkins(pid,calendar)
 end
 #============================================
 def stuff_donations(pid,calendar)
-  # used for PCOcore view grid
     donations = Donation.where(:pco_id => pid)
     donations.each do |don|
         pin = don[:donation_created_at].to_date
@@ -117,18 +128,35 @@ def stuff_donations(pid,calendar)
   return calendar
 end
 #============================================
+def stuff_serving(pid,calendar)
+    p = Person.where(:pco_id => pid)[0]
+    serving = p.teammembers
+    serving.each do |srv|
+        pin = srv[:plan_sort_date].to_date
+        calendar.each_key do |week|
+          this_week = calendar[week][:date]
+          next_week = this_week + 7
+          if pin <= next_week and pin > this_week
+             next_week_str = next_week.strftime("%Y%m%d")
+             calendar[next_week_str][:serve] = "Y"
+          end
+        end
+    end
+  return calendar
+end
+#============================================
 def stuff_groups(pid,calendar)
-  # used for PCOcore view grid
-    donations = Donation.where(:pco_id => pid)
-    donations.each do |don|
-        pin = don[:donation_created_at].to_date
-                calendar.each_key do |week|
-                  this_week = calendar[week][:date]
-                  next_week = this_week + 7
-                  if pin <= next_week and pin > this_week
-                     next_week_str = next_week.strftime("%Y%m%d")
-                     calendar[next_week_str][:amount] = don[:amount_cents]
-                  end
+    p = Person.where(:pco_id => pid)[0]
+    groupattendance = p.group_attendances
+    groupattendance.each do |att|
+        pin = att[:attend_date].to_date
+        calendar.each_key do |week|
+          this_week = calendar[week][:date]
+          next_week = this_week + 7
+          if pin <= next_week and pin > this_week
+             next_week_str = next_week.strftime("%Y%m%d")
+             calendar[next_week_str][:group] = "Y"
+          end
         end
     end
   return calendar
