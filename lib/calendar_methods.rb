@@ -60,6 +60,25 @@ def donation_grid(pid)
       return @donationcal
 end
 #============================================
+def groups_grid(pid)
+      calendar,lastsunday = get_calendar()
+      stuff_groups(pid,calendar)
+
+      @groupscal = []
+      calendar.each_key do |x|
+        if calendar[x][:attend] == "V"
+            xval = 1
+        elsif calendar[x][:attend] == "R"
+            xval = -1
+        else
+            xval = 0
+        end
+        newval =  [Date.parse(x), xval]
+        @groupscal << newval
+      end
+      return @groupscal
+end
+#============================================
 def stuff_checkins(pid,calendar)
     checkins = CheckIn.where(:pco_id => pid)
     checkins.each do |check|
@@ -97,7 +116,23 @@ def stuff_donations(pid,calendar)
     end
   return calendar
 end
-
+#============================================
+def stuff_groups(pid,calendar)
+  # used for PCOcore view grid
+    donations = Donation.where(:pco_id => pid)
+    donations.each do |don|
+        pin = don[:donation_created_at].to_date
+                calendar.each_key do |week|
+                  this_week = calendar[week][:date]
+                  next_week = this_week + 7
+                  if pin <= next_week and pin > this_week
+                     next_week_str = next_week.strftime("%Y%m%d")
+                     calendar[next_week_str][:amount] = don[:amount_cents]
+                  end
+        end
+    end
+  return calendar
+end
 #============================================
 def pledge_donations(pid,fid,calendar)
   # used for PCOpledge report

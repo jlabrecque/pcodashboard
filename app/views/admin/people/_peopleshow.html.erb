@@ -119,26 +119,23 @@
             <%     data_table_donation.new_column('date'  , 'Date')     %>
             <%     data_table_donation.new_column('number', 'Vol/Att')  %>
             <%     data_table_donation.add_rows(@donationcal)           %>
-            <% data_table_donation = GoogleVisualr::DataTable.new       %>
-            <%     data_table_donation.new_column('date'  , 'Date')     %>
-            <%     data_table_donation.new_column('number', 'Vol/Att')  %>
-            <%     data_table_donation.add_rows(@servingcal)           %>
-            <% data_table_donation = GoogleVisualr::DataTable.new       %>
-            <%     data_table_donation.new_column('date'  , 'Date')     %>
-            <%     data_table_donation.new_column('number', 'Vol/Att')  %>
-            <%     data_table_donation.add_rows(@groupscal)           %>
+            <% data_table_serving = GoogleVisualr::DataTable.new       %>
+            <%     data_table_serving.new_column('date'  , 'Date')     %>
+            <%     data_table_serving.new_column('number', 'Vol/Att')  %>
+            <%     data_table_serving.add_rows(@servingcal)           %>
+            <% data_table_groups = GoogleVisualr::DataTable.new       %>
+            <%     data_table_groups.new_column('date'  , 'Date')     %>
+            <%     data_table_groups.new_column('number', 'Vol/Att')  %>
+            <%     data_table_groups.add_rows(@groupscal)           %>
 
-            <%     opts   = { :title => "Check-Ins", :width => 800, :height => 300, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } } %>
-            <%     @chart_checkin = GoogleVisualr::Interactive::Calendar.new(data_table_checkin, opts) %>
-
-            <%     opts   = { :title => "Donations", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
-            <%     @chart_donation = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
-
-            <%     opts   = { :title => "Serving", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
-            <%     @chart_serving = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
-
-            <%     opts   = { :title => "Groups**", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
-            <%     @chart_groups = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
+          <%     opts   = { :title => "Check-Ins", :width => 800, :height => 300, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } } %>
+          <%     @chart_checkin = GoogleVisualr::Interactive::Calendar.new(data_table_checkin, opts) %>
+          <%     opts   = { :title => "Donations", :width => 800, :height => 300, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+          <%     @chart_donation = GoogleVisualr::Interactive::Calendar.new(data_table_donation, opts)%>
+          <%     opts   = { :title => "Serving", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+          <%     @chart_serving = GoogleVisualr::Interactive::Calendar.new(data_table_serving, opts)%>
+          <%     opts   = { :title => "Groups**", :width => 800, tooltip: { isHtml: FALSE }, calendar: { cellSize: 13.5 } }%>
+          <%     @chart_groups = GoogleVisualr::Interactive::Calendar.new(data_table_groups, opts)%>
 
   <div id='chart' style="height: auto;"></div>
   <%= render_chart @chart_checkin, 'chart' %>

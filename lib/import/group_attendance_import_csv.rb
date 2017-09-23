@@ -11,12 +11,14 @@ puts "Opening CSV file for read..."
 
 CSV.foreach(csvfile, headers: true) do |row|
   groupa = row.to_hash
-
-  input = GroupAttendance.create(
-  :group_id           => groupa['group_id'],
-  :person_id          => groupa['person_id'],
-  :attend_date        => groupa['attend_date']
-  )
+  p = Person.where(:pco_id => groupa["pco_id"])
+  if p.count > 0
+    input = GroupAttendance.create(
+    :group_id           => groupa['group_id'],
+    :person_id          => p[0].id,
+    :attend_date        => groupa['attend_date']
+    )
+  end
 
 puts "Processing Attendance: #{groupa['person_id']}"
 totcreated += 1

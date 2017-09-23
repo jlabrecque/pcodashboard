@@ -11,15 +11,16 @@ puts "Opening CSV file for read..."
 
 CSV.foreach(csvfile, headers: true) do |row|
   groupm = row.to_hash
-
-  input = GroupMembership.create(
-  :group_id           => groupm['group_id'],
-  :person_id          => groupm['person_id'],
-  :leader             => groupm['leader'],
-  :started            => groupm['started'],
-  :ended              => groupm['ended']
-    )
-
+  p = Person.where(:pco_id => groupm["pco_id"])
+  if p.count > 0
+    input = GroupMembership.create(
+    :group_id           => groupm['group_id'],
+    :person_id          => p[0].id,
+    :leader             => groupm['leader'],
+    :started            => groupm['started'],
+    :ended              => groupm['ended']
+      )
+  end
 puts "Processing Member: #{groupm['person_id']}"
 totcreated += 1
 end

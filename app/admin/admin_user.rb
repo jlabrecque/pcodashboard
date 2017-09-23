@@ -26,8 +26,8 @@ ActiveAdmin.register AdminUser do
     f.inputs do
       f.input :username
       f.input :email
-      f.input :password
-      f.input :password_confirmation
+        f.input :password
+        f.input :password_confirmation
       f.input :admin
       f.input :core
       f.input :pledge
