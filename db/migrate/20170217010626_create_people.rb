@@ -26,8 +26,6 @@ class CreatePeople < ActiveRecord::Migration[5.0]
       t.string "people_status"
       t.string "pco_created_at"
       t.string "pco_updated_at"
-      t.string "first_attended"
-      t.string "last_attended"
       t.string "first_donation"
       t.string "last_donation"
       t.string "email_array"
