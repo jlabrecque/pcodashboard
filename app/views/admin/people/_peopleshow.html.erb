@@ -108,7 +108,7 @@
 
             <% @checkincal = checkin_grid(pid) %>
             <% @donationcal = donation_grid(pid) %>
-            <% @servingcal = serving_grid(pid) %>
+            <% @servingcal = [] %>
             <% @groupscal = groups_grid(pid) %>
 
             <% data_table_checkin = GoogleVisualr::DataTable.new      %>

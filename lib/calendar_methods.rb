@@ -136,12 +136,9 @@ def stuff_serving(pid,calendar)
         calendar.each_key do |week|
           this_week = calendar[week][:date]
           next_week = this_week + 7
-          pp week
           if pin <= next_week and pin > this_week
-             next_week_str = next_week.strftime("%Y%m%d")
-             if !calendar[next_week_str].nil?
+            next_week_str = next_week.strftime("%Y%m%d")
                calendar[next_week_str][:serve] = "Y"
-             end
           end
         end
     end
