@@ -5,6 +5,8 @@ class Person < ApplicationRecord
   has_many :ingroups, :through => :group_memberships, :source => :group
   has_many :group_attendances
   has_many :attended, :through =>  :group_attendances, :source => :group
+  has_many :household_people
+  has_many :family, :through =>  :household_people, :source => :households
   has_many :teammembers
   has_many :mailchimplists
   has_many :workflowcards

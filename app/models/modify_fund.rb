@@ -1,0 +1,2 @@
+class ModifyFund < ApplicationRecord
+end

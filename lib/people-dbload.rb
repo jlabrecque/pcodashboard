@@ -147,6 +147,7 @@ meta = Metum.create(:modeltype => "people",
             state = JSON.parse(prs["included"].select {|k| k["type"] == "Address"}.to_json).select { |j| j["attributes"]["location"] == "Home"}[0]["attributes"]["state"]
             zip = JSON.parse(prs["included"].select {|k| k["type"] == "Address"}.to_json).select { |j| j["attributes"]["location"] == "Home"}[0]["attributes"]["zip"]
           end
+
           peopleapp_link = "https://people.planningcenteronline.com/people/AC"+prs["data"]["id"]
           membership = prs["data"]["attributes"]["membership"]
         totmembers = (membership == "Member") ? totmembers +=1 : totmembers
@@ -182,6 +183,7 @@ meta = Metum.create(:modeltype => "people",
         :pco_created_at  => prs["data"]["attributes"]["created_at"],
         :pco_updated_at  => prs["data"]["attributes"]["updated_at"]
         )
+        @pid = personnew.id
         totcreated += 1
       elsif    !(personcheck[0].pco_updated_at == prs["data"]["attributes"]["updated_at"])
         # exists, but not uptodate
@@ -214,10 +216,45 @@ meta = Metum.create(:modeltype => "people",
           :pco_created_at  => prs["data"]["attributes"]["created_at"],
           :pco_updated_at  => prs["data"]["attributes"]["updated_at"]
           )
+          @pid = personcheck[0].id
           totupdated += 1
       else
           LOGGER.info("** No action for #{fname} #{lname}  Offset: #{offset_index} **")
+          @pid = personcheck[0].id
       end
+      # Grab all household records [array] associated with this person
+      households = JSON.parse(prs["included"].select {|k| k["type"] == "Household"}.to_json)
+      # Iterate through all households, add or update into Household records
+      households.each do |h|
+        housecheck = Household.where(:household_id_pco => h["id"])
+        if !housecheck.exists?
+          housenew = Household.create(
+            :household_id_pco  =>    h["id"],
+            :household_name    =>    h["attributes"]["name"]
+          )
+          hid = housenew.id
+        else
+          housenew = Household.update(housecheck[0]["id"],
+            :household_id_pco  =>    h["id"],
+            :household_name    =>    h["attributes"]["name"]
+          )
+          hid = housecheck[0]["id"]
+        end
+        #### Create HouseholdPerson records
+        hpcheck = HouseholdPerson.where(:household_id => hid,:person_id => @pid)
+        if !hpcheck.exists?
+          hpnew = HouseholdPerson.create(
+            :household_id       =>      hid,
+            :person_id          =>      @pid
+          )
+        else
+          hpnew = HouseholdPerson.update(hpcheck[0].id,
+            :household_id       =>      hid,
+            :person_id          =>      @pid
+          )
+        end
+      end
+
       high_pco_count = prs["data"]["id"]
       totprocessed += 1
   end
@@ -229,15 +266,14 @@ meta = Metum.create(:modeltype => "people",
   :total_processed => totcreated + totupdated,
   :last_offset => last_offset_index)
 end
+LOGGER.info("Updating donation associations...")
 Person.all.each do |p|
   if !p.donations.empty?
-    LOGGER.info("Updating donation associations for #{p.id}")
     first_donation = p.donations.first.donation_created_at
     last_donation = p.donations.last.donation_created_at
     p.update(:first_donation => first_donation, :last_donation => last_donation)
   end
   if !p.check_ins.empty?
-    LOGGER.info("Updating donation associations for #{p.id}")
     first_checkin = p.check_ins.first.checkin_time
     last_checkin = p.check_ins.last.checkin_time
     p.update(:first_checkin => first_checkin, :last_checkin => last_checkin)

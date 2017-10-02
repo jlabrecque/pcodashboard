@@ -71,7 +71,7 @@ def person(pco_id)
   # Gets single person data
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
-    person_unp = api.people.v2.people[pco_id].get(include: 'emails,phone_numbers,addresses')
+    person_unp = api.people.v2.people[pco_id].get(include: 'emails,phone_numbers,addresses,households')
   rescue PCO::API::Errors::BaseError => error
     $retry_switch = exception_pause(error,script_name)
     retry if $retry_switch == 1

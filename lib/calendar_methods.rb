@@ -123,7 +123,7 @@ def stuff_donations(pid,calendar)
                      next_week_str = next_week.strftime("%Y%m%d")
                      calendar[next_week_str][:amount] = don[:amount_cents]
                   end
-        end
+                end
     end
   return calendar
 end
@@ -138,7 +138,7 @@ def stuff_serving(pid,calendar)
           next_week = this_week + 7
           if pin <= next_week and pin > this_week
             next_week_str = next_week.strftime("%Y%m%d")
-               calendar[next_week_str][:serve] = "Y"
+            calendar[next_week_str][:serve] = "Y"
           end
         end
     end

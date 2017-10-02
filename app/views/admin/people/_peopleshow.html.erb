@@ -3,6 +3,94 @@
 <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 <% pid = @person[:pco_id] %>
 <% id = @person[:id] %>
+
+<div id="row1">
+  <div class="peopleshowcolumn">
+    <% if !@person.people_thumbnail.nil? %>
+        <%= image_tag(@person.people_thumbnail, :alt => "thumbnail", :class => "person_show_image") %>
+    <% else %>
+        <%= image_tag('no_photo_thumbnail_gray.svg', :alt => "thumbnail", :class => "person_show_image") %>
+    <% end %>
+    </br></br>
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_people">
+    <p class="peopleshowcolumn_header">Member Status</p>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Campus:</span>
+        <span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span>
+    </p>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Status:</span>
+        <span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span>
+    </p>
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_serving">
+        <p class="peopleshowcolumn_header">Serving</p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Last Served:</span>
+            <span class="peopleshowcolumn_content"></span>
+        </p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Service Roles:</br></span>
+          <%   positions = [] %>
+            <% @person.teammembers.each do |p| %>
+              <%     positions << p.position %>
+            <% end %>
+            <%   positions.uniq.first(8).each do |role| %>
+                  <span class="peopleshowcolumn_content_indent"><%= role %></br></span>
+            <% end %>
+
+            <span class="peopleshowcolumn_content"></span>
+        </p>
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_groups">
+        <p class="peopleshowcolumn_header">Groups</p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Member of:</span>
+        </p>
+        <% if @person.ingroups.empty? %>
+            <span class="peopleshowcolumn_content_indent">n/a</span>
+        <% else %>
+            <% @person.ingroups.each do |group| %>
+                <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
+            <% end %>
+        <% end %>
+        <br/>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Group Leader:</span>
+        </p>
+        <% leading = @person.group_memberships.where(:leader => 1) %>
+        <% if leading.empty? %>
+            <span class="peopleshowcolumn_content_indent">n/a</span>
+        <% else %>
+            <%  leading.each do |leads| %>
+              <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
+            <% end %>
+        <% end %>
+
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_mc">
+        <p class="peopleshowcolumn_header">Communication</p>
+        <% if Mailchimplist.where(:email_address => @person.email).empty? %>
+        <%     open_rate = "" %>
+        <%     click_rate = "" %>
+        <% else %>
+        <%     mailchimpstats = Mailchimplist.where(:email_address => @person.email) %>
+        <%     click_rate = mailchimpstats[0].click_rate %>
+        <%     open_rate = mailchimpstats[0].open_rate %>
+        <% end  %>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">MC Open Rate:</span>
+            <span class="peopleshowcolumn_content"><%= open_rate %> %</span>
+        </p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">MC Click Rate:</span>
+            <span class="peopleshowcolumn_content"><%= click_rate %> %</span>
+        </p>
+  </div>
+
 <div id="row1">
   <div class="peopleshowcolumn">
     <% if !@person.people_thumbnail.nil? %>
