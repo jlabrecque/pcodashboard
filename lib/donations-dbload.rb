@@ -60,6 +60,43 @@ meta = Metum.create(:modeltype => "donations",
 :total_created => 0,
 :last_id_imported => 0,
 :last_offset => offset_index)
+LOGGER.info("=============================================================")
+LOGGER.info("Updating Funds")
+fnd = funds()
+inner_loop_index = 0
+fnd["data"].each do |u|
+  fndcheck = Fund.where(:fund_id_pco => u["id"])
+  if !fndcheck.exists?
+      LOGGER.info("Creating new record")
+      fundpost = Fund.create(
+          :fund_id_pco              =>  u["id"],
+          :name                     =>  u["attributes"]["name"],
+          :description              =>  u["attributes"]["description"],
+          :fund_updated_at          =>  u["attributes"]["updated_at"]
+      )
+      totcreated += 1
+    elsif  !(fndcheck[0].fund_updated_at == u["attributes"]["updated_at"])
+      LOGGER.info("Updating existing record")
+      fundpost = ServiceType.update(
+          :fund_id_pco              =>  u["id"],
+          :name                     =>  u["attributes"]["name"],
+          :description              =>  u["attributes"]["description"],
+          :fund_updated_at          =>  u["attributes"]["updated_at"]
+      )
+      else
+        LOGGER.info("*** No action ***")
+      end
+      inner_loop_index += 1
+end
+
+LOGGER.info("** All funds processed  **")
+LOGGER.info("Total funds created: #{totcreated}")
+
+totcreated = 0
+totupdated = 0
+
+LOGGER.info("=============================================================")
+LOGGER.info("Processing Donations")
 
 while !next_check.nil?
   don = donations(page_size,offset_index)
@@ -77,7 +114,8 @@ while !next_check.nil?
     designations(donation_id)["data"].each do |des|
             des_id = des["id"]
             des_amount = des["attributes"]["amount_cents"]
-            fund_id = des["relationships"]["fund"]["data"]["id"]
+            fund_id_pco = des["relationships"]["fund"]["data"]["id"]
+            fund_id = Fund.where(:fund_id_pco => fund_id_pco)[0].id
             designationscheck = Donation.where(:designation_id => des_id)
 
             if !designationscheck.exists?
@@ -95,6 +133,7 @@ while !next_check.nil?
               :payment_method_sub     =>  payment_method_sub,
               :designation_id         =>  des_id,
               :designation_cents      =>  des_amount,
+              :fund_id_pco            =>  fund_id_pco,
               :fund_id                =>  fund_id,
               :pco_id                 =>  pco_id
               )
@@ -114,6 +153,7 @@ while !next_check.nil?
               :payment_method_sub     =>  payment_method_sub,
               :designation_id         =>  des_id,
               :designation_cents      =>  des_amount,
+              :fund_id_pco            =>  fund_id_pco,
               :fund_id                =>  fund_id,
               :pco_id                 =>  pco_id
               )
@@ -135,6 +175,21 @@ while !next_check.nil?
     :total_processed => totcreated + totupdated,
     :last_offset => offset_index)
 end
+
+# #Update all Donation for association
+LOGGER.info("Updating :fund associations ...")
+#CheckIn.where(:person_id => nil).each do |chk|
+Donation.all.each do |don|
+     f = Fund.where(:fund_id_pco => don.fund_id_pco)
+     if f.count > 0 # matching fund_ids
+        puts "Updating fund_id association for Donation #{don.id}"
+        don.update(:fund_id => f[0].id)
+     else
+        puts "No associated Fund ID -- skipping"
+     end
+end
+LOGGER.info("Updating :eventtime_id associations from Eventtime dB...")
+
 LOGGER.info("** All records processed **")
 LOGGER.info("Total created: #{totcreated}")
 LOGGER.info("=============================================================")

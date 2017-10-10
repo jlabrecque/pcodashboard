@@ -5,7 +5,8 @@ class CreateCampaigns < ActiveRecord::Migration[5.0]
     t.string "campaign_name"
     t.string "start_date"
     t.string "end_date"
-    t.string "fund_id"
+    t.string "fund_id_pco"
+    t.integer "fund_id"
     t.boolean "closed", :null => false, :default => FALSE
     t.datetime "closeddate"
     t.integer "num_pledges", :default => 0
@@ -17,6 +18,7 @@ class CreateCampaigns < ActiveRecord::Migration[5.0]
     t.float "qtrprogress", :default => 0.00
     t.timestamps
   end
+  add_index("campaigns", "fund_id")
   user1 = Campaign.create(
     :campaign_id        =>  "0",
     :campaign_name      =>  "Dummy Seed Campaign",

@@ -64,7 +64,7 @@ class DonationsController < ApplicationController
               :payment_method_sub,
               :designation_id,
               :designation_cents,
-              :fund_id
+              :fund_id_pco
               )
     end
 end

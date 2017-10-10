@@ -52,10 +52,10 @@ def pledge_report(q,y,cpick)
           #per person calendar
           @calendar,lastsunday = get_calendar()
         # first stuff calendar for primary pco_id
-          pledge_donations(pledge.pco_id,campaign.fund_id,@calendar)
+          pledge_donations(pledge.pco_id,campaign.fund_id_pco,@calendar)
         # then, if a secondary pco_id exists (spouse)...
             if !pledge.pco_id2.nil?
-              pledge_donations(pledge.pco_id2,campaign.fund_id,@calendar)
+              pledge_donations(pledge.pco_id2,campaign.fund_id_pco,@calendar)
             end
           # get quarter pins
           # dtotal = total donations for this quarter

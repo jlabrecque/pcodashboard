@@ -8,7 +8,7 @@ ActiveAdmin.register Donation do
     column :donation_created_at
     column :payment_method
     column :payment_method_sub
-    column :fund_id
+    column :fund_id_pco
     column :pco_id
     actions
   end
@@ -17,7 +17,7 @@ ActiveAdmin.register Donation do
   filter :donation_created_at, label: "Date"
   filter :payment_method, as: :select
   filter :payment_method_sub, as: :select, label: "Submethod"
-  filter :fund_id, :as => :select, :collection => Fund.pluck(:name, :fund_id),label: "Fund ID"
+  filter :fund_id_pco, :as => :select, :collection => Fund.pluck(:name, :fund_id_pco),label: "Fund ID"
   filter :pco_id, as: :select, label: "PCO ID"
 
 end

@@ -68,7 +68,8 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "campaign_name"
     t.string   "start_date"
     t.string   "end_date"
-    t.string   "fund_id"
+    t.string   "fund_id_pco"
+    t.integer  "fund_id"
     t.boolean  "closed",                    default: false, null: false
     t.datetime "closeddate"
     t.integer  "num_pledges",               default: 0
@@ -146,7 +147,8 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "payment_method_sub"
     t.string   "designation_id"
     t.decimal  "designation_cents",   precision: 10
-    t.string   "fund_id"
+    t.string   "fund_id_pco"
+    t.integer  "fund_id"
     t.string   "pco_id"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
@@ -175,7 +177,7 @@ ActiveRecord::Schema.define(version: 20171001235129) do
   end
 
   create_table "funds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "fund_id"
+    t.string   "fund_id_pco"
     t.string   "name"
     t.string   "description"
     t.string   "fund_updated_at"

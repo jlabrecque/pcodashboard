@@ -11,10 +11,12 @@ def self.up
     t.string "payment_method_sub"
     t.string "designation_id"
     t.decimal "designation_cents"
-    t.string "fund_id"
+    t.string "fund_id_pco"
     t.string "pco_id"
+    t.integer "fund_id"
     t.timestamps
   end
+  add_index("donations", "fund_id")
 end
 def self.down
   drop_table :donations

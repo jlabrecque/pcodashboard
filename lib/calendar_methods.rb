@@ -127,6 +127,37 @@ def stuff_donations(pid,calendar)
     end
   return calendar
 end
+def stuff_tithe(pid,calendar)
+    donations = Donation.where(:pco_id => pid).tithe
+    donations.each do |don|
+        pin = don[:donation_created_at].to_date
+                calendar.each_key do |week|
+                  this_week = calendar[week][:date]
+                  next_week = this_week + 7
+                  if pin <= next_week and pin > this_week
+                     next_week_str = next_week.strftime("%Y%m%d")
+                     calendar[next_week_str][:amount] = don[:amount_cents]
+                  end
+                end
+    end
+  return calendar
+end
+#============================================
+def stuff_donreport(pid,calendar)
+    donations = Donation.where(:pco_id => pid)
+    donations.each do |don|
+        pin = don[:donation_created_at].to_date
+                calendar.each_key do |week|
+                  this_week = calendar[week][:date]
+                  next_week = this_week + 7
+                  if pin <= next_week and pin > this_week
+                     next_week_str = next_week.strftime("%Y%m%d")
+                     calendar[next_week_str][:amount] = don[:amount_cents]
+                  end
+                end
+    end
+  return calendar
+end
 #============================================
 def stuff_serving(pid,calendar)
     p = Person.where(:pco_id => pid)[0]
@@ -175,7 +206,7 @@ def pledge_donations(pid,fid,calendar)
                  # First add each don to :total
                  calendar[next_week_str][:total] += don[:amount_cents]
                  #Then add the matching pledge fund $$ to the :pledge
-                 if don[:fund_id] == fid
+                 if don[:fund_id_pco] == fid
                     calendar[next_week_str][:pledge] += don[:amount_cents]
                  end
 

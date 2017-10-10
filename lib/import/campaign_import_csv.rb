@@ -14,7 +14,7 @@ CSV.foreach(import, headers: true) do |row|
   pinput = Campaign.create(
   :campaign_id                => campaign['campaign_id'],
   :campaign_name              => campaign['campaign_name'],
-  :fund_id                    => campaign['fund_id']
+  :fund_id_pco                => campaign['fund_id']
   )
 
 puts "Processing Campaign for ID #{campaign["campaign_id"]}"

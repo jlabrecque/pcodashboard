@@ -15,8 +15,8 @@ Campaign.where(:closed => 0).each do |campaign|
     num_pledges = 0
     cid = campaign
     cname = campaign.campaign_name
-    fund = campaign.fund_id
-    Donation.where(:fund_id => campaign.fund_id).each do |don|
+    fund = campaign.fund_id_pco
+    Donation.where(:fund_id_pco => campaign.fund_id_pco).each do |don|
       totalprogress += don.amount_cents/100
       num_donations += 1
     end
@@ -38,10 +38,10 @@ Pledge.all.where(:campaign => campaign.campaign_id).each do |pledge|
       #per person calendar
       @calendar,lastsunday = get_calendar()
     # first stuff calendar for primary pco_id
-      pledge_donations(pledge.pco_id,campaign.fund_id,@calendar)
+      pledge_donations(pledge.pco_id,campaign.fund_id_pco,@calendar)
     # then, if a secondary pco_id exists (spouse)...
       if !pledge.pco_id2.nil?
-        pledge_donations(pledge.pco_id2,campaign.fund_id,@calendar)
+        pledge_donations(pledge.pco_id2,campaign.fund_id_pco,@calendar)
       end
       dtotal,ptotal,ctotal,progress,display_calendar = quarter_totals(@calendar,qstart,qend,pledge.pledge_start,pledge.initial_gift,"l")
       ppercent,pproject,cpercent,cproject = pledge_calcs(ptotal,ctotal,pledge.initial_gift,pperiod,numperiods,periodicity,progress)
