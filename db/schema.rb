@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.float    "qtrprogress",    limit: 24, default: 0.0
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
+    t.index ["fund_id"], name: "fund_id", using: :btree
   end
 
   create_table "campus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -152,6 +153,7 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "pco_id"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+    t.index ["fund_id"], name: "fund_id", using: :btree
   end
 
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -240,8 +242,11 @@ ActiveRecord::Schema.define(version: 20171001235129) do
   create_table "households", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "household_id_pco"
     t.string   "household_name"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "household_primary_pco"
+    t.integer  "person_id"
+    t.integer  "campus_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   create_table "locations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

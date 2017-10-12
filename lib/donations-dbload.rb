@@ -99,7 +99,7 @@ LOGGER.info("=============================================================")
 LOGGER.info("Processing Donations")
 
 while !next_check.nil?
-  don = donations(page_size,offset_index)
+  don = get_donations(page_size,offset_index)
   next_check = don["links"]["next"]
   donations_data = don["data"]
   donations_data.each do |dd|

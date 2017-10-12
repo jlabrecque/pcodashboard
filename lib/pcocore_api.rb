@@ -130,7 +130,7 @@ def find_person_campus(pco_id)
 end
 
 # PCO API pull of PCO Giving / People / Donations
-def donations(page_size,offset_index)
+def get_donations(page_size,offset_index)
   script_name="donations_dbload2.rb"
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
