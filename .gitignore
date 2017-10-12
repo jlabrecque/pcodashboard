@@ -22,3 +22,4 @@
 /lib/nohup.out
 # Ignore Byebug command history file.
 .byebug_history
+/lib/import/*.csv

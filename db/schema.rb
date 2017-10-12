@@ -401,6 +401,7 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "fname2"
     t.string   "lname2"
     t.string   "family_id"
+    t.integer  "household_id"
     t.decimal  "initial_gift",     precision: 10
     t.decimal  "pledge_perperiod", precision: 10
     t.integer  "pledge_periods"

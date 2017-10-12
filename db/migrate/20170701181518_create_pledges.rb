@@ -10,6 +10,7 @@ class CreatePledges < ActiveRecord::Migration[5.0]
       t.string "fname2"
       t.string "lname2"
       t.string "family_id"
+      t.integer "household_id"
       t.decimal "initial_gift"
       t.decimal "pledge_perperiod"
       t.integer "pledge_periods"
