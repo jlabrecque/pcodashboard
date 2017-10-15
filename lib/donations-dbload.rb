@@ -14,6 +14,8 @@ total = 0
 logfile_prefix = "donations"
 totcreated = 0
 totupdated = 0
+donupdatedcount = 0
+prsupdatedcount = 0
 next_check = 0
 $pullcount = 0
 datestamp = Time.now
@@ -182,30 +184,39 @@ LOGGER.info("Updating :fund associations ...")
 Donation.all.each do |don|
      f = Fund.where(:fund_id_pco => don.fund_id_pco)
      if f.count > 0 # matching fund_ids
-        puts "Updating fund_id association for Donation #{don.id}"
         don.update(:fund_id => f[0].id)
-     else
-        puts "No associated Fund ID -- skipping"
+        donupdatedcount += 1
      end
 end
-LOGGER.info("Updating :eventtime_id associations from Eventtime dB...")
+LOGGER.info("Updating Campaign associations ...")
+Campaign.all.each do |camp|
+     f = Fund.where(:fund_id_pco => camp.fund_id_pco)
+     if f.count > 0 # matching fund_ids
+        camp.update(:fund_id => f[0].id)
+     end
+end
 
-LOGGER.info("** All records processed **")
-LOGGER.info("Total created: #{totcreated}")
-LOGGER.info("=============================================================")
-LOGGER.info("Script ended at #{datestamp}")
-LOGGER.info("=============================================================")
+
 #open_log.close
 LOGGER.info("Updating :person_id associations from Person dB...")
 Donation.all.each do |don|
      p = Person.where(:pco_id => don.pco_id)
      if p.count > 0 # matching pco_ids
-        puts "Updating person_id for Donation #{don.id}"
         don.update(:person_id => p[0].id)
-     else
-        puts "No associated PCO ID -- skipping"
+        prsupdatedcount += 1
      end
 end
+LOGGER.info("=============================================================")
+LOGGER.info("** All records processed **")
+LOGGER.info("Donation Associations updated: #{donupdatedcount}")
+LOGGER.info("People Associations updated: #{prsupdatedcount}")
+LOGGER.info("Total Donation records created: #{totcreated}")
+LOGGER.info("=============================================================")
+LOGGER.info("Script ended at #{datestamp}")
+LOGGER.info("=============================================================")
+
+
+
 
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver

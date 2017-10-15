@@ -29,7 +29,7 @@ form do |f|
         f.input :campaign_id
     end
     f.input :campaign_name
-    f.input :fund_id_pco,  :as => :select, :collection => Fund.pluck(:name, :fund_id_pco)
+    f.input :fund_id,  :as => :select, :collection => Fund.pluck(:name, :fund_id)
     f.input :start_date, as: :datepicker,
                           datepicker_options: {
                             min_date: "2016-1-1",

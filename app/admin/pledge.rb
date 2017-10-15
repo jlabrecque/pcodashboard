@@ -6,7 +6,7 @@ menu parent: "Pledge Mgmt"
 active_admin_importable
 index do
   selectable_column
-  column :campaign
+  column :campaign_id
   column :pledge_date
   column "Primary First Name", :fname
   column "Primary Last Name", :lname
@@ -16,10 +16,28 @@ index do
   actions
 end
 
-filter :campaign, as: :select, :collection => Campaign.where(:closed => 0).pluck(:campaign_name, :campaign_id)
+filter :campaign_id, as: :select, :collection => Campaign.where(:closed => 0).pluck(:campaign_name, :campaign_id_pco)
 filter :fname, label: "Primary First Name"
 filter :lname, label: "Primary Last Name"
 filter :fname2, label: "Secondary First Name"
 filter :lname2, label: "Secondary Last Name"
 filter :periodicity, as: :select
+
+  form do |f|
+    f.inputs do
+
+      f.input :campaign_id, :as => :select, :collection => Campaign.pluck(:campaign_name, :id)
+      f.input :pledge_date
+      f.input :pco_id, :as => :select, :collection => Person.pluck(:fullname, :pco_id), label: "Name"
+      f.input :household_id, :as => :select, :collection => Household.pluck(:household_name, :id), label: "Household"
+      f.input :pco_id2, :as => :select, :collection => Person.pluck(:fullname, :pco_id), label: "Name2"
+      f.input :initial_gift
+      f.input :pledge_perperiod
+      f.input :pledge_periods
+      f.input :periodicity
+      f.input :pledge_start
+    end
+    f.actions
+  end
+
 end

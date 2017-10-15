@@ -1,9 +1,10 @@
 class CreatePledges < ActiveRecord::Migration[5.0]
   def self.up
     create_table :pledges do |t|
-      t.string "campaign"
+      t.string "campaign_id"
       t.string "pledge_date"
       t.string "pco_id"
+      t.integer "person_id"
       t.string "fname"
       t.string "lname"
       t.string "pco_id2"

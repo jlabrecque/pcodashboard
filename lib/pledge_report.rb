@@ -3,7 +3,7 @@ require 'json'
 require 'pp'
 require 'csv'
 require 'calendar_methods.rb'
-
+require 'date'
 quarter = "q2"
 year = "2017"
 campaign_pick = 1
@@ -27,7 +27,7 @@ def pledge_report(q,y,cpick)
           puts header.join(',')
           csv << header
         #Per pledge
-        Pledge.all.where(:campaign => campaign.campaign_id).each do |pledge|
+        Pledge.all.where(:campaign_id => campaign.campaign_id_pco).each do |pledge|
           pperiod = pledge.pledge_perperiod
           numperiods = pledge.pledge_periods
           periodicity = pledge.periodicity

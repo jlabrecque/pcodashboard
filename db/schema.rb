@@ -64,23 +64,23 @@ ActiveRecord::Schema.define(version: 20171001235129) do
   end
 
   create_table "campaigns", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "campaign_id"
+    t.string   "campaign_id_pco"
     t.string   "campaign_name"
     t.string   "start_date"
     t.string   "end_date"
     t.string   "fund_id_pco"
     t.integer  "fund_id"
-    t.boolean  "closed",                    default: false, null: false
+    t.boolean  "closed",                     default: false, null: false
     t.datetime "closeddate"
-    t.integer  "num_pledges",               default: 0
-    t.integer  "num_donations",             default: 0
-    t.float    "totalcommitted", limit: 24, default: 0.0
-    t.float    "qtrcommited",    limit: 24, default: 0.0
-    t.float    "avgpledge",      limit: 24, default: 0.0
-    t.float    "totalprogress",  limit: 24, default: 0.0
-    t.float    "qtrprogress",    limit: 24, default: 0.0
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.integer  "num_pledges",                default: 0
+    t.integer  "num_donations",              default: 0
+    t.float    "totalcommitted",  limit: 24, default: 0.0
+    t.float    "qtrcommited",     limit: 24, default: 0.0
+    t.float    "avgpledge",       limit: 24, default: 0.0
+    t.float    "totalprogress",   limit: 24, default: 0.0
+    t.float    "qtrprogress",     limit: 24, default: 0.0
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.index ["fund_id"], name: "fund_id", using: :btree
   end
 
@@ -392,9 +392,10 @@ ActiveRecord::Schema.define(version: 20171001235129) do
   end
 
   create_table "pledges", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "campaign"
+    t.string   "campaign_id"
     t.string   "pledge_date"
     t.string   "pco_id"
+    t.integer  "person_id"
     t.string   "fname"
     t.string   "lname"
     t.string   "pco_id2"

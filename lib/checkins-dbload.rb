@@ -129,10 +129,7 @@ LOGGER.info("Updating :person_id associations from Person dB...")
 CheckIn.all.each do |chk|
      p = Person.where(:pco_id => chk.pco_id)
      if p.count > 0 # matching pco_ids
-        puts "Updating person_id for Checkin #{chk.id}"
         chk.update(:person_id => p[0].id)
-     else
-        puts "No associated PCO ID -- skipping"
      end
 end
 LOGGER.info("Updating :eventtime_id associations from Eventtime dB...")
@@ -140,10 +137,7 @@ LOGGER.info("Updating :eventtime_id associations from Eventtime dB...")
 CheckIn.where(:eventtime_id => nil).each do |chk|
      e = Eventtime.where(:eventtime_id_pco => chk.eventtime_id_pco)
      if e.count > 0  #matching eventime_ids
-        puts "Updating eventtime_id for Checkin #{chk.id}"
         chk.update(:eventtime_id => e[0].id, :checkin_time => e[0].starts_at)
-     else
-        puts "No associated Eventtime ID -- skipping"
      end
 end
 

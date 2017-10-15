@@ -26,7 +26,7 @@ ActiveAdmin.register PledgeReport do
     f.inputs do
       f.input :quarter, :as => :select, :collection => ["Q1","Q2","Q3","Q4"]
       f.input :year, :as => :select, :collection => ['2016','2017','2018','2019','2020','2021','2022','2023','2024']
-      f.input :campaign_id, as: :select, :collection => Campaign.pluck(:campaign_name, :campaign_id)
+      f.input :campaign_id, as: :select, :collection => Campaign.pluck(:campaign_name, :campaign_id_pco)
       f.input :reportname
       f.actions
     end

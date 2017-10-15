@@ -26,7 +26,7 @@ Campaign.where(:closed => 0).each do |campaign|
 qstart,qend = quarter_pins(@calendar,qx,year)
 
 #Per pledge
-Pledge.all.where(:campaign => campaign.campaign_id).each do |pledge|
+Pledge.all.where(:campaign_id => campaign.id).each do |pledge|
       pperiod = pledge.pledge_perperiod
       numperiods = pledge.pledge_periods
       periodicity = pledge.periodicity
@@ -49,14 +49,14 @@ Pledge.all.where(:campaign => campaign.campaign_id).each do |pledge|
       totalpledge += (pledge.pledge_periods * pledge.pledge_perperiod)
       #
  end
- puts num_pledges
+ puts "Total Pledges: #{num_pledges}"
  num_pledges > 0 ? avgpledge = totalpledge / num_pledges : avgpledge = 0
  totalpledge > 0 ? percentprogress = totalprogress / totalpledge : percentprogress = 0.0
  puts "CampaignName: #{campaign.campaign_name} Start Date:#{campaign.start_date}  TotalPledged:#{totalpledge} TotalProgress: #{totalprogress} #Pledges:#{num_pledges}  AveragePledge:#{avgpledge}  %Progress:#{percentprogress} "
 
  campaign.update_attributes(:num_pledges => num_pledges, :totalcommitted => totalpledge)
  cmupdate = CampaignMetum.create(
-            :campaign_id        =>    campaign.campaign_id,
+            :campaign_id        =>    campaign.campaign_id_pco,
             :campaign_name      =>    campaign.campaign_name,
             :totalpledged       =>    totalpledge,
             :totalprogress      =>    totalprogress,

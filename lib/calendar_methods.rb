@@ -224,29 +224,31 @@ def quarter_totals(calendar,qstart,qend,cstart,initial_gift,mode)
   ptotal = 0.00
   dtotal = 0.00
   progress = 0
+
   display_calendar = []
   calendar.each do | week |
+
       # if between campaign start and quarter end, add to campaign total
       if week[0].to_date >= cstart.to_date and week[0].to_date <= qend.to_date
           ctotal += week[1][:pledge]/100
           progress += 1
           # also, if on or after quarter start, add to quarter total
           if week[0].to_date >= qstart.to_date
-#            puts "#{week[0].to_date} #{week[1][:date]} #{week[1][:amount]}"
                 dtotal += week[1][:total]/100
                 ptotal += week[1][:pledge]/100
                 case mode
                 when "h"
                   display_calendar << week[0]
                 else
-                  display_calendar << week[1][:pledge]
+                  display_calendar << (week[1][:pledge]/100)
               end
           end
       else
       end
   end
+
   # add initial_gift to campaign total
-  initial_gift.nil? ? ctotal == 0 : ctotal += initial_gift
+  #initial_gift.nil? ? ctotal == 0 : ctotal += initial_gift
   return dtotal,ptotal,ctotal,progress,display_calendar
 
 end
@@ -254,21 +256,18 @@ end
 def quarter_pins(calendar,qx,year)
   # used for PCOpledge report
   case qx
-    when "Q1"
+    when "Q1","q1"
       qstart = Date.parse("01-01-" + year).strftime("%Y%m%d")
       qend = Date.parse("31-03-" + year).strftime("%Y%m%d")
-    when "Q2"
+    when "Q2","q2"
       qstart = Date.parse("01-04-" + year).strftime("%Y%m%d")
       qend = Date.parse("30-06-" + year).strftime("%Y%m%d")
-    when "Q3"
+    when "Q3","q3"
       qstart = Date.parse("01-07-" + year).strftime("%Y%m%d")
       qend = Date.parse("30-09-" + year).strftime("%Y%m%d")
-    when "Q4"
+    when "Q4","q4"
       qstart = Date.parse("01-10-" + year).strftime("%Y%m%d")
       qend = Date.parse("31-12-" + year).strftime("%Y%m%d")
-    else
-      qstart = Date.parse("01-01-" + year).strftime("%Y%m%d")
-      qend = Date.parse("31-03-" + year).strftime("%Y%m%d")
   end
   return qstart,qend
 end

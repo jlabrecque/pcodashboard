@@ -49,7 +49,7 @@ def pledge_report(q,y,cpick)
     $qgrand_total = 0
     lastsunday = 0
     datestamp = Time.now
-    campaign = Campaign.all.where(:campaign_id => cpick)[0]
+    campaign = Campaign.all.where(:campaign_id_pco => cpick)[0]
     # get quarter pins once
     @calendar,lastsunday = get_calendar()
     qstart,qend = quarter_pins(@calendar,q,y)
@@ -61,7 +61,7 @@ def pledge_report(q,y,cpick)
           puts header.join(',')
           csv << header
         #Per pledge
-        Pledge.all.where(:campaign => campaign.campaign_id).each do |pledge|
+        Pledge.all.where(:campaign_id => campaign.campaign_id_pco).each do |pledge|
           pperiod = pledge.pledge_perperiod
           numperiods = pledge.pledge_periods
           periodicity = pledge.periodicity
@@ -122,3 +122,19 @@ def pledge_report(q,y,cpick)
 end
 
 ###############
+def campaign_total(c,p,ed)
+  @ct = 0
+  if !p.family.empty?
+      p.family[0].members.each do |member|
+        member.donations.where("fund_id = ? AND donation_created_at < ?", c.fund_id, ed).each do |don|
+          @ct += don.designation_cents
+        end
+      end
+  else
+    p.donations.where("fund_id = ? AND donation_created_at < ?", c.fund_id, ed).each do |don|
+      @ct += don.designation_cents
+    end
+  end
+  ctotal = @ct/100
+  return ctotal
+end

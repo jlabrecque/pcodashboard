@@ -1,7 +1,7 @@
 class CreateCampaigns < ActiveRecord::Migration[5.0]
   def self.up
   create_table :campaigns do |t|
-    t.string "campaign_id"
+    t.string "campaign_id_pco"
     t.string "campaign_name"
     t.string "start_date"
     t.string "end_date"
