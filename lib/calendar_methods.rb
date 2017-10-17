@@ -286,10 +286,11 @@ inc_initial_gift = TRUE
     cpercent = 0.00 # campaign % progress start to date
     cproject = 0.00 # campaign projections from start to date
     cproject = (pperiod * numperiods)
-    if inc_initial_gift
-      initial_gift.nil? ? cproject == cproject : cproject += initial_gift
+    if inc_initial_gift and !initial_gift.nil?
+      cproject += initial_gift
     end
-    cpercent = ctotal / cproject
+
+    cproject != 0 ? cpercent = ctotal / cproject : cpercent = 0.00
 
     case periodicity
       when "weekly"
