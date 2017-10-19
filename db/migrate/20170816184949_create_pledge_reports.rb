@@ -5,7 +5,9 @@ class CreatePledgeReports < ActiveRecord::Migration[5.0]
       t.string  :year
       t.integer :campaign_id
       t.string  :reportname
+      t.string  :validation
       t.string  :filename
+      t.string  :valfilename
       t.timestamps
     end
   end

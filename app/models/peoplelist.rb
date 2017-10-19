@@ -1,0 +1,2 @@
+class Peoplelist < ApplicationRecord
+end

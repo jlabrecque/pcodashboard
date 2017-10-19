@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171001235129) do
+ActiveRecord::Schema.define(version: 20171019032539) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -369,6 +369,23 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "last_checkin"
   end
 
+  create_table "peoplelist_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "peoplelist_id"
+    t.integer  "person_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "peoplelists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "list_id_pco"
+    t.string   "name"
+    t.text     "description",      limit: 65535
+    t.string   "status"
+    t.string   "list_updated_pco"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
   create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "plid"
     t.string   "stid"
@@ -386,7 +403,9 @@ ActiveRecord::Schema.define(version: 20171001235129) do
     t.string   "year"
     t.integer  "campaign_id"
     t.string   "reportname"
+    t.string   "validation"
     t.string   "filename"
+    t.string   "valfilename"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

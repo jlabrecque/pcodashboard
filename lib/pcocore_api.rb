@@ -156,6 +156,9 @@ def designations(donid)
   end
   $pullcount += 1
   rate_check()
+  ####################REMOVE
+  #pp JSON.parse(designations_unp.to_json)
+    ####################REMOVE
   return JSON.parse(designations_unp.to_json)
 
 end
@@ -293,7 +296,7 @@ def lists(page_size,offset_index)
   # Gets all team members related to a specific plan
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
-    lists_unp = api.people.v2.lists.get(per_page: page_size,offset: offset_index,include: 'people')
+    lists_unp = api.people.v2.lists.get(per_page: page_size,offset: offset_index)
   rescue PCO::API::Errors::BaseError => error
     $retry_switch = exception_pause(error,script_name)
     retry if $retry_switch == 1

@@ -4,13 +4,16 @@ ActiveAdmin.register PledgeReport do
   menu priority: 3, label: "Reports"
   menu parent: "Pledge Mgmt"
   actions :index, :new, :destroy, :create
-  permit_params :quarter, :year, :reportname, :filename, :id, :campaign_id
+  permit_params :quarter, :year, :reportname, :filename, :id, :campaign_id, :valfilename
 
   index do
     column :quarter
     column :year
     column :reportname do |c|
           link_to "#{c.reportname}", "http://#{Setting.first.site_url}/reports/#{c.filename}"
+    end
+    column :validation do |c|
+          link_to "#{c.reportname}_validation", "http://#{Setting.first.site_url}/reports/#{c.valfilename}"
     end
     column :created_at
     actions
@@ -37,8 +40,9 @@ ActiveAdmin.register PledgeReport do
         q = report["quarter"]
         y = report["year"]
         c = report["campaign_id"]
-        fn = pledge_report(q,y,c)
+        fn,vn = pledge_report(q,y,c)
         report["filename"] = fn
+        report["valfilename"] = vn
         create! do |succes, failure|
         end
       end
