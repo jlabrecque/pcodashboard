@@ -7,7 +7,7 @@
 <% donation_count = @donations.count %>
 <% donation_total = 0.00 %>
 <% @donations.each do |d| %>
-<%     donation_total += d["amount_cents"]/100 %>
+<%     donation_total += d["amount"] %>
 <% end %>
 <% donation_average = donation_total / donation_count %>
 <% checkins_total = @checkins.count %>

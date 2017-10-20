@@ -17,7 +17,7 @@ Campaign.where(:closed => 0).each do |campaign|
     cname = campaign.campaign_name
     fund = campaign.fund_id_pco
     Donation.where(:fund_id_pco => campaign.fund_id_pco).each do |don|
-      totalprogress += don.amount_cents/100
+      totalprogress += don.amount
       num_donations += 1
     end
     campaign.update_attributes(:totalprogress => totalprogress, :num_donations => num_donations)

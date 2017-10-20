@@ -141,8 +141,8 @@ def campaign_total(c,p,ed)
     @ct = 0
     ccount = p.donations.where("fund_id = ? AND donation_created_at <= ?", c.fund_id, ed).count
     p.donations.where("fund_id = ? AND donation_created_at <= ?", c.fund_id, ed).each do |don|
-      @ct += don.designation_cents
+      @ct += don.designation
     end
-  ctotal = @ct/100
+  ctotal = @ct
   return ctotal,ccount
 end

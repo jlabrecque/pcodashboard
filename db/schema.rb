@@ -140,14 +140,14 @@ ActiveRecord::Schema.define(version: 20171019032539) do
   create_table "donations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "donation_id"
     t.integer  "person_id"
-    t.decimal  "amount_cents",        precision: 10
+    t.decimal  "amount",        precision: 10
     t.string   "donation_created_at"
     t.string   "donation_updated_at"
     t.string   "payment_channel"
     t.string   "payment_method"
     t.string   "payment_method_sub"
     t.string   "designation_id"
-    t.decimal  "designation_cents",   precision: 10
+    t.decimal  "designation",   precision: 10
     t.string   "fund_id_pco"
     t.integer  "fund_id"
     t.string   "pco_id"

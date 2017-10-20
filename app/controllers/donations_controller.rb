@@ -56,14 +56,14 @@ class DonationsController < ApplicationController
     def Donation_params
       params.require(:Donation).permit(
               :donation_id,
-              :amount_cents,
+              :amount,
               :donation_created_at,
               :donation_updated_at,
               :payment_channel,
               :payment_method,
               :payment_method_sub,
               :designation_id,
-              :designation_cents,
+              :designation,
               :fund_id_pco
               )
     end

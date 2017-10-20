@@ -107,7 +107,7 @@ while !next_check.nil?
   donations_data.each do |dd|
     donation_id         =   dd['id']
     !dd['relationships']['person']['data'].nil? ? pco_id  = dd['relationships']['person']['data']['id'] : pco_id = "000000"
-    amount_cents        =   dd['attributes']['amount_cents']
+    amount              =   dd['attributes']['amount_cents']/100
     donation_created_at =   dd['attributes']['created_at']
     donation_updated_at =   dd['attributes']['updated_at']
     payment_channel     =   dd['attributes']['payment_channel']
@@ -115,7 +115,7 @@ while !next_check.nil?
     payment_method_sub  =   dd['attributes']['payment_method_sub']
     designations(donation_id)["data"].each do |des|
             des_id = des["id"]
-            des_amount = des["attributes"]["amount_cents"]
+            des_amount = des["attributes"]["amount_cents"]/100
             fund_id_pco = des["relationships"]["fund"]["data"]["id"]
             fund_id = Fund.where(:fund_id_pco => fund_id_pco)[0].id
             designationscheck = Donation.where(:designation_id => des_id)
@@ -127,14 +127,14 @@ while !next_check.nil?
 
               donationnew = Donation.create(
               :donation_id            =>  donation_id,
-              :amount_cents           =>  des_amount,
+              :amount                 =>  des_amount,
               :donation_created_at    =>  donation_created_at,
               :donation_updated_at    =>  donation_updated_at,
               :payment_channel        =>  payment_channel,
               :payment_method         =>  payment_method,
               :payment_method_sub     =>  payment_method_sub,
               :designation_id         =>  des_id,
-              :designation_cents      =>  des_amount,
+              :designation            =>  des_amount,
               :fund_id_pco            =>  fund_id_pco,
               :fund_id                =>  fund_id,
               :pco_id                 =>  pco_id
@@ -147,14 +147,14 @@ while !next_check.nil?
               LOGGER.info("Updating new record for Donation ID #{donation_id} #{des_id} #{pco_id} Offset: #{offset_index} ")
               donationexist = Donation.update(designationscheck[0].id,
               :donation_id            =>  donation_id,
-              :amount_cents           =>  des_amount,
+              :amount                 =>  des_amount,
               :donation_created_at    =>  donation_created_at,
               :donation_updated_at    =>  donation_updated_at,
               :payment_channel        =>  payment_channel,
               :payment_method         =>  payment_method,
               :payment_method_sub     =>  payment_method_sub,
               :designation_id         =>  des_id,
-              :designation_cents      =>  des_amount,
+              :designation            =>  des_amount,
               :fund_id_pco            =>  fund_id_pco,
               :fund_id                =>  fund_id,
               :pco_id                 =>  pco_id

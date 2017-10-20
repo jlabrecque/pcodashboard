@@ -46,7 +46,7 @@ def donation_grid(pid)
       doncount = 0
       @donationcal = []
       calendar.each_key do |x|
-        donval = (calendar[x][:amount])/100
+        donval = (calendar[x][:amount])
         if donval != 0
             tuple =  [Date.parse(x), donval]
             @donationcal << tuple
@@ -121,12 +121,13 @@ def stuff_donations(pid,calendar)
                   next_week = this_week + 7
                   if pin <= next_week and pin > this_week
                      next_week_str = next_week.strftime("%Y%m%d")
-                     calendar[next_week_str][:amount] = don[:amount_cents]
+                     calendar[next_week_str][:amount] = don[:amount]
                   end
                 end
     end
   return calendar
 end
+
 def stuff_tithe(pid,calendar)
     donations = Donation.where(:pco_id => pid).tithe
     donations.each do |don|
@@ -136,7 +137,7 @@ def stuff_tithe(pid,calendar)
                   next_week = this_week + 7
                   if pin <= next_week and pin > this_week
                      next_week_str = next_week.strftime("%Y%m%d")
-                     calendar[next_week_str][:amount] = don[:amount_cents]
+                     calendar[next_week_str][:amount] = don[:amount]
                   end
                 end
     end
@@ -152,7 +153,7 @@ def stuff_donreport(pid,calendar)
                   next_week = this_week + 7
                   if pin <= next_week and pin > this_week
                      next_week_str = next_week.strftime("%Y%m%d")
-                     calendar[next_week_str][:amount] = don[:amount_cents]
+                     calendar[next_week_str][:amount] = don[:amount]
                   end
                 end
     end
@@ -204,10 +205,10 @@ def pledge_donations(pid,fid,calendar)
               if pin <= next_week and pin > this_week
                  next_week_str = next_week.strftime("%Y%m%d")
                  # First add each don to :total
-                 calendar[next_week_str][:total] += don[:amount_cents]
+                 calendar[next_week_str][:total] += don[:amount]
                  #Then add the matching pledge fund $$ to the :pledge
                  if don[:fund_id_pco] == fid
-                    calendar[next_week_str][:pledge] += don[:amount_cents]
+                    calendar[next_week_str][:pledge] += don[:amount]
                  end
 
               end
@@ -230,18 +231,18 @@ def quarter_totals(calendar,qstart,qend,cstart,initial_gift,mode)
 
       # if between campaign start and quarter end, add to campaign total
       if week[0].to_date >= cstart.to_date and week[0].to_date <= qend.to_date
-          ctotal += week[1][:pledge]/100
+          ctotal += week[1][:pledge]
           progress += 1
           # also, if on or after quarter start, add to quarter total
           if week[0].to_date >= qstart.to_date
-                dtotal += week[1][:total]/100
-                ptotal += week[1][:pledge]/100
+                dtotal += week[1][:total]
+                ptotal += week[1][:pledge]
                 case mode
                 when "h"
                   display_calendar << week[0]
                 else
-                  display_calendar << (week[1][:pledge]/100)
-              end
+                  display_calendar << (week[1][:pledge])
+                end
           end
       else
       end

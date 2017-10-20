@@ -4,7 +4,7 @@ ActiveAdmin.register Donation do
   index do
     selectable_column
     column :id
-    column :amount_cents
+    column :amount
     column :donation_created_at
     column :payment_method
     column :payment_method_sub
@@ -13,7 +13,7 @@ ActiveAdmin.register Donation do
     actions
   end
 
-  filter :amount_cents, label: "Amount (cents)"
+  filter :amount, label: "Amount"
   filter :donation_created_at, label: "Date"
   filter :payment_method, as: :select
   filter :payment_method_sub, as: :select, label: "Submethod"
