@@ -10,17 +10,15 @@ index do
   column :pledge_date
   column "Primary First Name", :fname
   column "Primary Last Name", :lname
-  column "Secondary First Name", :fname2
-  column "Secondary Last Name", :lname2
   column :periodicity
+  number_column :pledge_perperiod, as: :currency, unit: "$", separator: ","
   actions
 end
 
 filter :campaign_id, as: :select, :collection => Campaign.where(:closed => 0).pluck(:campaign_name, :campaign_id_pco)
 filter :fname, label: "Primary First Name"
 filter :lname, label: "Primary Last Name"
-filter :fname2, label: "Secondary First Name"
-filter :lname2, label: "Secondary Last Name"
+filter :pledge_perperiod
 filter :periodicity, as: :select
 
   form do |f|

@@ -4,7 +4,7 @@ ActiveAdmin.register Donation do
   index do
     selectable_column
     column :id
-    column :amount
+    number_column :amount, as: :currency, unit: "$", separator: ","
     column :donation_created_at
     column :payment_method
     column :payment_method_sub
