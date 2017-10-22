@@ -249,7 +249,7 @@ def check(checkid)
 end
 
 def service_types()
-  script_name="volunteer_dbload.rb"
+  script_name="services-dbload.rb"
   # Gets all service types (should be one pull)
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
@@ -264,7 +264,7 @@ def service_types()
 end
 
 def plans(stid,page_size_pl,offset_index_pl)
-  script_name="volunteer_dbload.rb"
+  script_name="services-dbload.rb"
   # Gets all plans related to a service type
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
@@ -279,6 +279,7 @@ def plans(stid,page_size_pl,offset_index_pl)
 end
 
 def team_members(stid,plid,page_size,offset_index)
+  script_name="services-dbload.rb"
   api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
   begin
     team_members_unp = api.services.v2.service_types[stid].plans[plid].team_members.get(per_page: page_size,offset: offset_index)
@@ -288,7 +289,13 @@ def team_members(stid,plid,page_size,offset_index)
   end
   $pullcount += 1
   rate_check()
-  return JSON.parse(team_members_unp.to_json)
+  if $retry_switch == 3
+    $retry_switch = 0
+    return NIL
+  else
+    return JSON.parse(team_members_unp.to_json)
+  end
+
 end
 # lists methods
 def lists(page_size,offset_index)
@@ -305,9 +312,24 @@ def lists(page_size,offset_index)
   rate_check()
   return JSON.parse(lists_unp.to_json)
 end
+def listpeople(lid,page_size,offset_index)
+  script_name="unused"
+  # Gets all team members related to a specific plan
+  api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
+  begin
+    listpeople_unp = api.people.v2.lists[lid].people.get(per_page: page_size,offset: offset_index)
+  rescue PCO::API::Errors::BaseError => error
+    $retry_switch = exception_pause(error,script_name)
+    retry if $retry_switch == 1
+  end
+  $pullcount += 1
+  rate_check()
+  return JSON.parse(listpeople_unp.to_json)
+end
+
 #Build CampusDb methods
 def campus_load()
-  script_name="campus_dbload.rb"
+  script_name="people-dbload.rb"
   # Gets all service types (should be one pull)
   if !@settings.campus_fd.empty?
       api = PCO::API.new(basic_auth_token: @settings.pcoauthtok, basic_auth_secret: @settings.pcoauthsec )
@@ -459,7 +481,7 @@ def exception_pause(error,script_name)
       # Method resets (longer) sleep value, notifies user (console), sleeps for X, then resets the clock and pullcount
       case error.status
       when 429
-          puts "Exception occured...#{error.message}"
+          puts "429 Exception occured...#{error.message}"
           sleepval = ($endtime - Time.now)
           if sleepval < 0
               puts "Rate limit exceded .. Sleeping for #{$exceptionbuffer}"
@@ -473,8 +495,8 @@ def exception_pause(error,script_name)
           $pullcount = 0
           $retry_switch = 1
       when 404
-        puts "Exception occured...#{error.message}"
-        $retry_switch = 0
+        puts "404 Exception occured...#{error.message}"
+        $retry_switch = 3
       else
           puts "Non-recoverable non-rate error. Sorry!!..#{error.message}"
           $retry_switch = 0

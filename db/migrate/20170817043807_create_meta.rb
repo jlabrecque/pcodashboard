@@ -14,6 +14,9 @@ class CreateMeta < ActiveRecord::Migration[5.0]
    prime = Metum.create(:modeltype => "donations", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0)
    prime = Metum.create(:modeltype => "checkins", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0)
    prime = Metum.create(:modeltype => "campaigns", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0)
+   prime = Metum.create(:modeltype => "mccampaigns", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0)
+   prime = Metum.create(:modeltype => "mclists", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0)
+   prime = Metum.create(:modeltype => "plans", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0, :last_import => ("2010-01-01").to_date)
 
   end
   def self.down

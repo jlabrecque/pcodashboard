@@ -7,6 +7,8 @@ class Person < ApplicationRecord
   has_many :attended, :through =>  :group_attendances, :source => :group
   has_many :household_people
   has_many :family, :through =>  :household_people, :source => :household
+  has_many :peoplelist_people
+  has_many :lists, :through =>  :peoplelist_people, :source => :peoplelist
   has_many :teammembers
   has_many :mailchimplists
   has_many :workflowcards

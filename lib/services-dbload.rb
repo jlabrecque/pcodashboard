@@ -68,13 +68,14 @@ st = service_type()
           :st_freq          =>  u["attributes"]["frequency"]
           )
         else
-          LOGGER.info("NO action")
         end
             inner_loop_index += 1
 
     end
     LOGGER.info("** All records processed  **")
     LOGGER.info("Total ServiceTypes created: #{totcreated}")
+
+
 
 totprocessed = 0
 totcreated = 0
@@ -121,7 +122,6 @@ st.each do |s|
                         )
                         totupdated += 1
                       else
-                        LOGGER.info("No action for Plan ID #{stid} #{plid} #{pldates} #{pl_sort_date} #{pupdate} ")
                       end
 
                   end
@@ -132,13 +132,15 @@ st.each do |s|
 end
 
 
+plwindow = Plan.byupdate.last.pl_updated_at.to_date
+meta = Metum.create(:modeltype => "plans", :last_import => plwindow)
+
 LOGGER.info("** All Plans processed  **")
 LOGGER.info("Total Plans created: #{totcreated}")
 LOGGER.info("Total Plans updated: #{totupdated}")
 
-#set inner and outer indexes to 0
 
-planwindow = Date.today - 1000
+checkwindow = (Plan.byupdate.last.pl_updated_at.to_date - 7.days).to_s
 next_check = 0
 totcreated = 0
 totupdated = 0
@@ -149,74 +151,71 @@ set_endtime()
 LOGGER.info("=================================================")
 LOGGER.info("Starting processing Team members...")
 ServiceType.all.each do |st|
-    Plan.where(:stid => st["stid"]).each do |pl|
-      if pl["pl_updated_at"].to_date.strftime("%Y-%m-%d") < planwindow.to_s
-        LOGGER.info("Plan update before update window -- skipping")
-      else
+     Plan.where("stid = ? and pl_updated_at >= ?",st["stid"],checkwindow).each do |pl|
+        LOGGER.info("Processing ServiceType: #{st.stid} Plan: #{pl.plid}")
         while !next_check.nil?
             tm = team_members(st["stid"],pl["plid"],page_size,offset_index)
-            next_check = tm["links"]["next"]
-                tm["data"].each do |member|
+            if !tm.nil?
+              next_check = tm["links"]["next"]
+                  tm["data"].each do |member|
 
-                      pco_id        =   member["relationships"]["person"]["data"]["id"]
-                      tmid          =   member["id"]
-                      tmname        =   member["attributes"]["name"]
-                      tmstatus      =   member["attributes"]["status"]
-                      tmreason      =   member["attributes"]["decline_reason"]
-                      !tmreason.nil?  ? tmreason = tmreason.tr('^A-Za-z0-9 ', '') : tmreason = ""
-                      tmposition    =   member["attributes"]["team_position_name"]
-                      pldates       =   pl["pldates"]
-                      pl_sort_date  =   pl["pl_sort_date"]
-                      membercheck   = Teammember.where(:tmid => tmid)
-                      person        = Person.where(:pco_id => pco_id)
-                      if !membercheck.exists?
-                        ## then do all this to create new record
-                      LOGGER.info("Creating new record for TeamMember ID #{tmid}")
+                        pco_id        =   member["relationships"]["person"]["data"]["id"]
+                        tmid          =   member["id"]
+                        tmname        =   member["attributes"]["name"]
+                        tmstatus      =   member["attributes"]["status"]
+                        tmreason      =   member["attributes"]["decline_reason"]
+                        !tmreason.nil?  ? tmreason = tmreason.tr('^A-Za-z0-9 ', '') : tmreason = ""
+                        tmposition    =   member["attributes"]["team_position_name"]
+                        pldates       =   pl["pldates"]
+                        pl_sort_date  =   pl["pl_sort_date"]
+                        membercheck   = Teammember.where(:tmid => tmid)
+                        person        = Person.where(:pco_id => pco_id)
+                        if !membercheck.exists?
+                          ## then do all this to create new record
+                          newmember = Teammember.create(
+                              :plan_id            =>   pl["id"],
+                              :person_id          =>   person[0]["id"],
+                              :plid               =>   pl["plid"],
+                              :plan_dates         =>   pldates,
+                              :plan_sort_date     =>   pl_sort_date,
+                              :tmid               =>   tmid,
+                              :pco_id             =>   pco_id,
+                              :name               =>   tmname,
+                              :position           =>   tmposition,
+                              :status             =>   tmstatus,
+                              :decline_reason     =>   tmreason,
+                              :plan_updated_at    =>   member["attributes"]["updated_at"]
+                          )
+                          totcreated += 1
+                            # pco_id not in db, so use create
+                        elsif  !(membercheck[0].plan_updated_at == member["attributes"]["updated_at"])
+                          upmember = Teammember.update(membercheck[0].id,
+                          :plan_id            =>   pl["id"],
+                          :person_id          =>   person[0]["id"],
+                          :plid               =>   pl["plid"],
+                          :plan_dates         =>   pldates,
+                          :plan_sort_date     =>   pl_sort_date,
+                          :tmid               =>   tmid,
+                          :pco_id             =>   pco_id,
+                          :name               =>   tmname,
+                          :position           =>   tmposition,
+                          :status             =>   tmstatus,
+                          :decline_reason     =>   tmreason,
+                          :plan_updated_at    =>   member["attributes"]["updated_at"]
+                          )
 
-                        newmember = Teammember.create(
-                            :plan_id            =>   pl["id"],
-                            :person_id          =>   person[0]["id"],
-                            :plid               =>   pl["plid"],
-                            :plan_dates         =>   pldates,
-                            :plan_sort_date     =>   pl_sort_date,
-                            :tmid               =>   tmid,
-                            :pco_id             =>   pco_id,
-                            :name               =>   tmname,
-                            :position           =>   tmposition,
-                            :status             =>   tmstatus,
-                            :decline_reason     =>   tmreason,
-                            :plan_updated_at    =>   member["attributes"]["updated_at"]
-                        )
-                        totcreated += 1
-                          # pco_id not in db, so use create
-                      elsif  !(membercheck[0].plan_updated_at == member["attributes"]["updated_at"])
-                        LOGGER.info("Updating existing record for TeamMember ID #{tmid}")
-                        upmember = Teammember.update(membercheck[0].id,
-                        :plan_id            =>   pl["id"],
-                        :person_id          =>   person[0]["id"],
-                        :plid               =>   pl["plid"],
-                        :plan_dates         =>   pldates,
-                        :plan_sort_date     =>   pl_sort_date,
-                        :tmid               =>   tmid,
-                        :pco_id             =>   pco_id,
-                        :name               =>   tmname,
-                        :position           =>   tmposition,
-                        :status             =>   tmstatus,
-                        :decline_reason     =>   tmreason,
-                        :plan_updated_at    =>   member["attributes"]["updated_at"]
-                        )
-
-                        totupdated += 1
-                      else
-                        LOGGER.info("No action for TeamMember ID #{tmid}")
-                        totskipped += 1
-                      end
-                end
-            offset_index += page_size
+                          totupdated += 1
+                        else
+                          totskipped += 1
+                        end
+                  end
+              offset_index += page_size
+          else
+            next_check = NIL
+          end
         end
         next_check = 0
         offset_index = 0
-      end
     end
 end
 # puts "** ALl records processed -- CSV file complete **"

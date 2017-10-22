@@ -20,8 +20,18 @@ total_items = 1
 total_skipped = 0
 item_count = 0
 
-
+#Start ...
+puts("=============================================================")
+puts("mailchimp-dbload.rb is a Ruby script to load the current ")
+puts("PCO related Mailchimp data within the churches MC account.")
+puts("This script updates:")
+puts(" - mailchimp list members against PCO people emails")
+puts(" - mailchimp campaign data")
+puts(" - mailchimp campaign send data")
+puts("=============================================================")
 ## Load Mailchimp Campaign Data
+puts("Starting MC Campaign updates...")
+
 while item_count < total_items
       @campaigns = get_mc_campaigns(page_size,offset_index)
       total_items = @campaigns["total_items"]
@@ -93,6 +103,7 @@ meta = Metum.create(:modeltype => "mccampaigns", :last_import => mcwindow)
 puts "Total MC Campaigns created: #{total_created}"
 puts "Total MC Campaigns  updated: #{total_updated}"
 puts "Total MC Campaigns  skipped: #{total_skipped}"
+puts("=============================================================")
 
 ## Load Mailchimp List Data
 
@@ -103,6 +114,7 @@ total_created = 0
 total_updated = 0
 total_skipped = 0
 item_count = 0
+puts("Starting MC list member updates...")
 
 #If cli parms not passed, so update from last offset ...
   if ARGV.count == 1 and ARGV.first == "update"
@@ -190,6 +202,7 @@ end
 puts "Total MC List Members created: #{total_created}"
 puts "Total MC List Members updated: #{total_updated}"
 puts "Total MC List Members skipped: #{total_skipped}"
+puts("=============================================================")
 
 ## Load Mailchimp Campaign Send Data
 
@@ -200,6 +213,7 @@ total_updated = 0
 total_items = 1
 total_skipped = 0
 item_count = 0
+puts("Starting MC campaign send updates...")
 
 # if no MCcampaign records exist, do all. Else, update send records for Campaigns sent in the last 60 days
 Mccampaign.count == 0 ? mcwindow = "Fri, 01 Jan 2010" : mcwindow = Mccampaign.bysend.last.send_time.to_date - 60
@@ -260,3 +274,5 @@ end
 
 puts "Total MC Send Records created: #{total_created}"
 puts "Total MC Send Records updated: #{total_updated}"
+puts("=============================================================")
+puts("All Mailchimp updates complete!")
