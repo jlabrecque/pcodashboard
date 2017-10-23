@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019032539) do
+ActiveRecord::Schema.define(version: 20171022002253) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -140,14 +140,14 @@ ActiveRecord::Schema.define(version: 20171019032539) do
   create_table "donations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "donation_id"
     t.integer  "person_id"
-    t.decimal  "amount",        precision: 10
+    t.decimal  "amount",              precision: 10
     t.string   "donation_created_at"
     t.string   "donation_updated_at"
     t.string   "payment_channel"
     t.string   "payment_method"
     t.string   "payment_method_sub"
     t.string   "designation_id"
-    t.decimal  "designation",   precision: 10
+    t.decimal  "designation",         precision: 10
     t.string   "fund_id_pco"
     t.integer  "fund_id"
     t.string   "pco_id"
@@ -176,6 +176,15 @@ ActiveRecord::Schema.define(version: 20171019032539) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.index ["event_id"], name: "index_eventtimes_on_event_id", using: :btree
+  end
+
+  create_table "focallists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "list_name"
+    t.text     "description",       limit: 65535
+    t.integer  "peoplelist_id"
+    t.string   "peoplelist_id_pco"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   create_table "funds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

@@ -3,9 +3,16 @@
 <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 <% pid = @person[:pco_id] %>
 <% id = @person[:id] %>
+<% @checkincal = checkin_grid(pid) %>
+<% @donationcal = donation_grid(pid) %>
+<% @servingcal = [] %>
+<% @groupscal = groups_grid(pid) %>
+
 
 <div id="row1">
-  <div class="peopleshowcolumn">
+  <div class="peopleshowcolumn peopleshowcolumn_master_top">
+    <p class="peopleshowcolumn_header_master">Contact</p>
+    <p>
     <% if !@person.people_thumbnail.nil? %>
         <%= image_tag(@person.people_thumbnail, :alt => "thumbnail", :class => "person_show_image") %>
     <% else %>
@@ -15,7 +22,7 @@
 
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_people">
-    <p class="peopleshowcolumn_header">Member Status</p>
+    <p class="peopleshowcolumn_header_people">Member Status</p>
     <p>
         <span class="peopleshowcolumn_content_prefix">Campus:</span>
         <span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span>
@@ -25,8 +32,35 @@
         <span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span>
     </p>
   </div>
+  <div class="peopleshowcolumn peopleshowcolumn_checkins">
+        <p class="peopleshowcolumn_header_checkins">CheckIns</p>
+        <p><span class="peopleshowcolumn_content_prefix">First CheckIn</span></p>
+        <p><span class="peopleshowcolumn_content">
+        <%= @person.check_ins.bydate.first.checkin_time.to_date.strftime("%m/%d/%Y") %></span></p>
+            <p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Total Checkins</span>
+        </p>
+        <br/>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Avg Attendance</span>
+        </p>
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_giving">
+        <p class="peopleshowcolumn_header_giving">Giving</p>
+    <p><span class="peopleshowcolumn_content_prefix">First Gift</span></p>
+    <p><span class="peopleshowcolumn_content">
+    <%= @person.donations.bydate.first.donation_created_at.to_date.strftime("%m/%d/%Y") %></span></p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Avg Gift</span>
+        </p>
+        <p>
+            <span class="peopleshowcolumn_content_prefix">Giving Frequency</span>
+        </p>
+  </div>
   <div class="peopleshowcolumn peopleshowcolumn_serving">
-        <p class="peopleshowcolumn_header">Serving</p>
+        <p class="peopleshowcolumn_header_serving">Serving</p>
         <p>
             <span class="peopleshowcolumn_content_prefix">Last Served:</span>
             <span class="peopleshowcolumn_content"></span>
@@ -44,128 +78,61 @@
             <span class="peopleshowcolumn_content"></span>
         </p>
   </div>
-  <div class="peopleshowcolumn peopleshowcolumn_groups">
-        <p class="peopleshowcolumn_header">Groups</p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Member of:</span>
-        </p>
-        <% if @person.ingroups.empty? %>
-            <span class="peopleshowcolumn_content_indent">n/a</span>
-        <% else %>
-            <% @person.ingroups.each do |group| %>
-                <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
-            <% end %>
-        <% end %>
-        <br/>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Group Leader:</span>
-        </p>
-        <% leading = @person.group_memberships.where(:leader => 1) %>
-        <% if leading.empty? %>
-            <span class="peopleshowcolumn_content_indent">n/a</span>
-        <% else %>
-            <%  leading.each do |leads| %>
-              <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
-            <% end %>
-        <% end %>
-
-
-  </div>
-  <div class="peopleshowcolumn peopleshowcolumn_mc">
-        <p class="peopleshowcolumn_header">Communication</p>
-        <% if Mailchimplist.where(:email_address => @person.email).empty? %>
-        <%     open_rate = "" %>
-        <%     click_rate = "" %>
-        <% else %>
-        <%     mailchimpstats = Mailchimplist.where(:email_address => @person.email) %>
-        <%     click_rate = mailchimpstats[0].click_rate %>
-        <%     open_rate = mailchimpstats[0].open_rate %>
-        <% end  %>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">MC Open Rate:</span>
-            <span class="peopleshowcolumn_content"><%= open_rate %> %</span>
-        </p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">MC Click Rate:</span>
-            <span class="peopleshowcolumn_content"><%= click_rate %> %</span>
-        </p>
-  </div>
 
 <div id="row1">
-  <div class="peopleshowcolumn">
-    <% if !@person.people_thumbnail.nil? %>
-        <%= image_tag(@person.people_thumbnail, :alt => "thumbnail", :class => "person_show_image") %>
-    <% else %>
-        <%= image_tag('no_photo_thumbnail_gray.svg', :alt => "thumbnail", :class => "person_show_image") %>
-    <% end %>
-    </br></br>
+  <div class="peopleshowcolumn peopleshowcolumn_master_bottom">
+
     <span class="peopleshowcolumn_content_prefix">PCO_id:  <%=  link_to @person.pco_id, @person.peopleapp_link %></br></span>
     <span class="peopleshowcolumn_content_prefix"><%=  link_to "#{@person.email}", "mailto:"+@person.email  %></br></span>
     <span class="peopleshowcolumn_content_prefix"><%= !@person.mphone.nil? ?  "#{@person.mphone}" : "Ph:  " %></br></span>
     <span class="peopleshowcolumn_content_prefix">Birthdate: <%= !@person.birthdate.nil? ? @person.birthdate : " " %></br></span>
     <% !@person.city.nil? ? city = @person.city : city = "" %>
-    <span class="peopleshowcolumn_content_prefix">Lives in: <%= city %></span>
-
-  </div>
-  <div class="peopleshowcolumn peopleshowcolumn_people">
-    <p class="peopleshowcolumn_header">Member Status</p>
-    <p>
-        <span class="peopleshowcolumn_content_prefix">Campus:</span>
-        <span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span>
-    </p>
-    <p>
-        <span class="peopleshowcolumn_content_prefix">Status:</span>
-        <span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span>
-    </p>
-  </div>
-  <div class="peopleshowcolumn peopleshowcolumn_serving">
-        <p class="peopleshowcolumn_header">Serving</p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Last Served:</span>
-            <span class="peopleshowcolumn_content"></span>
-        </p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Service Roles:</br></span>
-          <%   positions = [] %>
-            <% @person.teammembers.each do |p| %>
-              <%     positions << p.position %>
-            <% end %>
-            <%   positions.uniq.first(8).each do |role| %>
-                  <span class="peopleshowcolumn_content_indent"><%= role %></br></span>
-            <% end %>
-
-            <span class="peopleshowcolumn_content"></span>
-        </p>
+  </br>
+    <p><span class="peopleshowcolumn_content_prefix">Address</span></p>
+    <% !@person.street.nil? ? street = @person.street : street = "" %>
+    <% !@person.city.nil? ? city = @person.city : city = "" %>
+    <% !@person.state.nil? ? state = @person.state : state = "" %>
+    <% !@person.zip.nil? ? zip = @person.zip : zip = "" %>
+    <p><span class="peopleshowcolumn_content"><%= street %></span>
+    <span class="peopleshowcolumn_content"><%= city %>, <%= state %>  <%= zip %></span></p>
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_groups">
-        <p class="peopleshowcolumn_header">Groups</p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Member of:</span>
-        </p>
-        <% if @person.ingroups.empty? %>
-            <span class="peopleshowcolumn_content_indent">n/a</span>
-        <% else %>
-            <% @person.ingroups.each do |group| %>
-                <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
-            <% end %>
+    <p class="peopleshowcolumn_header_groups">Groups</p>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Member of:</span>
+    </p>
+    <% if @person.ingroups.empty? %>
+        <span class="peopleshowcolumn_content_indent">n/a</span>
+    <% else %>
+        <% @person.ingroups.each do |group| %>
+            <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
         <% end %>
-        <br/>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Group Leader:</span>
-        </p>
-        <% leading = @person.group_memberships.where(:leader => 1) %>
-        <% if leading.empty? %>
-            <span class="peopleshowcolumn_content_indent">n/a</span>
-        <% else %>
-            <%  leading.each do |leads| %>
-              <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
-            <% end %>
+    <% end %>
+    <br/>
+    <p>
+        <span class="peopleshowcolumn_content_prefix">Group Leader:</span>
+    </p>
+    <% leading = @person.group_memberships.where(:leader => 1) %>
+    <% if leading.empty? %>
+        <span class="peopleshowcolumn_content_indent">n/a</span>
+    <% else %>
+        <%  leading.each do |leads| %>
+          <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
         <% end %>
+    <% end %>
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_pledge">
+        <p class="peopleshowcolumn_header_pledge">Pledges</p>
+
+  </div>
+  <div class="peopleshowcolumn peopleshowcolumn_lists">
+        <p class="peopleshowcolumn_header_lists">Lists</p>
+
 
 
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_mc">
-        <p class="peopleshowcolumn_header">Communication</p>
+        <p class="peopleshowcolumn_header_mc">Communication</p>
         <% if Mailchimplist.where(:email_address => @person.email).empty? %>
         <%     open_rate = "" %>
         <%     click_rate = "" %>
@@ -194,10 +161,7 @@
 
   </br></br></br></br></br>
 
-            <% @checkincal = checkin_grid(pid) %>
-            <% @donationcal = donation_grid(pid) %>
-            <% @servingcal = [] %>
-            <% @groupscal = groups_grid(pid) %>
+
 
             <% data_table_checkin = GoogleVisualr::DataTable.new      %>
             <%     data_table_checkin.new_column('date'  , 'Date')    %>

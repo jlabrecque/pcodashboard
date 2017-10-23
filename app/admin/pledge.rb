@@ -16,7 +16,6 @@ index do
 end
 
 filter :campaign_id, as: :select, :collection => Campaign.where(:closed => 0).pluck(:campaign_name, :campaign_id_pco)
-filter :fname, label: "Primary First Name"
 filter :lname, label: "Primary Last Name"
 filter :pledge_perperiod
 filter :periodicity, as: :select

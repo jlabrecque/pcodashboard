@@ -99,11 +99,11 @@ span.donation_grid_dates.true { background: darkkhaki; color: darkkhaki;}
 span.donation_grid_dates.false { background: white; color:white;}
 
 .person_show_image {
-  max-width: 80px;
+  max-width: 150px;
   height:auto;
   border-radius: 5%;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-left: 16%;
+  margin-right: 16%;
   margin-top: 12px;
 }
 .badge_image {
@@ -112,7 +112,7 @@ span.donation_grid_dates.false { background: white; color:white;}
 }
 
 #row1 {
-  width: 100%;
+  width: 1500px;
     background-color: #fff;
     margin: auto;
 }
@@ -124,10 +124,93 @@ span.donation_grid_dates.false { background: white; color:white;}
   font-family: sans-serif;
   font-size: 16pt;
 }
+.peopleshowcolumn_header_master {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #a97878 !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_people {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #799AD9 !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_checkins {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #8B6A98 !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_giving {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #F3C45B !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_serving {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #6B953F !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_groups {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #FEAE8C !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_pledge {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: indianred !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_lists {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #799AD9 !important;
+  height: 40px;
+}
+.peopleshowcolumn_header_mc {
+  text-align: center;
+  font-weight: normal;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 16pt;
+  background-color: #b5ab9f !important;
+  height: 40px;
+}
+
+
 .peopleshowcolumn_content_prefix {
   text-align: left;
   font-weight: normal;
-  color: #efefef;
+  color: #000;
   font-family: sans-serif;
   font-size: 12pt;
   margin-left: 15px;
@@ -153,7 +236,7 @@ span.donation_grid_dates.false { background: white; color:white;}
 .peopleshowcolumn {
   border-style: solid;
   border-color: grey;
-  border-radius: 10px;
+  border-radius: 0px;
   margin-left: 10px;
   margin-right: 10px;
   width: 230px;
@@ -162,17 +245,38 @@ span.donation_grid_dates.false { background: white; color:white;}
   background-color: #a97878;
 
 }
-.peopleshowcolumn_serving {
-  background-color: #b2b7ab !important;
+.peopleshowcolumn_master_top {
+  background-color: #fff !important;
+  border-bottom: 0px !important;
+  margin-bottom: 0px;
 }
-.peopleshowcolumn_groups {
-  background-color: #FEAE8C !important;
+.peopleshowcolumn_master_bottom {
+  background-color: #fff !important;
+  border-top: 0px !important;
 }
 .peopleshowcolumn_people {
-  background-color: #799AD9 !important;
+  background-color: #fff !important;
+}
+.peopleshowcolumn_checkins {
+  background-color: #fff !important;
+}
+.peopleshowcolumn_giving {
+  background-color: #fff !important;
+}
+.peopleshowcolumn_serving {
+  background-color: #fff !important;
+}
+.peopleshowcolumn_groups {
+  background-color: #fff !important;
+}
+.peopleshowcolumn_pledge {
+  background-color: #fff !important;
+}
+.peopleshowcolumn_lists {
+  background-color: #fff !important;
 }
 .peopleshowcolumn_mc {
-  background-color: #b5ab9f !important;
+  background-color: #fff !important;
 }
 
 
