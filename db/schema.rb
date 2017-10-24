@@ -389,6 +389,7 @@ ActiveRecord::Schema.define(version: 20171022002253) do
     t.string   "list_id_pco"
     t.string   "name"
     t.text     "description",      limit: 65535
+    t.boolean  "focallist"
     t.string   "status"
     t.string   "list_updated_pco"
     t.datetime "created_at",                     null: false

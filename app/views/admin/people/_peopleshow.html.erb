@@ -41,7 +41,9 @@
         <p>
             <span class="peopleshowcolumn_content_prefix">Total Checkins</span>
         </p>
-        <br/>
+        <p><span class="peopleshowcolumn_content">
+          <%= @person.check_ins.bydate.count %></span></p>
+        <p>
         <p>
             <span class="peopleshowcolumn_content_prefix">Avg Attendance</span>
         </p>
@@ -55,9 +57,20 @@
         <p>
             <span class="peopleshowcolumn_content_prefix">Avg Gift</span>
         </p>
+        <p><span class="peopleshowcolumn_content">
+          $<%= @person.donations.bydate.average(:amount).to_f.round(2) %></span></p>
         <p>
             <span class="peopleshowcolumn_content_prefix">Giving Frequency</span>
         </p>
+        <p><span class="peopleshowcolumn_content">
+          <% if @person.donations.bydate.count > 0 %>
+              <% dcount = @person.donations.bydate.count %>
+              <% dayssince = Date.today - (@person.donations.bydate.first.donation_created_at.to_date) %>
+              <% weekssince = (dayssince.to_i)/7 %>
+              <% avggiving =  dcount.to_f / weekssince.to_f %>
+              <%= (avggiving * 100).round(2) %>%
+          <% end %>
+</span></p>
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_serving">
         <p class="peopleshowcolumn_header_serving">Serving</p>
@@ -123,6 +136,29 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_pledge">
         <p class="peopleshowcolumn_header_pledge">Pledges</p>
+        <% case @person.pledges[0].periodicity %>
+        <% when "weekly" %>
+          <% per1 = "Week" %>
+          <% per2 = "Weeks" %>
+          <% totalcommittment = (@person.pledges[0].pledge_perperiod * (@person.pledges[0].pledge_periods)) + @person.pledges[0].initial_gift %>
+        <% when "monthly" %>
+          <% per1 = "Month" %>
+          <% per2 = "Months" %>
+          <% totalcommittment = (@person.pledges[0].pledge_perperiod * (@person.pledges[0].pledge_periods)) + @person.pledges[0].initial_gift %>
+        <% when "annually" %>
+          <% per1 = "Year" %>
+          <% per2 = "Years" %>
+          <% totalcommittment = (@person.pledges[0].pledge_perperiod * (@person.pledges[0].pledge_periods)) + @person.pledges[0].initial_gift %>
+        <% when "none" %>
+          <% per1 = "" %>
+          <% per2 = "" %>
+          <% totalcommittment = @person.pledges[0].initial_gift %>
+        <% end %>
+        <p>
+        <span class="peopleshowcolumn_content"><%= @person.pledges[0].campaign.campaign_name %></br></span>
+        <span class="peopleshowcolumn_content">$<%= @person.pledges[0].pledge_perperiod %> per <%= per1 %> for <%= @person.pledges[0].pledge_periods %> <%= per2 %></br> </span>
+        <span class="peopleshowcolumn_content">Total: $<%= totalcommittment %></span>
+        </p>
 
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_lists">
