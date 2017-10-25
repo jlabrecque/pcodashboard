@@ -294,6 +294,117 @@ LOGGER.info("Total People Updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
 
+
+
+#CONSTANTS
+offset_index = 0
+page_size = 100
+sleepval = 30
+totprocessed = 0
+totcreated = 0
+totupdated = 0
+$pullcount = 0
+datestamp = Time.now
+set_endtime()
+
+# Getting List Info
+LOGGER.info("Starting PCO List Processing...")
+
+next_check = 0
+while !next_check.nil?
+
+    lists = lists(page_size,offset_index)
+    next_check = lists["links"]["next"]
+
+    lists["data"].each do |l|
+
+        listcheck = Peoplelist.where(:list_id_pco => l["id"])
+
+        if listcheck.count == 0 # No matching
+          LOGGER.info("Creating new record: List- #{l["id"]}"
+            listrecord =  Peoplelist.create(
+                :list_id_pco        =>  l["id"],
+                :name               =>  l["attributes"]["name"],
+                :description        =>  l["attributes"]["description"],
+                :focallist          =>  FALSE,
+                :status             =>  l["attributes"]["status"],
+                :list_updated_pco   =>  l["attributes"]["updated_at"]
+              )
+            totcreated += 1
+        elsif  !(listcheck[0].list_updated_pco == l["attributes"]["updated_at"])
+          LOGGER.info("Updating existing record: List- #{l["id"]}"
+            listrecord = Peoplelist.update(listcheck[0]["id"],
+                :list_id_pco        =>  l["id"],
+                :name               =>  l["attributes"]["name"],
+                :description        =>  l["attributes"]["description"],
+                :focallist          =>  FALSE,
+                :status             =>  l["attributes"]["status"],
+                :list_updated_pco   =>  l["attributes"]["updated_at"]
+            )
+             totupdated += 1
+        else
+        end
+ end
+ offset_index += page_size
+end
+LOGGER.info("** ALl Lists processed  **")
+LOGGER.info("Total Lists created: #{totcreated}")
+LOGGER.info("Total Lists updated: #{totupdated}")
+
+
+# Getting Peoplelist_Person Info
+LOGGER.info("Updating List Associations...")
+
+totprocessed = 0
+totcreated = 0
+totupdated = 0
+next_check = 0
+offset_index = 0
+page_size = 100
+
+plp = PeoplelistPerson.count
+plp = 0 ? updatewindow = "2010-01-01" : updatewindow = (Peoplelist.byupdate.last.list_updated_pco.to_date - 1.days).to_s
+Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
+#Peoplelist.all.each do |pl|
+    lid_pco = pl.list_id_pco
+    lid = pl.id
+    while !next_check.nil?
+        peoplelist = listpeople(pl.list_id_pco,page_size,offset_index)
+        # pp peoplelist
+        next_check = peoplelist["links"]["next"]
+        peoplelist["data"].each do |p|
+          person = Person.where(:pco_id => p["id"])[0]
+          pco_id = person.pco_id
+          pid = person.id
+          personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
+          # pp personcheck
+            if personcheck.count == 0 # No matching
+              LOGGER.info("Creating new Peoplelist_Person record: PCO_ID: #{pco_id}")
+                record =  PeoplelistPerson.create(
+                    :peoplelist_id           =>  lid,
+                    :person_id               =>  pid
+                  )
+                totcreated += 1
+            else
+              LOGGER.info("Updating existing Peoplelist_Person record: PCO_ID: #{pco_id}")
+                  record =  PeoplelistPerson.update(personcheck[0]["id"],
+                      :peoplelist_id           =>  lid,
+                      :person_id               =>  pid
+                    )
+                 totupdated += 1
+            end
+    end
+     offset_index += page_size
+  end
+  next_check = 0
+end
+
+LOGGER.info("** ALl PeopleListPeople processed  **")
+LOGGER.info("Total PeopleListPeople created: #{totcreated}")
+LOGGER.info("Total PeopleListPeople updated: #{totupdated}")
+
+
+
 LOGGER.info("Emailing log file to #{eml_address}")
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
