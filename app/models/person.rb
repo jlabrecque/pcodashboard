@@ -27,6 +27,7 @@ class Person < ApplicationRecord
   scope :gilroy, -> { where(:campus => "Gilroy")}
   scope :morganhill, -> { where(:campus => "Morgan Hill")}
   scope :sanjose, -> { where(:campus => "San Jose")}
+  # scope :focallist, -> { joins(:lists).where("peoplelists.focallist = ?",TRUE) }
 
 
 

@@ -49,5 +49,6 @@ ActiveAdmin.register Person do
     filter :campus, as: :select
     filter :first_name, label: "Primary First Name"
     filter :last_name, label: "Primary Last Name"
+    filter :lists, as: :select, :collection => Peoplelist.where(:focallist => TRUE).pluck(:name, :id), label: "PCO List"
 
 end
