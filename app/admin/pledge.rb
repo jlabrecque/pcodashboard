@@ -1,7 +1,7 @@
 ActiveAdmin.register Pledge do
 
-menu priority: 6, label: "Pledges"
-menu parent: "Pledge Mgmt"
+menu priority: 0, label: "Pledges"
+menu parent: "Pledge Views", priority: 0
 
 active_admin_importable
 index do

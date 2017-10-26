@@ -2,7 +2,8 @@ ActiveAdmin.register Fund do
   actions :index, :show, :edit, :update
   permit_params :fund_id_pco, :name, :description, :tithe
 
-  menu parent: "Donations"
+  menu priority: 6, label: "Funds"
+    menu parent: "Giving Views"
 
   index do
     column :fund_id_pco

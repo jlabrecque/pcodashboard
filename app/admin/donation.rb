@@ -1,6 +1,9 @@
 ActiveAdmin.register Donation do
   actions :index, :show
 
+  menu priority: 6, label: "Donations"
+    menu parent: "Giving Views"
+
   index do
     selectable_column
     column :id

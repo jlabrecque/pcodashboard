@@ -15,7 +15,7 @@ dow = Date.today.strftime("%A")
 case dow
   when "Monday"
 #    regex = "^[a-fA-F]" # get last_names starting with A-F
-        regex = "^[w-zW-Z]" # get last_names starting with A-F
+    regex = "^[w-zW-Z]" # get last_names starting with A-F
   when "Tuesday"
     regex = "^[g-lG-L]" # get last_names starting with A-F
   when "Wednesday"

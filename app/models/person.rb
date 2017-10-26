@@ -14,8 +14,8 @@ class Person < ApplicationRecord
   has_many :workflowcards
   has_many :check_ins
   has_many :donations
+  has_many :geo_maps
   has_many :pledges
-  has_one :geo_map
   has_one :campu
 
   serialize :email_array

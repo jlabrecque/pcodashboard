@@ -8,8 +8,8 @@ ActiveAdmin.register Person do
 #      link_to "View Donation Grid", "/"
 #    end
 
-menu priority: 6, label: "People"
-  menu parent: "People Views"
+menu priority: 3, label: "People"
+  menu parent: "People Views", priority: 1
 
     class CheckinsIndex < ActiveAdmin::Views::IndexAsTable
         def self.index_name

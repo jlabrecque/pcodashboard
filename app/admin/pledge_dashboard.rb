@@ -4,7 +4,7 @@ ActiveAdmin.register_page "Pledge Dashboard" do
   require 'pcopledge_methods.rb'
   require 'google_visualr'
 
-menu parent: "Pledge Mgmt"
+menu parent: "Pledge Views"
 
     content do
         render partial: 'pledgedashboard' #, :locals => {:transactions => Transaction.all}

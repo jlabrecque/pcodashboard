@@ -44,6 +44,15 @@ ActiveAdmin.setup do |config|
   #     admin.site_title = "PCOpledge Admin"
   #    end
   config.namespace :admin do |admin|
+    admin.build_menu do |menu|
+      menu.add label: 'Dashboard', priority: 0
+      menu.add label: 'People Views', priority: 1
+      menu.add label: 'Giving Views', priority: 2
+      menu.add label: 'Checkin Views', priority: 3
+      menu.add label: 'Pledge Views', priority: 4
+      menu.add label: 'Site Mgmt', priority: 5
+      menu.add label: 'Job Mgmt', priority: 6
+end
 
   end
   # This will ONLY change the title for the admin section. Other

@@ -2,7 +2,7 @@ ActiveAdmin.register PledgeReport do
 
 
   menu priority: 3, label: "Reports"
-  menu parent: "Pledge Mgmt"
+  menu parent: "Pledge Views"
   actions :index, :new, :destroy, :create
   permit_params :quarter, :year, :reportname, :filename, :id, :campaign_id, :valfilename
 

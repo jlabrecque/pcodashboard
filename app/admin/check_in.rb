@@ -1,6 +1,9 @@
 ActiveAdmin.register CheckIn do
   actions :index, :show
 
+  menu priority: 6, label: "CheckIns"
+    menu parent: "Checkin Views"
+
   index do
     selectable_column
     column :id

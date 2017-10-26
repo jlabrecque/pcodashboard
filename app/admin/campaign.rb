@@ -3,7 +3,7 @@ ActiveAdmin.register Campaign do
 
  permit_params :campaign_id, :campaign_name, :fund_id_pco, :start_date, :end_date, :closed, :closeddate
  menu priority: 3, label: "Campaigns"
- menu parent: "Pledge Mgmt"
+ menu parent: "Pledge Views"
 
 index do
   selectable_column

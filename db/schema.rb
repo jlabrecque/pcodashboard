@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171022002253) do
+ActiveRecord::Schema.define(version: 20171026135700) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -178,15 +178,6 @@ ActiveRecord::Schema.define(version: 20171022002253) do
     t.index ["event_id"], name: "index_eventtimes_on_event_id", using: :btree
   end
 
-  create_table "focallists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string   "list_name"
-    t.text     "description",       limit: 65535
-    t.integer  "peoplelist_id"
-    t.string   "peoplelist_id_pco"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
   create_table "funds", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "fund_id_pco"
     t.string   "name"
@@ -239,6 +230,32 @@ ActiveRecord::Schema.define(version: 20171022002253) do
     t.string   "group_url"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "household_givings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "pco_id"
+    t.integer  "person_id"
+    t.string   "last_name"
+    t.string   "first_name"
+    t.string   "campus"
+    t.string   "family"
+    t.text     "month1",     limit: 65535
+    t.text     "month2",     limit: 65535
+    t.text     "month3",     limit: 65535
+    t.text     "month4",     limit: 65535
+    t.text     "month5",     limit: 65535
+    t.text     "month6",     limit: 65535
+    t.text     "month7",     limit: 65535
+    t.text     "month8",     limit: 65535
+    t.text     "month9",     limit: 65535
+    t.text     "month10",    limit: 65535
+    t.text     "month11",    limit: 65535
+    t.text     "month12",    limit: 65535
+    t.float    "annavg",     limit: 24
+    t.float    "lastqtravg", limit: 24
+    t.float    "lastmntavg", limit: 24
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "household_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
