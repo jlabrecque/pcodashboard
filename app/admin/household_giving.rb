@@ -3,15 +3,26 @@ ActiveAdmin.register HouseholdGiving, as: "Household Giving Report" do
   menu priority: 6, label: "Household Giving Report"
     menu parent: "Giving Views"
 
-    index do
-      column :last_name, label: "Last Name"
-      column :first_name, label: "First Name"
-      column :campus, label: "Campus"
-      column :family, label: "Family"
-      number_column :annavg, as: :currency, unit: "$", label: "Annual Average Giving"
-      number_column :lastqtravg, as: :currency, unit: "$", label: "Last Qtr Giving"
-      actions
-    end
+
+    class HouseholdGivingIndex < ActiveAdmin::Views::IndexAsTable
+        def self.index_name
+          "householdgiving_location"
+        end
+      end
+
+      def household_giving_params
+        params.require(:householdgiving).permit(:pco_id, :first_name, :last_name, :campus, :family, :annavg, :lastqrtavg)
+      end
+
+      controller do
+      # This code is evaluated within the controller class
+      end
+
+      index as: HouseholdGivingIndex do
+        @householdgiving = HouseholdGiving.where("annavg > ?", 0)
+        render partial: 'householdgivingindex' #, :locals => {:transactions => Transaction.all}
+      end
+
 
     filter :last_name
     filter :first_name

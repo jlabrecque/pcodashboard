@@ -1,0 +1,43 @@
+
+
+      <table class="householdgiving_grid" summary="Person list">
+        <% first = HouseholdGiving.first%>
+         <tr>
+           <th class="householdgiving_grid_names">Campus</th>
+           <th class="householdgiving_grid_names">Family</th>
+           <th class="householdgiving_grid_dates"><%= first.month1[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month2[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month3[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month4[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month5[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month6[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month7[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month8[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month9[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month10[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month11[0] %></th>
+           <th class="householdgiving_grid_dates"><%= first.month12[0] %></th>
+           <th class="householdgiving_grid_names">Annual Avg</th>
+           <th class="householdgiving_grid_names">Last Qtr Avg</th>
+         </tr>
+         <% HouseholdGiving.all.each do |hg|%>
+         <tr>
+           <th class="householdgiving_grid_names"><%= hg.campus %></th>
+           <th class="householdgiving_grid_names"><%= hg.family %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month1[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month2[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month3[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month4[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month5[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month6[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month7[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month8[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month9[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month10[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month11[1] %></th>
+           <th class="householdgiving_grid_dates">$<%= hg.month12[1] %></th>
+           <th class="householdgiving_grid_names">$<%= hg.annavg %></th>
+           <th class="householdgiving_grid_names">$<%= hg.lastqtravg %></th>
+         </tr
+         <% end %>
+      </table>

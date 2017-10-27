@@ -6,20 +6,15 @@ require 'pcocore_api.rb'
 require 'log4r'
 require 'dotenv'
 require 'dotenv-rails'
+
 #CONSTANTS
-page_size = 100
-sleepval = 0
-lastcheckinid = ""
 logfile_prefix = "checkins"
-totcreated = 0
-totupdated = 0
-next_check = 0
-$pullcount = 0
 datestamp = Time.now
 set_endtime()
 logfile = "log/#{logfile_prefix}_dbload_#{datestamp.strftime("%y%m%d%H%M")}.log"
 eml_address = admin_email()
 eml_subject = "#{logfile_prefix}_dbload logfile #{datestamp}"
+
 
 LOGGER = Log4r::Logger.new('Checkins_dbload.log')
 LOGGER.outputters << Log4r::StdoutOutputter.new('stdout')
@@ -60,6 +55,132 @@ meta = Metum.create(:modeltype => "checkins",
 :last_id_imported => 0,
 :last_offset => offset_index)
 
+##Update Events
+
+#CONSTANTS
+offset_index = 0
+page_size = 50
+sleepval = 30
+totprocessed = 0
+totcreated = 0
+totupdated = 0
+$pullcount = 0
+
+
+LOGGER.info("Creating/Updating Events...")
+#get block
+ev = events()
+
+    inner_loop_index = 0
+    # per event loop
+    ev["data"].each do |u|
+        evcheck = Event.where(:event_id_pco => u["id"])
+        if !evcheck.exists?
+          # stuff the people array with required field data
+            eventrecord = Event.create(
+                :event_id_pco  => u["id"],
+                :event_name  => u["attributes"]["name"],
+                :event_updated_at  => u["attributes"]["updated_at"],
+                :frequency        =>  u["attributes"]["frequency"]
+            )
+            totcreated += 1
+        elsif  !(evcheck[0].event_updated_at == u["attributes"]["updated_at"])
+          # stuff the people array with required field data
+          eventrecord = Event.update(
+                :event_id_pco  => u["id"],
+                :event_name  => u["attributes"]["name"],
+                :event_updated_at  => u["attributes"]["updated_at"],
+                :frequency        =>  u["attributes"]["frequency"]
+          )
+        else
+        end
+    inner_loop_index = 0
+ end
+LOGGER.info("** All Event records processed  **")
+LOGGER.info("Total Events created: #{totcreated}")
+
+##Update EventTimes
+
+#CONSTANTS
+offset_index = 0
+page_size = 50
+sleepval = 30
+totprocessed = 0
+totcreated = 0
+totupdated = 0
+$pullcount = 0
+datestamp = Time.now
+set_endtime()
+
+LOGGER.info("Creating/Updating EventTimes...")
+
+#get block
+
+next_check = 0
+while !next_check.nil?
+    evt = eventtimes(page_size,offset_index)
+    next_check = evt["links"]["next"]
+    inner_loop_index = 0
+    # per event loop
+    evt["data"].each do |u|
+        evtcheck = Eventtime.where(:eventtime_id_pco => u["id"])
+        if !evtcheck.exists?
+          # stuff the people array with required field data
+            eventtimerecord = Eventtime.create(
+                 :eventtime_id_pco  => u["id"],
+                 :event_id_pco      => u["relationships"]["event"]["data"]["id"],
+                 :starts_at         => u["attributes"]["starts_at"],
+                 :guest_count       => u["attributes"]["guest_count"],
+                 :regular_count     => u["attributes"]["regular_count"],
+                 :volunteer_count   => u["attributes"]["volunteer_count"]
+            )
+            totcreated += 1
+        elsif  !(evtcheck[0].updated_at == u["attributes"]["updated_at"])
+          # stuff the people array with required field data
+            eventtimerecord = Eventtime.update(evtcheck[0]["id"],
+                  :eventtime_id_pco  => u["id"],
+                  :event_id_pco      => u["relationships"]["event"]["data"]["id"],
+                  :starts_at         => u["attributes"]["starts_at"],
+                  :guest_count       => u["attributes"]["guest_count"],
+                  :regular_count     => u["attributes"]["regular_count"],
+                  :volunteer_count   => u["attributes"]["volunteer_count"]
+             )
+        else
+        end
+    inner_loop_index = 0
+ end
+ offset_index += page_size
+end
+LOGGER.info("** All EventTime records processed  **")
+LOGGER.info("Total EventTimes created: #{totcreated}")
+
+# LOGGER.info("Updating Eventime Associations")
+
+# Eventtime.all.each do |evt|
+#     ev = Event.where(:event_id_pco => evt["event_id_pco"])
+#     puts "1"
+#     evt.update(:event_id => ev[0].id )
+# end
+
+# LOGGER.info("Updating Eventime Associations")
+##Update CheckIns
+
+#CONSTANTS
+page_size = 100
+sleepval = 0
+lastcheckinid = ""
+logfile_prefix = "checkins"
+totcreated = 0
+totupdated = 0
+next_check = 0
+$pullcount = 0
+datestamp = Time.now
+set_endtime()
+logfile = "log/#{logfile_prefix}_dbload_#{datestamp.strftime("%y%m%d%H%M")}.log"
+eml_address = admin_email()
+eml_subject = "#{logfile_prefix}_dbload logfile #{datestamp}"
+
+LOGGER.info("Creating/Updating Checkins...")
   while !next_check.nil?
     # pull groups of records each loop
     checkinblock = checkins(page_size,offset_index)
@@ -104,12 +225,13 @@ meta = Metum.create(:modeltype => "checkins",
                       )
                      totupdated += 1
                    else
-                   LOGGER.info("No action for CheckIn ID #{checkid}  #{offset_index}")
                  end
       # lastcheckinid = checkid
     end
     last_offset_index = offset_index
     offset_index += page_size
+    LOGGER.info("New Offset: #{offset_index}")
+
     meta = Metum.update(meta.id,
     :total_created => totcreated,
     :total_updated => totupdated,
