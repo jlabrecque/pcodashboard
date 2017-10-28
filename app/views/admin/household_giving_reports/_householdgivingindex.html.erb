@@ -22,21 +22,22 @@
          </tr>
          <%= HouseholdGiving.all.each do |h| %>
          <tr>
-                    <th class="householdgiving_grid_names"><%= h.campus %></th>
-                    <th class="householdgiving_grid_names"><%= h.family %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month1[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month2[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month3[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month4[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month5[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month6[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month7[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month8[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month9[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month10[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month11[1] %></th>
-                    <th class="householdgiving_grid_dates">$<%= h.month12[1] %></th>
-                    <th class="householdgiving_grid_names">$<%= h.annavg %></th>
-                    <th class="householdgiving_grid_names">$<%= h.lastqtravg %></th>
-                  </tr>
+            <th class="householdgiving_grid_names"><%= h.campus %></th>
+            <th class="householdgiving_grid_names"><%= h.family %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month1[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month2[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month3[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month4[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month5[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month6[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month7[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month8[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month9[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month10[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month11[1] %></th>
+            <th class="householdgiving_grid_dates">$<%= h.month12[1] %></th>
+            <th class="householdgiving_grid_names">$<%= h.annavg %></th>
+            <th class="householdgiving_grid_names">$<%= h.lastqtravg %></th>
+        </tr>
+        <% end %>
       </table>
