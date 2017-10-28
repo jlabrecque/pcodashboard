@@ -12,11 +12,6 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 
-// Overriding any non-variable SASS must be done after the fact.
-// For example, to change the default status-tag color:
-//
-//   .status_tag { background: #6090DB; }
-/* Primary stylesheet */
 
 /* Colors */
 $red: #c31618;
@@ -35,7 +30,6 @@ th, td, caption {
   padding-right: 0px;
   padding-bottom: 0px;
   padding-top: 0px;
-
 }
 .people_index {
   width: 1000px;
@@ -49,6 +43,7 @@ th, td, caption {
 .people_show_header {
 font-family: "Verdana Lucida";
 	}
+
 .people_show_titles {
 	font-family: "Verdana Lucida";
 	width: 150px;
@@ -68,6 +63,7 @@ font-family: "Verdana Lucida";
   border-color: grey;
   border-width: 1px;
 }
+
 .checkin_grid_ids tr, th, td {
   border-style: solid;
   border-color: grey;
@@ -75,6 +71,7 @@ font-family: "Verdana Lucida";
   width: 50px;
   height: 30px;
 }
+
 .checkin_grid_names tr, th, td {
   border-style: solid;
   border-color: grey;
@@ -82,6 +79,7 @@ font-family: "Verdana Lucida";
   width: auto !important;
   height: 25px !important;
 }
+
 .checkin_grid_dates tr, th, td {
   border-style: solid;
   border-color: grey;
@@ -91,12 +89,53 @@ font-family: "Verdana Lucida";
   text-align: center !important;
   vertical-align: middle !important;
 }
-span.checkin_grid_dates.volunteer { background: darkseagreen; color: darkseagreen;}
-span.checkin_grid_dates.regular { background: cornflowerblue; color: cornflowerblue;}
-span.checkin_grid_dates.false { background: white; color:white;}
 
-span.donation_grid_dates.true { background: darkkhaki; color: darkkhaki;}
-span.donation_grid_dates.false { background: white; color:white;}
+.householdgiving_grid_names tr, th{
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  font-weight: bold;
+  width: auto !important;
+  height: 25px !important;
+}
+.householdgiving_grid_dates tr, th {
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  width: 30px;
+  height: 30px;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+.householdgiving_content tr td {
+  font-weight: normal;
+  width: auto !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+span.checkin_grid_dates.volunteer {
+  background: darkseagreen;
+  color: darkseagreen;
+}
+span.checkin_grid_dates.regular {
+  background: cornflowerblue;
+  color: cornflowerblue;
+}
+span.checkin_grid_dates.false {
+  background: white;
+  color:white;
+}
+span.donation_grid_dates.true {
+  background: darkkhaki;
+  color: darkkhaki;
+}
+span.donation_grid_dates.false {
+  background: white;
+  color:white;
+}
+
+
 
 .person_show_image {
   max-width: 150px;

@@ -10,7 +10,10 @@ ActiveAdmin.register HouseholdGiving, as: "Household Giving Report" do
         render partial: 'householdgivingindex'
       end
 
-
+      controller do
+      # This code is evaluated within the controller class
+      include ActionView::Helpers::NumberHelper
+      end
 
     filter :last_name
     filter :first_name

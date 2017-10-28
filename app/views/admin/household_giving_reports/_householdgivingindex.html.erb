@@ -1,7 +1,6 @@
 
-
-      <table class="householdgiving_grid" summary="Person list">
-        <% first = HouseholdGiving.first%>
+      <table summary="Person list">
+        <% first = HouseholdGiving.first %>
          <tr>
            <th class="householdgiving_grid_names">Campus</th>
            <th class="householdgiving_grid_names">Family</th>
@@ -22,22 +21,22 @@
          </tr>
          <% HouseholdGiving.all.each do |h| %>
          <tr>
-            <th class="householdgiving_grid_names"><%= h.campus %></th>
-            <th class="householdgiving_grid_names"><%= h.family %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month1[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month2[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month3[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month4[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month5[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month6[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month7[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month8[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month9[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month10[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month11[1] %></th>
-            <th class="householdgiving_grid_dates">$<%= h.month12[1] %></th>
-            <th class="householdgiving_grid_names">$<%= h.annavg %></th>
-            <th class="householdgiving_grid_names">$<%= h.lastqtravg %></th>
+            <td class="householdgiving_content"><%= h.campus %></td>
+            <td class="householdgiving_content"><%= h.family %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month1[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month2[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month3[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month4[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month5[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month6[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month7[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month8[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month9[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month10[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month11[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.month12[1], precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.annavg, precision: 0) %></td>
+            <td class="householdgiving_content"><%= number_to_currency(h.lastqtravg, precision: 0) %></td>
         </tr>
         <% end %>
       </table>
