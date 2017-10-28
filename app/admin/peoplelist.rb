@@ -21,6 +21,7 @@ menu priority: 2, label: "PCO Lists"
     f.inputs do
       f.input :focallist, label: "Focal List"
     end
+    f.actions
     end
 
 end
