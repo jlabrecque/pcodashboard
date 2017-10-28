@@ -4,10 +4,8 @@ class Cron < ApplicationRecord
   scope :peoplereload, lambda { where(:job_name => "PeopleReload")}
   scope :checkins, lambda { where(:job_name => "CheckinsLoad")}
   scope :donations, lambda { where(:job_name => "DonationsLoad")}
-  scope :servicetypes, lambda { where(:job_name => "ServicetypeLoad")}
-  scope :plans, lambda { where(:job_name => "PlansLoad")}
-  scope :teammembers, lambda { where(:job_name => "TeammembersLoad")}
-  scope :mailchimplists, lambda { where(:job_name => "MailchimplistsLoad")}
+  scope :services, lambda { where(:job_name => "ServicesLoad")}
+  scope :mailchimp, lambda { where(:job_name => "MailchimpLoad")}
   scope :geocode, lambda { where(:job_name => "GeocodeDaily")}
 
 end

@@ -4,9 +4,9 @@ $checkinsload = Cron.checkins[0]
 $donationsload = Cron.donations[0]
 $peopleload = Cron.people[0]
 
-$servicesload = Cron.servicetypes[0]
+$servicesload = Cron.services[0]
 
-$mailchimpload = Cron.mailchimplists[0]
+$mailchimpload = Cron.mailchimp[0]
 $geocodedaily = Cron.geocode[0]
 
 
