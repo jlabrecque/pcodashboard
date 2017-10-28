@@ -20,7 +20,7 @@ class CreateCampaigns < ActiveRecord::Migration[5.0]
   end
   add_index("campaigns", "fund_id")
   user1 = Campaign.create(
-    :campaign_id        =>  "0",
+    :campaign_id_pco    =>  "0",
     :campaign_name      =>  "Dummy Seed Campaign",
     :start_date         =>  "1/1/2017",
     :end_date           =>  "1/1/2017",
