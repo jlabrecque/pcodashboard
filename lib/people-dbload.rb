@@ -219,7 +219,6 @@ meta = Metum.create(:modeltype => "people",
           @pid = personcheck[0].id
           totupdated += 1
       else
-          LOGGER.info("** No action for #{fname} #{lname}  Offset: #{offset_index} **")
           @pid = personcheck[0].id
       end
       # Grab all household records [array] associated with this person
@@ -321,7 +320,6 @@ while !next_check.nil?
         listcheck = Peoplelist.where(:list_id_pco => l["id"])
 
         if listcheck.count == 0 # No matching
-          LOGGER.info("Creating new record: List- #{l["id"]}"
             listrecord =  Peoplelist.create(
                 :list_id_pco        =>  l["id"],
                 :name               =>  l["attributes"]["name"],
@@ -332,7 +330,6 @@ while !next_check.nil?
               )
             totcreated += 1
         elsif  !(listcheck[0].list_updated_pco == l["attributes"]["updated_at"])
-          LOGGER.info("Updating existing record: List- #{l["id"]}"
             listrecord = Peoplelist.update(listcheck[0]["id"],
                 :list_id_pco        =>  l["id"],
                 :name               =>  l["attributes"]["name"],
@@ -379,14 +376,12 @@ Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
           personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
           # pp personcheck
             if personcheck.count == 0 # No matching
-              LOGGER.info("Creating new Peoplelist_Person record: PCO_ID: #{pco_id}")
                 record =  PeoplelistPerson.create(
                     :peoplelist_id           =>  lid,
                     :person_id               =>  pid
                   )
                 totcreated += 1
             else
-              LOGGER.info("Updating existing Peoplelist_Person record: PCO_ID: #{pco_id}")
                   record =  PeoplelistPerson.update(personcheck[0]["id"],
                       :peoplelist_id           =>  lid,
                       :person_id               =>  pid

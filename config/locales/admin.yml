@@ -24,4 +24,5 @@ en:
     index_list:
       donations_location: "Donations"
       checkins_location: "CheckIns"
+      householdgiving_location: "Household Giving"
   hello: "Hello world"

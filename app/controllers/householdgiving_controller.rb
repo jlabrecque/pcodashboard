@@ -1,5 +1,7 @@
 class HouseholdGivingController < ApplicationController
   def index
+    @householdgiving = HouseholdGiving.where("annavg > ?", 0)
+
   end
 
   def show

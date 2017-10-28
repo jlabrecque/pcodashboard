@@ -20,15 +20,6 @@ LOGGER = Log4r::Logger.new('Checkins_dbload.log')
 LOGGER.outputters << Log4r::StdoutOutputter.new('stdout')
 LOGGER.outputters << Log4r::FileOutputter.new('file', :filename => logfile)
 
-#If cli parms not passed, so update from last offset ...
-  if ARGV.count == 1 and ARGV.first == "update"
-        LOGGER.info("Performing full update, checking all records for updates")
-        offset_index = 0
-  else
-        precheckinmeta = Metum.checkins.last
-        !precheckinmeta.nil? ? offset_index = precheckinmeta.last_offset : offset_index = 0
-        LOGGER.info("Performing delta update, based on last offset completed: #{offset_index}")
-  end
 
 LOGGER.info("=============================================================")
 LOGGER.info("checkins_dbload.rb is a Ruby script to load the current ")
@@ -46,14 +37,6 @@ LOGGER.info("the script also counts the API pulls against a 1 minute")
 LOGGER.info("counter, and if approach the rate limit, will sleep the")
 LOGGER.info("script to keep within the limit")
 LOGGER.info("=============================================================")
-LOGGER.info("Last offset processed: #{offset_index}")
-LOGGER.info("Starting processing...")
-
-#Creating new tracking meta
-meta = Metum.create(:modeltype => "checkins",
-:total_created => 0,
-:last_id_imported => 0,
-:last_offset => offset_index)
 
 ##Update Events
 
@@ -165,6 +148,22 @@ LOGGER.info("Total EventTimes created: #{totcreated}")
 # LOGGER.info("Updating Eventime Associations")
 ##Update CheckIns
 
+#If cli parms not passed, so update from last offset ...
+  if ARGV.count == 1 and ARGV.first == "update"
+        LOGGER.info("Performing full update, checking all records for updates")
+        offset_index = 0
+  else
+        precheckinmeta = Metum.checkins.last
+        !precheckinmeta.nil? ? offset_index = precheckinmeta.last_offset : offset_index = 0
+        LOGGER.info("Performing delta update, based on last offset completed: #{offset_index}")
+  end
+
+  #Creating new tracking meta
+  meta = Metum.create(:modeltype => "checkins",
+  :total_created => 0,
+  :last_id_imported => 0,
+  :last_offset => offset_index)
+
 #CONSTANTS
 page_size = 100
 sleepval = 0
@@ -180,6 +179,7 @@ logfile = "log/#{logfile_prefix}_dbload_#{datestamp.strftime("%y%m%d%H%M")}.log"
 eml_address = admin_email()
 eml_subject = "#{logfile_prefix}_dbload logfile #{datestamp}"
 
+LOGGER.info("Last offset processed: #{offset_index}")
 LOGGER.info("Creating/Updating Checkins...")
   while !next_check.nil?
     # pull groups of records each loop
