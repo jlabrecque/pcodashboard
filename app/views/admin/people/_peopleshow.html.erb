@@ -32,13 +32,22 @@
         <p class="peopleshowcolumn_header_checkins">CheckIns</p>
         <p><span class="peopleshowcolumn_content_prefix">First CheckIn</span></p>
         <p><span class="peopleshowcolumn_content">
-        <%= @person.check_ins.bydate.first.checkin_time.to_date.strftime("%m/%d/%Y") %></span></p>
-            <p>
+        <% if !@person.check_ins.nil? %>
+            <%= @person.check_ins.bydate.first.checkin_time.to_date.strftime("%m/%d/%Y") %></span>
+        <% else %>
+            n/a
+        <% end %>
+        </p>
         <p>
             <span class="peopleshowcolumn_content_prefix">Total Checkins</span>
         </p>
         <p><span class="peopleshowcolumn_content">
-          <%= @person.check_ins.bydate.count %></span></p>
+          <% if !@person.check_ins.nil? %>
+          <%= @person.check_ins.bydate.count %></span>
+          <% else %>
+              0
+          <% end %>
+        </p>
         <p>
         <p>
             <span class="peopleshowcolumn_content_prefix">Avg Attendance</span>
@@ -47,26 +56,30 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_giving">
         <p class="peopleshowcolumn_header_giving">Giving</p>
-    <p><span class="peopleshowcolumn_content_prefix">First Gift</span></p>
-    <p><span class="peopleshowcolumn_content">
-    <%= @person.donations.bydate.first.donation_created_at.to_date.strftime("%m/%d/%Y") %></span></p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Avg Gift</span>
-        </p>
-        <p><span class="peopleshowcolumn_content">
-          $<%= @person.donations.bydate.average(:amount).to_f.round(2) %></span></p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Giving Frequency</span>
-        </p>
-        <p><span class="peopleshowcolumn_content">
-          <% if @person.donations.bydate.count > 0 %>
-              <% dcount = @person.donations.bydate.count %>
-              <% dayssince = Date.today - (@person.donations.bydate.first.donation_created_at.to_date) %>
-              <% weekssince = (dayssince.to_i)/7 %>
-              <% avggiving =  dcount.to_f / weekssince.to_f %>
-              <%= (avggiving * 100).round(2) %>%
-          <% end %>
-</span></p>
+    <% if !@person.check_ins.nil? %>
+            <p><span class="peopleshowcolumn_content_prefix">First Gift</span></p>
+            <p><span class="peopleshowcolumn_content">
+            <%= @person.donations.bydate.first.donation_created_at.to_date.strftime("%m/%d/%Y") %></span></p>
+                <p>
+                    <span class="peopleshowcolumn_content_prefix">Avg Gift</span>
+                </p>
+                <p><span class="peopleshowcolumn_content">
+                  $<%= @person.donations.bydate.average(:amount).to_f.round(2) %></span></p>
+                <p>
+                    <span class="peopleshowcolumn_content_prefix">Giving Frequency</span>
+                </p>
+                <p><span class="peopleshowcolumn_content">
+                  <% if @person.donations.bydate.count > 0 %>
+                      <% dcount = @person.donations.bydate.count %>
+                      <% dayssince = Date.today - (@person.donations.bydate.first.donation_created_at.to_date) %>
+                      <% weekssince = (dayssince.to_i)/7 %>
+                      <% avggiving =  dcount.to_f / weekssince.to_f %>
+                      <%= (avggiving * 100).round(2) %>%
+                  <% end %>
+        </span></p>
+        <% else %>
+            n/a
+        <% end %>
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_serving">
         <p class="peopleshowcolumn_header_serving">Serving</p>
