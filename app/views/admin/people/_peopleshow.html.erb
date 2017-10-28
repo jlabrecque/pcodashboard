@@ -45,7 +45,7 @@
           <% if !@person.check_ins.empty? %>
           <%= @person.check_ins.bydate.count %></span>
           <% else %>
-              0
+              No Checkins
           <% end %>
         </p>
         <p>
@@ -76,9 +76,9 @@
                       <% avggiving =  dcount.to_f / weekssince.to_f %>
                       <%= (avggiving * 100).round(2) %>%
                   <% end %>
-        </span></p>
+              </span></p>
         <% else %>
-            n/a
+            <p><span class="peopleshowcolumn_content">No Gifts</span></p>
         <% end %>
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_serving">
@@ -141,6 +141,7 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_pledge">
         <p class="peopleshowcolumn_header_pledge">Pledges</p>
+    <% if  !@person.pledges.empty? %>
         <% case @person.pledges[0].periodicity %>
         <% when "weekly" %>
           <% per1 = "Week" %>
@@ -165,6 +166,9 @@
         <span class="peopleshowcolumn_content">$<%= @person.pledges[0].pledge_perperiod %>/<%= per1 %> for <%= @person.pledges[0].pledge_periods %> <%= per2 %></br> </span>
         <span class="peopleshowcolumn_content">Total: $<%= totalcommittment %></span>
         </p>
+    <% else %>
+        <p><span class="peopleshowcolumn_content">No Pledges</span></p>
+    <% end %>
 
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_lists">
