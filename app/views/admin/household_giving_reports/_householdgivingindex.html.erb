@@ -20,7 +20,7 @@
            <th class="householdgiving_grid_names">Annual Avg</th>
            <th class="householdgiving_grid_names">Last Qtr Avg</th>
          </tr>
-         <%= HouseholdGiving.all.each do |h| %>
+         <% HouseholdGiving.all.each do |h| %>
          <tr>
             <th class="householdgiving_grid_names"><%= h.campus %></th>
             <th class="householdgiving_grid_names"><%= h.family %></th>
