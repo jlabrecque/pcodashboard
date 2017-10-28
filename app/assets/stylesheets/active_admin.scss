@@ -210,11 +210,13 @@ span.donation_grid_dates.false { background: white; color:white;}
 .peopleshowcolumn_content_prefix {
   text-align: left;
   font-weight: normal;
-  color: #000;
+  color: #565B60;
   font-family: sans-serif;
-  font-size: 12pt;
+  font-size: 11pt;
+  font-weight: bold;
   margin-left: 15px;
   width: 80px;
+  text-decoration: underline;
 }
 .peopleshowcolumn_content_indent {
   text-align: left;
@@ -226,12 +228,11 @@ span.donation_grid_dates.false { background: white; color:white;}
   width: 80px;
 }
 .peopleshowcolumn_content {
-  text-align: right;
   font-weight: normal;
-  color: #484e53;
+  color: #000;
   font-family: sans-serif;
-  font-size: 14pt;
-  margin-left: 15px;
+  font-size: 12pt;
+  margin-left: 10%;
 }
 .peopleshowcolumn {
   border-style: solid;

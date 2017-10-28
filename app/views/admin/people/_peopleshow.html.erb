@@ -5,7 +5,7 @@
 <% id = @person[:id] %>
 <% @checkincal = checkin_grid(pid) %>
 <% @donationcal = donation_grid(pid) %>
-<% @servingcal = [] %>
+<% @servingcal = serving_grid(pid) %>
 <% @groupscal = groups_grid(pid) %>
 
 
@@ -23,14 +23,10 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_people">
     <p class="peopleshowcolumn_header_people">Member Status</p>
-    <p>
-        <span class="peopleshowcolumn_content_prefix">Campus:</span>
-        <span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span>
-    </p>
-    <p>
-        <span class="peopleshowcolumn_content_prefix">Status:</span>
-        <span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span>
-    </p>
+    <p><span class="peopleshowcolumn_content_prefix">Campus:</span></p>
+    <p><span class="peopleshowcolumn_content"><%= !@person.campus.nil? ?  @person.campus : " " %></span></p>
+    <p><span class="peopleshowcolumn_content_prefix">Status:</span></p>
+    <p><span class="peopleshowcolumn_content"><%= !@person.membership.nil? ? @person.membership : " " %></span></p>
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_checkins">
         <p class="peopleshowcolumn_header_checkins">CheckIns</p>
@@ -74,22 +70,18 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_serving">
         <p class="peopleshowcolumn_header_serving">Serving</p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Last Served:</span>
-            <span class="peopleshowcolumn_content"></span>
-        </p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">Service Roles:</br></span>
-          <%   positions = [] %>
+        <p><span class="peopleshowcolumn_content_prefix">Last Served:</span></p>
+        <p><span class="peopleshowcolumn_content"></span></p>
+        <p><span class="peopleshowcolumn_content_prefix">Service Roles:</br></span></p>
+        <%   positions = [] %>
             <% @person.teammembers.each do |p| %>
               <%     positions << p.position %>
             <% end %>
-            <%   positions.uniq.first(8).each do |role| %>
-                  <span class="peopleshowcolumn_content_indent"><%= role %></br></span>
+            <p>
+            <%   positions.uniq.first(4).each do |role| %>
+                  <span class="peopleshowcolumn_content"><%= role %></br></span>
             <% end %>
-
-            <span class="peopleshowcolumn_content"></span>
-        </p>
+          </p>
   </div>
 
 <div id="row1">
@@ -115,10 +107,10 @@
         <span class="peopleshowcolumn_content_prefix">Member of:</span>
     </p>
     <% if @person.ingroups.empty? %>
-        <span class="peopleshowcolumn_content_indent">n/a</span>
+        <span class="peopleshowcolumn_content">n/a</span>
     <% else %>
         <% @person.ingroups.each do |group| %>
-            <span class="peopleshowcolumn_content_indent"><%= group.description %><br/></span>
+            <span class="peopleshowcolumn_content"><%= group.description %><br/></span>
         <% end %>
     <% end %>
     <br/>
@@ -127,10 +119,10 @@
     </p>
     <% leading = @person.group_memberships.where(:leader => 1) %>
     <% if leading.empty? %>
-        <span class="peopleshowcolumn_content_indent">n/a</span>
+        <span class="peopleshowcolumn_content">n/a</span>
     <% else %>
         <%  leading.each do |leads| %>
-          <span class="peopleshowcolumn_content_indent"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
+          <span class="peopleshowcolumn_content"><%=  Group.where(:id => leads.group_id)[0].description  %></br></span>
         <% end %>
     <% end %>
   </div>
@@ -154,9 +146,10 @@
           <% per2 = "" %>
           <% totalcommittment = @person.pledges[0].initial_gift %>
         <% end %>
+        <p><span class="peopleshowcolumn_content_prefix">Active Pledges</span></p>
         <p>
         <span class="peopleshowcolumn_content"><%= @person.pledges[0].campaign.campaign_name %></br></span>
-        <span class="peopleshowcolumn_content">$<%= @person.pledges[0].pledge_perperiod %> per <%= per1 %> for <%= @person.pledges[0].pledge_periods %> <%= per2 %></br> </span>
+        <span class="peopleshowcolumn_content">$<%= @person.pledges[0].pledge_perperiod %>/<%= per1 %> for <%= @person.pledges[0].pledge_periods %> <%= per2 %></br> </span>
         <span class="peopleshowcolumn_content">Total: $<%= totalcommittment %></span>
         </p>
 
@@ -177,14 +170,10 @@
         <%     click_rate = mailchimpstats[0].click_rate %>
         <%     open_rate = mailchimpstats[0].open_rate %>
         <% end  %>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">MC Open Rate:</span>
-            <span class="peopleshowcolumn_content"><%= open_rate %> %</span>
-        </p>
-        <p>
-            <span class="peopleshowcolumn_content_prefix">MC Click Rate:</span>
-            <span class="peopleshowcolumn_content"><%= click_rate %> %</span>
-        </p>
+        <p><span class="peopleshowcolumn_content_prefix">MC Open Rate:</span></p>
+        <p><span class="peopleshowcolumn_content"><%= open_rate %> %</span></p>
+        <p><span class="peopleshowcolumn_content_prefix">MC Click Rate:</span></p>
+        <p><span class="peopleshowcolumn_content"><%= click_rate %> %</span></p>
   </div>
   <div id="clear"></div>
 </div>
