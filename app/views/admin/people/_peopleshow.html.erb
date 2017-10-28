@@ -32,7 +32,7 @@
         <p class="peopleshowcolumn_header_checkins">CheckIns</p>
         <p><span class="peopleshowcolumn_content_prefix">First CheckIn</span></p>
         <p><span class="peopleshowcolumn_content">
-        <% if !@person.check_ins.nil? %>
+        <% if !@person.check_ins.empty? %>
             <%= @person.check_ins.bydate.first.checkin_time.to_date.strftime("%m/%d/%Y") %></span>
         <% else %>
             n/a
@@ -42,7 +42,7 @@
             <span class="peopleshowcolumn_content_prefix">Total Checkins</span>
         </p>
         <p><span class="peopleshowcolumn_content">
-          <% if !@person.check_ins.nil? %>
+          <% if !@person.check_ins.empty? %>
           <%= @person.check_ins.bydate.count %></span>
           <% else %>
               0
@@ -56,7 +56,7 @@
   </div>
   <div class="peopleshowcolumn peopleshowcolumn_giving">
         <p class="peopleshowcolumn_header_giving">Giving</p>
-    <% if !@person.check_ins.nil? %>
+    <% if !@person.donations.empty? %>
             <p><span class="peopleshowcolumn_content_prefix">First Gift</span></p>
             <p><span class="peopleshowcolumn_content">
             <%= @person.donations.bydate.first.donation_created_at.to_date.strftime("%m/%d/%Y") %></span></p>
