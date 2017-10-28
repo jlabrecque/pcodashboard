@@ -1,7 +1,7 @@
 # cronotab.rb — Crono configuration file
 
 $checkinsload = Cron.checkins.first
-$donationsload = Cron.donation.first
+$donationsload = Cron.donations.first
 $peopleload = Cron.people.first
 
 $servicesload = Cron.services.first
