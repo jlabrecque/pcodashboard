@@ -363,42 +363,40 @@ plp = PeoplelistPerson.count
 plp = 0 ? updatewindow = "2010-01-01" : updatewindow = (Peoplelist.byupdate.last.list_updated_pco.to_date - 1.days).to_s
 Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
 #Peoplelist.all.each do |pl|
+#Peoplelist.all.each do |pl|
     lid_pco = pl.list_id_pco
     lid = pl.id
-    while !next_check.nil?
-        peoplelist = listpeople(pl.list_id_pco,page_size,offset_index)
-        # pp peoplelist
-        next_check = peoplelist["links"]["next"]
-        peoplelist["data"].each do |p|
-          person = Person.where(:pco_id => p["id"])[0]
-          pco_id = person.pco_id
-          pid = person.id
-          personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
-          # pp personcheck
-            if personcheck.count == 0 # No matching
-                record =  PeoplelistPerson.create(
-                    :peoplelist_id           =>  lid,
-                    :person_id               =>  pid
-                  )
-                totcreated += 1
-            else
-                  record =  PeoplelistPerson.update(personcheck[0]["id"],
+      while !next_check.nil?
+          peoplelist = listpeople(pl.list_id_pco,page_size,offset_index)
+          next_check = peoplelist["links"]["next"]
+          peoplelist["data"].each do |p|
+            person = Person.where(:pco_id => p["id"])[0]
+            pco_id = person.pco_id
+            pid = person.id
+            personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
+              if personcheck.count == 0 # No matching
+                  record =  PeoplelistPerson.create(
                       :peoplelist_id           =>  lid,
                       :person_id               =>  pid
                     )
-                 totupdated += 1
-            end
-    end
-     offset_index += page_size
-  end
-  next_check = 0
+                  totcreated += 1
+              else
+                    record =  PeoplelistPerson.update(personcheck[0]["id"],
+                        :peoplelist_id           =>  lid,
+                        :person_id               =>  pid
+                      )
+                   totupdated += 1
+              end
+          end
+          offset_index += page_size
+      end
+      next_check = 0
+      offset_index = 0
 end
 
 LOGGER.info("** ALl PeopleListPeople processed  **")
 LOGGER.info("Total PeopleListPeople created: #{totcreated}")
 LOGGER.info("Total PeopleListPeople updated: #{totupdated}")
-
-
 
 LOGGER.info("Emailing log file to #{eml_address}")
 eml_body = File.read(logfile)
