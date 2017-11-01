@@ -58,7 +58,7 @@ def donation_grid(pid)
       return @donationcal
 end
 #============================================
-def serving_grid(pid)
+def serving_grid2(pid)
       calendar,lastsunday = get_calendar()
       stuff_serving(pid,calendar)
 
