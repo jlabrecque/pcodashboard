@@ -272,6 +272,7 @@ meta = Metum.create(:modeltype => "people",
   :total_processed => totcreated + totupdated,
   :last_offset => last_offset_index)
 end
+LOGGER.info("=============================================================")
 LOGGER.info("Updating donation associations...")
 Person.all.each do |p|
   if !p.donations.empty?
@@ -285,15 +286,14 @@ Person.all.each do |p|
     p.update(:first_checkin => first_checkin, :last_checkin => last_checkin)
   end
 end
-LOGGER.info("========================================")
+LOGGER.info("=============================================================")
 LOGGER.info("Total People processed: #{totprocessed}")
 LOGGER.info("Total Members: #{totmembers}")
 LOGGER.info("Total People Created: #{totcreated}")
 LOGGER.info("Total People Updated: #{totupdated}")
 LOGGER.info("Last Offset Processed:  #{last_offset_index}")
 LOGGER.info("Last PCO ID Processed: #{high_pco_count}")
-
-
+LOGGER.info("=============================================================")
 
 #CONSTANTS
 offset_index = 0
@@ -334,7 +334,6 @@ while !next_check.nil?
                 :list_id_pco        =>  l["id"],
                 :name               =>  l["attributes"]["name"],
                 :description        =>  l["attributes"]["description"],
-                :focallist          =>  FALSE,
                 :status             =>  l["attributes"]["status"],
                 :list_updated_pco   =>  l["attributes"]["updated_at"]
             )
@@ -347,7 +346,7 @@ end
 LOGGER.info("** ALl Lists processed  **")
 LOGGER.info("Total Lists created: #{totcreated}")
 LOGGER.info("Total Lists updated: #{totupdated}")
-
+LOGGER.info("=============================================================")
 
 # Getting Peoplelist_Person Info
 LOGGER.info("Updating List Associations...")
@@ -397,6 +396,102 @@ end
 LOGGER.info("** ALl PeopleListPeople processed  **")
 LOGGER.info("Total PeopleListPeople created: #{totcreated}")
 LOGGER.info("Total PeopleListPeople updated: #{totupdated}")
+LOGGER.info("=============================================================")
+
+####### Geocoding
+LOGGER.info("Beginning DoW Geocode...")
+people_geo_created = 0
+people_geo_updated = 0
+campus_geo_created = 0
+campus_geo_updated = 0
+
+#Add per person georecords
+dow = Date.today.strftime("%A")
+
+case dow
+  when "Monday"
+#    regex = "^[a-fA-F]" # get last_names starting with A-F
+    regex = "^[w-zW-Z]" # get last_names starting with A-F
+  when "Tuesday"
+    regex = "^[g-lG-L]" # get last_names starting with A-F
+  when "Wednesday"
+    regex = "^[m-rM-R]" # get last_names starting with A-F
+  when "Thursday"
+    regex = "^[s-vS-V]" # get last_names starting with A-F
+  when "Friday"
+    regex = "^[w-zW-Z]" # get last_names starting with A-F
+else
+    regex = ""
+end
+LOGGER.info("DoW is #{dow}, Pattern is #{regex}")
+
+Person.where("last_name REGEXP ?", regex).each do |person|
+  LOGGER.info("PCO_id: #{person.pco_id}, Name: #{person.last_name}, #{person.first_name}")
+    address,long,lat = geocode_people(person.pco_id,person.street,person.city,person.state,person.zip)
+    geoexists = GeoMap.where(:pco_id => person.pco_id)
+    if !address.blank?
+      if !geoexists.exists? #create new record
+
+            georecord = GeoMap.create(
+            :person_id      =>    person.id,
+            :pco_id         =>    person.pco_id,
+            :campus_id      =>    "na",
+            :full_address   =>    address,
+            :latitude       =>    lat,
+            :longitude      =>    long
+            )
+          LOGGER.info("*** Creating new Georecord #{person.pco_id} #{address} ***")
+          people_geo_created += 1
+      else
+            georecord = GeoMap.update(geoexists[0].id,
+            :person_id      =>    person.id,
+            :pco_id         =>    person.pco_id,
+            :campus_id      =>    "na",
+            :full_address   =>    address,
+            :latitude       =>    lat,
+            :longitude      =>    long
+            )
+          LOGGER.info("*** Updating Georecord  #{person.pco_id} #{address} ***")
+          people_geo_updated += 1
+      end
+  end
+end
+#Add per Campus georecords
+Campu.all.each do |campus|
+    address,long,lat = geocode_people(campus.campus_id_pco,campus.street,campus.city,campus.state,campus.zip)
+    geoexists = GeoMap.where(:campus_id => campus.campus_id_pco)
+    if !address.blank?
+      if !geoexists.exists? #create new record
+
+            georecord = GeoMap.create(
+            :person_id      =>    0,
+            :pco_id         =>    "na",
+            :campus_id      =>    campus.campus_id_pco,
+            :full_address   =>    address,
+            :latitude       =>    lat,
+            :longitude      =>    long
+            )
+          campus_geo_created += 1
+      else
+            georecord = GeoMap.update(geoexists[0].id,
+            :person_id      =>    0,
+            :pco_id         =>    "na",
+            :campus_id      =>    campus.campus_id_pco,
+            :full_address   =>    address,
+            :latitude       =>    lat,
+            :longitude      =>    long
+            )
+          campus_geo_updated += 1
+      end
+  end
+end
+LOGGER.info("=============================================================")
+LOGGER.info("All people and campus records processed")
+LOGGER.info("")
+LOGGER.info("#{people_geo_created} people geo records created")
+LOGGER.info("#{campus_geo_created} campus geo records created")
+LOGGER.info("=============================================================")
+
 
 LOGGER.info("Emailing log file to #{eml_address}")
 eml_body = File.read(logfile)

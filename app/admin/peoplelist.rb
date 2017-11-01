@@ -3,7 +3,7 @@ ActiveAdmin.register Peoplelist, as: "PCO People Lists"  do
   actions :index, :show, :edit, :update
   permit_params :list_id_pco, :name, :description, :focallist
 
-menu priority: 2, label: "PCO Lists"
+  menu priority: 2, label: "PCO Lists"
   menu parent: "People Views"
 
   index do

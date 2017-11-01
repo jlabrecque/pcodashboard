@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026135700) do
+ActiveRecord::Schema.define(version: 20171101034650) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -232,7 +232,7 @@ ActiveRecord::Schema.define(version: 20171026135700) do
     t.datetime "updated_at",   null: false
   end
 
-  create_table "household_givings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "hgifts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "pco_id"
     t.integer  "person_id"
     t.string   "last_name"
@@ -496,6 +496,7 @@ ActiveRecord::Schema.define(version: 20171026135700) do
     t.integer  "sleepbuffer"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.string   "namecheck_words"
   end
 
   create_table "teammembers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
