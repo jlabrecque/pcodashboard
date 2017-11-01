@@ -1,12 +1,9 @@
 ActiveAdmin.register Hgift do
-  menu label: "Household Giving Report"
+
+  menu parent: "Giving Views", label: "Household Giving Report"
   actions :index
 
-    menu priority: 6
-    menu parent: "Giving Views"
-
-
-    index do
+    index :title => 'Household Giving' do
       @hgifts = Hgift.where("annavg > ?", 0)
       render partial: 'hgiftsindex'
     end
