@@ -69,7 +69,6 @@ inner_loop_index = 0
 fnd["data"].each do |u|
   fndcheck = Fund.where(:fund_id_pco => u["id"])
   if !fndcheck.exists?
-      LOGGER.info("Creating new record")
       fundpost = Fund.create(
           :fund_id_pco              =>  u["id"],
           :name                     =>  u["attributes"]["name"],
@@ -78,15 +77,13 @@ fnd["data"].each do |u|
       )
       totcreated += 1
     elsif  !(fndcheck[0].fund_updated_at == u["attributes"]["updated_at"])
-      LOGGER.info("Updating existing record")
-      fundpost = ServiceType.update(
+      fundpost = Fund.update(
           :fund_id_pco              =>  u["id"],
           :name                     =>  u["attributes"]["name"],
           :description              =>  u["attributes"]["description"],
           :fund_updated_at          =>  u["attributes"]["updated_at"]
       )
       else
-        LOGGER.info("*** No action ***")
       end
       inner_loop_index += 1
 end
@@ -179,6 +176,7 @@ while !next_check.nil?
 end
 
 # #Update all Donation for association
+LOGGER.info("=============================================================")
 LOGGER.info("Updating :fund associations ...")
 #CheckIn.where(:person_id => nil).each do |chk|
 Donation.all.each do |don|
@@ -198,6 +196,7 @@ end
 
 
 #open_log.close
+LOGGER.info("=============================================================")
 LOGGER.info("Updating :person_id associations from Person dB...")
 Donation.all.each do |don|
      p = Person.where(:pco_id => don.pco_id)
@@ -214,9 +213,7 @@ LOGGER.info("Total Donation records created: #{totcreated}")
 LOGGER.info("=============================================================")
 LOGGER.info("Script ended at #{datestamp}")
 LOGGER.info("=============================================================")
-
-
-
+LOGGER.info("Emailing Log Report")
 
 eml_body = File.read(logfile)
 PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver

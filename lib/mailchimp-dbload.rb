@@ -11,7 +11,6 @@ require 'digest/md5'
 require 'mailchimp_api.rb'
 require 'pcocore_api.rb'
 
-
 page_size = 200
 offset_index = 0
 total_created = 0
@@ -19,18 +18,28 @@ total_updated = 0
 total_items = 1
 total_skipped = 0
 item_count = 0
+logfile_prefix = "mailchimp"
+datestamp = Time.now
+set_endtime()
+logfile = "log/#{logfile_prefix}_dbload_#{datestamp.strftime("%y%m%d%H%M")}.log"
+eml_address = admin_email()
+eml_subject = "#{logfile_prefix}_dbload logfile #{datestamp}"
 
+LOGGER = Log4r::Logger.new('Mailchimp_dbload.log')
+LOGGER.outputters << Log4r::StdoutOutputter.new('stdout')
+LOGGER.outputters << Log4r::FileOutputter.new('file', :filename => logfile)
 #Start ...
-puts("=============================================================")
-puts("mailchimp-dbload.rb is a Ruby script to load the current ")
-puts("PCO related Mailchimp data within the churches MC account.")
-puts("This script updates:")
-puts(" - mailchimp list members against PCO people emails")
-puts(" - mailchimp campaign data")
-puts(" - mailchimp campaign send data")
-puts("=============================================================")
+LOGGER.info("=============================================================")
+LOGGER.info("mailchimp-dbload.rb is a Ruby script to load the current ")
+LOGGER.info("PCO related Mailchimp data within the churches MC account.")
+LOGGER.info("This script updates:")
+LOGGER.info(" - mailchimp list members against PCO people emails")
+LOGGER.info(" - mailchimp campaign data")
+LOGGER.info(" - mailchimp campaign send data")
+LOGGER.info("=============================================================")
 ## Load Mailchimp Campaign Data
-puts("Starting MC Campaign updates...")
+
+LOGGER.info("Starting MC Campaign updates...")
 
 while item_count < total_items
       @campaigns = get_mc_campaigns(page_size,offset_index)
@@ -41,7 +50,6 @@ while item_count < total_items
                 campaignexists = Mccampaign.where(:mailchimp_campaign_id => c["id"])
 
                     if campaignexists.count == 0
-                        puts "Creating new Campaign entry for #{c["id"]}"
                         Mccampaign.create(
                         :mailchimp_campaign_id          =>    c["id"],
                         :web_id                         =>    c["web_id"],
@@ -64,7 +72,6 @@ while item_count < total_items
                         )
                         total_created += 1
                       else
-                      puts "Updating existing Campaign entry #{c["id"]}"
 
                         Mccampaign.update(campaignexists[0]["id"],
                         :web_id                         =>    c["web_id"],
@@ -88,7 +95,6 @@ while item_count < total_items
                         total_updated += 1
                       end
             else
-              puts "Campaign not sent -- skipping"
               total_skipped += 1
             end
             item_count += 1
@@ -100,10 +106,10 @@ end
 mcwindow = Mccampaign.bysend.last.send_time.to_date
 meta = Metum.create(:modeltype => "mccampaigns", :last_import => mcwindow)
 
-puts "Total MC Campaigns created: #{total_created}"
-puts "Total MC Campaigns  updated: #{total_updated}"
-puts "Total MC Campaigns  skipped: #{total_skipped}"
-puts("=============================================================")
+LOGGER.info("Total MC Campaigns created: #{total_created}")
+LOGGER.info("Total MC Campaigns  updated: #{total_updated}")
+LOGGER.info("Total MC Campaigns  skipped: #{total_skipped}")
+LOGGER.info("=============================================================")
 
 ## Load Mailchimp List Data
 
@@ -114,16 +120,16 @@ total_created = 0
 total_updated = 0
 total_skipped = 0
 item_count = 0
-puts("Starting MC list member updates...")
+LOGGER.info("Starting MC list member updates...")
 
 #If cli parms not passed, so update from last offset ...
   if ARGV.count == 1 and ARGV.first == "update"
-        puts("Performing full MClist update, checking all records for updates")
+        LOGGER.info("Performing full MClist update, checking all records for updates")
         offset_index = 0
   else
         premclistmeta = Metum.mclist.last
         !premclistmeta.nil? ? offset_index = premclistmeta.last_offset : offset_index = 0
-        puts("Performing delta MClist update, based on last offset completed: #{offset_index}")
+        LOGGER.info("Performing delta MClist update, based on last offset completed: #{offset_index}")
   end
 
 #Creating new tracking meta
@@ -131,6 +137,9 @@ meta = Metum.create(:modeltype => "mclists",
 :total_created => 0,
 :last_id_imported => 0,
 :last_offset => offset_index)
+
+LOGGER.info("=============================================================")
+LOGGER.info("Starting MC list member updates...")
 
 
 while offset_index <= $mc_total_members
@@ -164,7 +173,6 @@ while offset_index <= $mc_total_members
             :list_id          =>    m["list_id"]
         )
         total_created += 1
-      puts "Creating record for: #{m["email_address"]}"
     else # !(mccheck[0]["info_changed"] == m["last_changed"])
         mcrecord = Mailchimplist.update(mccheck[0].id,
             :email_address    =>    m["email_address"],
@@ -185,7 +193,6 @@ while offset_index <= $mc_total_members
             :list_id          =>    m["list_id"]
         )
         total_updated += 1
-        puts "Updating record for: #{m["email_address"]}"
     end
       item_count += 1
     end
@@ -199,10 +206,10 @@ while offset_index <= $mc_total_members
 end
 
 
-puts "Total MC List Members created: #{total_created}"
-puts "Total MC List Members updated: #{total_updated}"
-puts "Total MC List Members skipped: #{total_skipped}"
-puts("=============================================================")
+LOGGER.info("Total MC List Members created: #{total_created}")
+LOGGER.info("Total MC List Members updated: #{total_updated}")
+LOGGER.info("Total MC List Members skipped: #{total_skipped}")
+LOGGER.info("=============================================================")
 
 ## Load Mailchimp Campaign Send Data
 
@@ -213,7 +220,7 @@ total_updated = 0
 total_items = 1
 total_skipped = 0
 item_count = 0
-puts("Starting MC campaign send updates...")
+LOGGER.info("Starting MC campaign send updates...")
 
 # if no MCcampaign records exist, do all. Else, update send records for Campaigns sent in the last 60 days
 Mccampaign.count == 0 ? mcwindow = "Fri, 01 Jan 2010" : mcwindow = Mccampaign.bysend.last.send_time.to_date - 60
@@ -237,7 +244,6 @@ Mccampaign.where("create_time > ?",mcwindow).all.each do |c|
           # mccampaignsendcheck = mailchimp_email_id + "+" + mailchimp_list_id + "+" + mailchimp_campaign_id
           mccampaignsendcheck = Mccampaignsend.where("mailchimp_email_id = ? and mailchimp_campaign_id = ? and mailchimp_list_id = ?",mailchimp_email_id,mailchimp_campaign_id,mailchimp_list_id)
           if mccampaignsendcheck.count == 0 # No records exist
-                puts "Creating Campaign Send record: #{mailchimp_email_id}"
                 newsend = Mccampaignsend.create(
                 :person_id                => person_id,
                 :mccampaign_id            => mccampaign_id,
@@ -253,7 +259,6 @@ Mccampaign.where("create_time > ?",mcwindow).all.each do |c|
                 )
                 total_created += 1
           else
-                puts "Updating Campaign Send record: #{mailchimp_email_id}"
                 newsend = Mccampaignsend.update(mccampaignsendcheck[0].id,
                 :person_id                => person_id,
                 :mccampaign_id            => mccampaign_id,
@@ -272,7 +277,10 @@ Mccampaign.where("create_time > ?",mcwindow).all.each do |c|
     end
 end
 
-puts "Total MC Send Records created: #{total_created}"
-puts "Total MC Send Records updated: #{total_updated}"
-puts("=============================================================")
-puts("All Mailchimp updates complete!")
+LOGGER.info("Total MC Send Records created: #{total_created}")
+LOGGER.info("Total MC Send Records updated: #{total_updated}")
+LOGGER.info("=============================================================")
+LOGGER.info("All Mailchimp updates complete!")
+
+eml_body = File.read(logfile)
+PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver

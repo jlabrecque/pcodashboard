@@ -65,9 +65,9 @@ def serving_grid(pid)
       @servingcal = []
       calendar.each_key do |x|
         if calendar[x][:serve] == "Y"
-            xval = 2
-        else
             xval = 1
+        else
+            xval = 0
         end
         newval =  [Date.parse(x), xval]
         @servingcal << newval
