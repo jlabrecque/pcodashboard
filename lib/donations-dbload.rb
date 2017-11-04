@@ -4,8 +4,7 @@ require 'pp'
 require 'csv'
 require 'pcocore_api.rb'
 require 'log4r'
-require 'dotenv'
-require 'dotenv-rails'
+
 #CONSTANTS
 page_size = 100
 lastdonationid = ""
@@ -210,6 +209,18 @@ LOGGER.info("** All records processed **")
 LOGGER.info("Donation Associations updated: #{donupdatedcount}")
 LOGGER.info("People Associations updated: #{prsupdatedcount}")
 LOGGER.info("Total Donation records created: #{totcreated}")
+
+# #Run Weekly Household Giving report
+
+dow = Date.today.strftime("%A")
+if dow == "Sunday"
+  LOGGER.info("=============================================================")
+  LOGGER.info("Beginning Household Giving report...")
+  household_giving_report()
+  LOGGER.info("Household Giving report updated to database")
+
+end
+
 LOGGER.info("=============================================================")
 LOGGER.info("Script ended at #{datestamp}")
 LOGGER.info("=============================================================")

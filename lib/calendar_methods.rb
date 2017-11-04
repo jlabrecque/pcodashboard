@@ -164,18 +164,22 @@ def stuff_serving(pid,calendar)
     p = Person.where(:pco_id => pid)[0]
     serving = p.teammembers
     serving.each do |srv|
-        pin = srv[:plan_sort_date].to_date
+      pin = srv[:plan_sort_date].to_date
+      if pin < Date.today
         calendar.each_key do |week|
           this_week = calendar[week][:date]
           next_week = this_week + 7
-          if pin <= next_week and pin > this_week
-            next_week_str = next_week.strftime("%Y%m%d")
-            calendar[next_week_str][:serve] = "Y"
-          end
+            if pin <= next_week and pin > this_week
+              next_week_str = next_week.strftime("%Y%m%d")
+              puts "next_week_str = #{next_week_str}"
+              calendar[next_week_str][:serve] = "Y"
+            end
         end
+      end
     end
   return calendar
 end
+
 #============================================
 def stuff_groups(pid,calendar)
     p = Person.where(:pco_id => pid)[0]
