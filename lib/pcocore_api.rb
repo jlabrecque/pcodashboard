@@ -4,6 +4,7 @@ require 'rubygems'
 require 'json'
 require 'date'
 require 'graticule'
+require 'calendar_methods.rb'
 
 @settings = Setting.x
 
@@ -845,4 +846,5 @@ def household_giving_report()
               )
           end
     end
+    prime = Metum.create(:modeltype => "hgift", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0, :last_import => Date.today)
 end

@@ -47,6 +47,7 @@ ActiveAdmin.register Setting do
 
       h2("Other", :class => "section_title")
       div simple_format  "First Run?: #{setting.first_run}"
+      div simple_format  "Household Giving Report DoW?: #{setting.hgiftday}"
 
       h1 ""
     end
@@ -107,6 +108,12 @@ ActiveAdmin.register Setting do
       tab 'Google API' do
         f.inputs 'Mailchimp PCO Field Definitions' do
           f.input :googlemaps_api
+        end
+      end
+
+      tab 'Other' do
+        f.inputs 'Other Settings' do
+          f.input :hgiftday
         end
       end
 

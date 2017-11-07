@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101034650) do
+ActiveRecord::Schema.define(version: 20171107030952) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -494,9 +494,10 @@ ActiveRecord::Schema.define(version: 20171101034650) do
     t.integer  "rate_interval"
     t.integer  "exceptionbuffer"
     t.integer  "sleepbuffer"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "namecheck_words"
+    t.string   "hgiftday",                default: "Sun"
   end
 
   create_table "teammembers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

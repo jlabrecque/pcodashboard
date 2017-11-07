@@ -1,5 +1,9 @@
 <% @page_title = "Giving Report" %>
 
+<h3>
+  Last update: <%= Metum.where(:modeltype => "hgift").last.last_import %>
+</h3>
+
       <table summary="Person list">
         <% first = @hgifts.first %>
          <tr>
