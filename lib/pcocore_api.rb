@@ -867,18 +867,18 @@ def household_giving_csv()
         fname     = h.first_name
         family    = h.family
         campus    = h.campus
-        month1    = m.month1[1]
-        month2    = m.month2[1]
-        month3    = m.month3[1]
-        month4    = m.month4[1]
-        month5    = m.month5[1]
-        month6    = m.month6[1]
-        month7    = m.month7[1]
-        month8    = m.month8[1]
-        month9    = m.month9[1]
-        month10   = m.month10[1]
-        month11   = m.month11[1]
-        month12   = m.month12[1]
+        month1    = h.month1[1]
+        month2    = h.month2[1]
+        month3    = h.month3[1]
+        month4    = h.month4[1]
+        month5    = h.month5[1]
+        month6    = h.month6[1]
+        month7    = h.month7[1]
+        month8    = h.month8[1]
+        month9    = h.month9[1]
+        month10   = h.month10[1]
+        month11   = h.month11[1]
+        month12   = h.month12[1]
         line = [lname,fname,family,campus,month1,month2,month3,month4,month5,month6,month7,month8,month9,month10,month11,month12]
         csv << line
       end

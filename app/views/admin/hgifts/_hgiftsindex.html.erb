@@ -1,7 +1,8 @@
 <% @page_title = "Giving Report" %>
 
 <h3>
-  Last update: <%= Metum.where(:modeltype => "hgift").last.last_import %>
+  <% prime = Metum.where(:modeltype => "hgift").last  %>
+  Last update: <%= prime.last_import %> - <%= link_to "Download Full CSV", "http://#{Setting.first.site_url}/reports/#{prime.last_id_imported}" %>
 </h3>
 
       <table summary="Person list">
@@ -44,6 +45,5 @@
           <td class="householdgiving_content"><%= number_to_currency(h.lastqtravg, precision: 0) %></td>
       </tr>
       <% end %>
-
 
       </table>
