@@ -213,8 +213,7 @@ LOGGER.info("Total Donation records created: #{totcreated}")
 # #Run Weekly Household Giving report
 
 dow = Date.today.strftime("%A")
-#if dow == "Sunday"
-if dow == "Tuesday"
+if dow == "Sunday"
   LOGGER.info("=============================================================")
   LOGGER.info("Beginning Household Giving report...")
   household_giving_report()
