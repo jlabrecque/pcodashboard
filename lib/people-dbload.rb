@@ -410,8 +410,7 @@ dow = Date.today.strftime("%A")
 
 case dow
   when "Monday"
-#    regex = "^[a-fA-F]" # get last_names starting with A-F
-    regex = "^[w-zW-Z]" # get last_names starting with A-F
+    regex = "^[a-fA-F]" # get last_names starting with A-F
   when "Tuesday"
     regex = "^[g-lG-L]" # get last_names starting with A-F
   when "Wednesday"
@@ -492,7 +491,10 @@ LOGGER.info("#{people_geo_created} people geo records created")
 LOGGER.info("#{campus_geo_created} campus geo records created")
 LOGGER.info("=============================================================")
 
-
-LOGGER.info("Emailing log file to #{eml_address}")
-eml_body = File.read(logfile)
-PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+LOGGER.info("SCRIPT COMPLETED SUCCESSFULLY")
+if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
+  LOGGER.info("Script execution failed!")
+  eml_body = File.read(logfile)
+  LOGGER.info("Emailing log file to #{eml_address}")
+  PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+end

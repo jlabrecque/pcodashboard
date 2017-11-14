@@ -262,7 +262,10 @@ CheckIn.where(:eventtime_id => nil).each do |chk|
         chk.update(:eventtime_id => e[0].id, :checkin_time => e[0].starts_at)
      end
 end
-
-
-eml_body = File.read(logfile)
-PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+LOGGER.info("SCRIPT COMPLETED SUCCESSFULLY")
+if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
+  LOGGER.info("Script execution failed!")
+  eml_body = File.read(logfile)
+  LOGGER.info("Emailing log file to #{eml_address}")
+  PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+end

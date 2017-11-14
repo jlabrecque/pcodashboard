@@ -5,5 +5,7 @@ class Metum < ApplicationRecord
   scope :campaigns, lambda { where(:modeltype => "campaigns")}
   scope :mclist, lambda { where(:modeltype => "mclists")}
   scope :mccampaign, lambda { where(:modeltype => "mccampaigns")}
+  scope :hgifts, lambda { where(:modeltype => "hgift")}
+
 
 end

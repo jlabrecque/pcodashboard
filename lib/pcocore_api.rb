@@ -847,4 +847,41 @@ def household_giving_report()
           end
     end
     prime = Metum.create(:modeltype => "hgift", :last_id_imported => "", :last_offset => "0", :total_processed => 0, :total_created => 0, :total_updated => 0, :last_import => Date.today)
+    csvfilename = household_giving_csv()
+    Metum.update(prime.id,:last_id_imported => csvfilename)
+end
+
+def household_giving_csv()
+
+  datestamp = Metum.hgifts.last.last_import
+  csvfilename = "Household_Giving_#{datestamp.strftime ("%y%m%d%H%M")}.csv"
+
+  CSV.open("public/reports/#{csvfilename}", "w") do |csv|
+
+      m = Hgift.last
+      header = ["Last Name","First Name","Family","Campus",m.month1[0],m.month2[0],m.month3[0],m.month4[0],m.month5[0],m.month6[0],m.month7[0],m.month8[0],m.month9[0],m.month10[0],m.month11[0],m.month12[0]]
+      csv << header
+
+      Hgift.all.each do |h|
+        lname     = h.last_name
+        fname     = h.first_name
+        family    = h.family
+        campus    = h.campus
+        month1    = m.month1[1]
+        month2    = m.month2[1]
+        month3    = m.month3[1]
+        month4    = m.month4[1]
+        month5    = m.month5[1]
+        month6    = m.month6[1]
+        month7    = m.month7[1]
+        month8    = m.month8[1]
+        month9    = m.month9[1]
+        month10   = m.month10[1]
+        month11   = m.month11[1]
+        month12   = m.month12[1]
+        line = [lname,fname,family,campus,month1,month2,month3,month4,month5,month6,month7,month8,month9,month10,month11,month12]
+        csv << line
+      end
+  end
+  return csvfilename
 end

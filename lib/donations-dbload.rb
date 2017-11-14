@@ -224,7 +224,10 @@ end
 LOGGER.info("=============================================================")
 LOGGER.info("Script ended at #{datestamp}")
 LOGGER.info("=============================================================")
-LOGGER.info("Emailing Log Report")
-
-eml_body = File.read(logfile)
-PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+LOGGER.info("SCRIPT COMPLETED SUCCESSFULLY")
+if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
+  LOGGER.info("Script execution failed!")
+  eml_body = File.read(logfile)
+  LOGGER.info("Emailing log file to #{eml_address}")
+  PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+end
