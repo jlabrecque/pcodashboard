@@ -13,6 +13,9 @@ class Ability
         can :manage, CheckIn
         can :manage, Donation
         can :read, ActiveAdmin::Page, name: "Dashboard"
+        can :manage, Hgift
+        can :manage, Fund
+        can :manage, Peoplelist
       end
       if user.pledge?
         can :manage, Pledge
