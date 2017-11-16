@@ -758,7 +758,6 @@ def household_giving_report()
                   @montotals_a = @montotals.to_a
                   @montotals_count = @montotals_a.count
                   donreportarray << [p.id,p.pco_id,p.last_name,p.first_name,p.campus,family,@montotals_a]
-                  pp donreportarray
            end
         end
     # #stuff header

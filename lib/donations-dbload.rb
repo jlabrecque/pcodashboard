@@ -92,10 +92,10 @@ LOGGER.info("Total funds created: #{totcreated}")
 
 totcreated = 0
 totupdated = 0
+next_check = 0
 
 LOGGER.info("=============================================================")
 LOGGER.info("Processing Donations")
-
 while !next_check.nil?
   don = get_donations(page_size,offset_index)
   next_check = don["links"]["next"]
@@ -171,7 +171,7 @@ while !next_check.nil?
     :total_created => totcreated,
     :total_updated => totupdated,
     :total_processed => totcreated + totupdated,
-    :last_offset => offset_index)
+    :last_offset => last_index)
 end
 
 # #Update all Donation for association
