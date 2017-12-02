@@ -375,21 +375,25 @@ Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
           next_check = peoplelist["links"]["next"]
           peoplelist["data"].each do |p|
             person = Person.where(:pco_id => p["id"])[0]
-            pid = person.id
-            personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
-              if personcheck.count == 0 # No matching
-                  record =  PeoplelistPerson.create(
-                      :peoplelist_id           =>  lid,
-                      :person_id               =>  pid
-                    )
-                  totcreated += 1
-              else
-                    record =  PeoplelistPerson.update(personcheck[0]["id"],
-                        :peoplelist_id           =>  lid,
-                        :person_id               =>  pid
-                      )
-                   totupdated += 1
-              end
+            if person.nil?
+              puts "Person #{p["id"][0]} is nil"
+            else
+                pid = person.id
+                personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
+                  if personcheck.count == 0 # No matching
+                      record =  PeoplelistPerson.create(
+                          :peoplelist_id           =>  lid,
+                          :person_id               =>  pid
+                        )
+                      totcreated += 1
+                  else
+                        record =  PeoplelistPerson.update(personcheck[0]["id"],
+                            :peoplelist_id           =>  lid,
+                            :person_id               =>  pid
+                          )
+                       totupdated += 1
+                  end
+            end
           end
           offset_index += page_size
       end
