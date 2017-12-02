@@ -285,6 +285,11 @@ Person.all.each do |p|
     last_checkin = p.check_ins.last.checkin_time
     p.update(:first_checkin => first_checkin, :last_checkin => last_checkin)
   end
+  if !p.teammembers.empty?
+    first_served = p.teammembers.first.plan_sort_date
+    last_served = p.teammembers.last.plan_sort_date
+    p.update(:first_served => first_served, :last_served => last_served)
+  end
 end
 LOGGER.info("=============================================================")
 LOGGER.info("Total People processed: #{totprocessed}")

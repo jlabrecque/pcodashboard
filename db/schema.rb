@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171107030952) do
+ActiveRecord::Schema.define(version: 20171202011356) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -393,6 +393,8 @@ ActiveRecord::Schema.define(version: 20171107030952) do
     t.integer  "campus_id"
     t.string   "first_checkin"
     t.string   "last_checkin"
+    t.string   "first_served"
+    t.string   "last_served"
   end
 
   create_table "peoplelist_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
