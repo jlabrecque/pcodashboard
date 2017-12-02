@@ -375,6 +375,7 @@ Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
           next_check = peoplelist["links"]["next"]
           peoplelist["data"].each do |p|
             person = Person.where(:pco_id => p["id"])[0]
+puts "PersonID is #{p["id"][0]}"
             pco_id = person.pco_id
             pid = person.id
             personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
