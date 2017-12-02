@@ -374,11 +374,7 @@ Peoplelist.where("list_updated_pco >= ?",updatewindow).all.each do |pl|
           peoplelist = listpeople(pl.list_id_pco,page_size,offset_index)
           next_check = peoplelist["links"]["next"]
           peoplelist["data"].each do |p|
-puts "============" 
-puts "List: #{lid}"
             person = Person.where(:pco_id => p["id"])[0]
-puts "PersonID is #{p["id"][0]}"
-            pco_id = person.pco_id
             pid = person.id
             personcheck = PeoplelistPerson.where("peoplelist_id = ? and person_id = ?",lid,pid)
               if personcheck.count == 0 # No matching
@@ -418,17 +414,19 @@ dow = Date.today.strftime("%A")
 
 case dow
   when "Monday"
-    regex = "^[a-fA-F]" # get last_names starting with A-F
+    regex = "^[a-dA-D]" # get last_names starting with A-F
   when "Tuesday"
-    regex = "^[g-lG-L]" # get last_names starting with A-F
+    regex = "^[e-hE-H]" # get last_names starting with A-F
   when "Wednesday"
-    regex = "^[m-rM-R]" # get last_names starting with A-F
+    regex = "^[i-lI-L]" # get last_names starting with A-F
   when "Thursday"
-    regex = "^[s-vS-V]" # get last_names starting with A-F
+    regex = "^[m-pM-P]" # get last_names starting with A-F
   when "Friday"
-    regex = "^[w-zW-Z]" # get last_names starting with A-F
-else
-    regex = ""
+    regex = "^[q-tQ-T]" # get last_names starting with A-F
+  when "Saturday"
+    regex = "^[u-wU-W]" # get last_names starting with A-F
+  when "Sunday"
+    regex = "^[x-zX-Z]" # get last_names starting with A-F
 end
 LOGGER.info("DoW is #{dow}, Pattern is #{regex}")
 
