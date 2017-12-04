@@ -226,8 +226,10 @@ meta = Metum.create(:modeltype => "people",
       # Iterate through all households, add or update into Household records
       households.each do |h|
         housecheck = Household.where(:household_id_pco => h["id"])
-        puts h["attributes"]["primary_contact_id"][0]
         primary = Person.where(:pco_id => h["attributes"]["primary_contact_id"])[0]
+        puts "Primary empty: #{primary.empty?} ID #{h["attributes"]["primary_contact_id"]}"
+        puts "Primary nil: #{primary.nil?}"
+
         !if primary.nil?
             if !housecheck.exists?
               housenew = Household.create(
