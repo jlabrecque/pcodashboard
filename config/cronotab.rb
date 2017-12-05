@@ -3,16 +3,20 @@
 $checkinsload = Cron.checkins.first
 $donationsload = Cron.donations.first
 $peopleload = Cron.people.first
-
+$peoplereload = Cron.peoplereload.first
 $servicesload = Cron.services.first
-
 $mailchimpload = Cron.mailchimp.first
 $geocodedaily = Cron.geocode.first
-
 
 class PeopleLoad < ActiveJob::Base
   def perform
     load $peopleload.script_name
+  end
+end
+
+class PeopleReload < ActiveJob::Base
+  def perform
+    load $peoplereload.script_name
   end
 end
 
@@ -48,6 +52,9 @@ end
 
 if $peopleload.enabled
   Crono.perform(PeopleLoad).every 1.days, at: {hour: $peopleload.hour, min: $peopleload.minute}
+end
+if $peoplereload.enabled
+  Crono.perform(PeopleReload).every 7.days, at: {hour: $peoplereload.hour, min: $peoplereload.minute}
 end
 if $donationsload.enabled
   Crono.perform(DonationsLoad).every 1.days, at: {hour: $donationsload.hour, min: $donationsload.minute}

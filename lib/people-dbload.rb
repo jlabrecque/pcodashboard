@@ -289,7 +289,8 @@ Person.all.each do |p|
   end
   if !p.teammembers.empty?
     first_served = p.teammembers.first.plan_sort_date
-    last_served = p.teammembers.last.plan_sort_date
+    last_served_search = p.teammembers.where("status = ? and plan_sort_date <= ?","C",Time.now.to_s)
+    !last_served_search.empty? ? last_served = last_served_search.last.plan_sort_date : last_served = ""
     p.update(:first_served => first_served, :last_served => last_served)
   end
 end
