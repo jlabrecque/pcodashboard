@@ -3,6 +3,7 @@ ActiveAdmin.register Person do
   action_item :view, only: :show do
     link_to 'Back to Index', "/admin/people"
   end
+  config.per_page = [50, 100, 250]
 
 #    action_item :view_site do
 #      link_to "View Donation Grid", "/"

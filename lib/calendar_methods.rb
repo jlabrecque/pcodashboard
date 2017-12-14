@@ -143,6 +143,22 @@ def stuff_tithe(pid,calendar)
     end
   return calendar
 end
+
+def stuff_mhsunday(pid,calendar)
+    donations = Donation.where(:pco_id => pid)
+    donations.each do |don|
+        pin = don[:donation_created_at].to_date
+                calendar.each_key do |week|
+                  this_week = calendar[week][:date]
+                  next_week = this_week + 7
+                  if pin <= next_week and pin > this_week
+                     next_week_str = next_week.strftime("%Y%m%d")
+                     calendar[next_week_str][:amount] += don[:amount]
+                  end
+                end
+    end
+  return calendar
+end
 #============================================
 def stuff_donreport(pid,calendar)
     donations = Donation.where(:pco_id => pid)
