@@ -140,12 +140,13 @@ LOGGER.info("Total Plans created: #{totcreated}")
 LOGGER.info("Total Plans updated: #{totupdated}")
 
 
-checkwindow = (Plan.byupdate.last.pl_updated_at.to_date - 7.days).to_s
+checkwindow = (Plan.byupdate.last.pl_updated_at.to_date - 7.days).to_s #string
+datestamp = Time.now #date
+updatestamp = datestamp.strftime("%Y-%m-%d") #string
 next_check = 0
 totcreated = 0
 totupdated = 0
 totskipped = 0
-datestamp = Time.now
 set_endtime()
 
 LOGGER.info("=================================================")
@@ -184,6 +185,7 @@ ServiceType.all.each do |st|
                               :position           =>   tmposition,
                               :status             =>   tmstatus,
                               :decline_reason     =>   tmreason,
+                              :planperson         =>   updatestamp,
                               :plan_updated_at    =>   member["attributes"]["updated_at"]
                           )
                           totcreated += 1
@@ -201,11 +203,15 @@ ServiceType.all.each do |st|
                           :position           =>   tmposition,
                           :status             =>   tmstatus,
                           :decline_reason     =>   tmreason,
+                          :planperson         =>   updatestamp,
                           :plan_updated_at    =>   member["attributes"]["updated_at"]
                           )
 
                           totupdated += 1
                         else
+                          upmember = Teammember.update(membercheck[0].id,
+                          :planperson         =>   updatestamp
+                          )
                           totskipped += 1
                         end
                   end

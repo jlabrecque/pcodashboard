@@ -24,3 +24,7 @@
 .byebug_history
 /lib/import/*.csv
 /public/reports/*
+
+#ignore test controller + page
+/app/admin/test.rb
+/app/views/admin/tes*
