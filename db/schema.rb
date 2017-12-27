@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171202011356) do
+ActiveRecord::Schema.define(version: 20171227214426) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -413,6 +413,94 @@ ActiveRecord::Schema.define(version: 20171202011356) do
     t.string   "list_updated_pco"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+  end
+
+  create_table "personcheckins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "person_id"
+    t.string   "pco_id"
+    t.string   "fullname"
+    t.string   "week1"
+    t.string   "week1value"
+    t.string   "week2"
+    t.string   "week2value"
+    t.string   "week3"
+    t.string   "week3value"
+    t.string   "week4"
+    t.string   "week4value"
+    t.string   "week5"
+    t.string   "week5value"
+    t.string   "week6"
+    t.string   "week6value"
+    t.string   "week7"
+    t.string   "week7value"
+    t.string   "week8"
+    t.string   "week8value"
+    t.string   "week9"
+    t.string   "week9value"
+    t.string   "week10"
+    t.string   "week10value"
+    t.string   "week11"
+    t.string   "week11value"
+    t.string   "week12"
+    t.string   "week12value"
+    t.string   "week13"
+    t.string   "week13value"
+    t.string   "week14"
+    t.string   "week14value"
+    t.string   "week15"
+    t.string   "week15value"
+    t.string   "week16"
+    t.string   "week16value"
+    t.string   "week17"
+    t.string   "week17value"
+    t.string   "week18"
+    t.string   "week18value"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "persongifts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "person_id"
+    t.string   "pco_id"
+    t.string   "fullname"
+    t.string   "week1"
+    t.string   "week1value"
+    t.string   "week2"
+    t.string   "week2value"
+    t.string   "week3"
+    t.string   "week3value"
+    t.string   "week4"
+    t.string   "week4value"
+    t.string   "week5"
+    t.string   "week5value"
+    t.string   "week6"
+    t.string   "week6value"
+    t.string   "week7"
+    t.string   "week7value"
+    t.string   "week8"
+    t.string   "week8value"
+    t.string   "week9"
+    t.string   "week9value"
+    t.string   "week10"
+    t.string   "week10value"
+    t.string   "week11"
+    t.string   "week11value"
+    t.string   "week12"
+    t.string   "week12value"
+    t.string   "week13"
+    t.string   "week13value"
+    t.string   "week14"
+    t.string   "week14value"
+    t.string   "week15"
+    t.string   "week15value"
+    t.string   "week16"
+    t.string   "week16value"
+    t.string   "week17"
+    t.string   "week17value"
+    t.string   "week18"
+    t.string   "week18value"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

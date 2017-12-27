@@ -1,0 +1,2 @@
+class Persongift < ApplicationRecord
+end
