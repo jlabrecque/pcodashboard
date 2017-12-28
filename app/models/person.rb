@@ -33,6 +33,23 @@ class Person < ApplicationRecord
   # # Enumerize
    extend Enumerize
    enumerize :week1checkin, in: [:R, :V, :N], default: :N
+   enumerize :week2checkin, in: [:R, :V, :N], default: :N
+   enumerize :week3checkin, in: [:R, :V, :N], default: :N
+   enumerize :week4checkin, in: [:R, :V, :N], default: :N
+   enumerize :week5checkin, in: [:R, :V, :N], default: :N
+   enumerize :week6checkin, in: [:R, :V, :N], default: :N
+   enumerize :week7checkin, in: [:R, :V, :N], default: :N
+   enumerize :week8checkin, in: [:R, :V, :N], default: :N
+   enumerize :week9checkin, in: [:R, :V, :N], default: :N
+   enumerize :week10checkin, in: [:R, :V, :N], default: :N
+   enumerize :week11checkin, in: [:R, :V, :N], default: :N
+   enumerize :week12checkin, in: [:R, :V, :N], default: :N
+   enumerize :week13checkin, in: [:R, :V, :N], default: :N
+   enumerize :week14checkin, in: [:R, :V, :N], default: :N
+   enumerize :week15checkin, in: [:R, :V, :N], default: :N
+   enumerize :week16checkin, in: [:R, :V, :N], default: :N
+   enumerize :week17checkin, in: [:R, :V, :N], default: :N
+   enumerize :week18checkin, in: [:R, :V, :N], default: :N
   #
   #  # Rails Enum
    enum status: { active: 0, archived: 1 }

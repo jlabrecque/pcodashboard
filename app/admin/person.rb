@@ -36,8 +36,12 @@ menu priority: 3, label: "People"
       $people = Person.first
       # render partial: 'peopleindex' #, :locals => {:transactions => Transaction.all}
       selectable_column
-      column :pco_id
-      column "Name", :fullname
+      column :pco_id do |col|
+        link_to(col.pco_id, col.peopleapp_link)
+      end
+      column "Name", :fullname do |col|
+        link_to(col.fullname, admin_person_path(col), :class => 'action show')
+      end
       tag_column "#{Person.first.week1}", :week1checkin
       tag_column "#{Person.first.week2}", :week2checkin
       tag_column "#{Person.first.week3}", :week3checkin
