@@ -46,6 +46,7 @@ gem 'daemons'
 gem 'haml'
 gem 'sinatra', require: nil
 gem 'activeadmin_addons'
+gem 'enumerize'
 #gem "active_material", github: "vigetlabs/active_material"
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

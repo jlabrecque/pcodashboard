@@ -106,6 +106,8 @@ GEM
     dotenv-rails (2.2.1)
       dotenv (= 2.2.1)
       railties (>= 3.2, < 5.2)
+    enumerize (2.1.2)
+      activesupport (>= 3.2)
     erubis (2.7.0)
     excon (0.45.4)
     execjs (2.7.0)
@@ -328,6 +330,7 @@ DEPENDENCIES
   devise
   dotenv
   dotenv-rails
+  enumerize
   font-awesome-sass (~> 4.3)
   gchartrb
   gender_detector

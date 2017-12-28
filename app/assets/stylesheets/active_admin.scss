@@ -340,3 +340,27 @@ span.donation_grid_dates.false {
 body.active_admin #collection_selection_toggle_panel {
   display: none
 }
+
+$r-color: #97AACC;
+$v-color: #90BB90;
+$n-color: transparent;
+
+.status_tag {
+  &.r { background: $r-color; color: $r-color; font-size: 1.2em; margin: 0 0 0 0;}
+  &.v { background: $v-color; color: $v-color; font-size: 1.2em; margin: 0 0 0 0;}
+  &.n { background: $n-color; color: $n-color; font-size: 1.2em; margin: 0 0 0 0;}
+}
+
+#index_table_people .col {
+  min-width: 0px;
+  padding: 0 0 0 0;
+}
+#index_table_people .col-selectable {
+  min-width: 30px;
+}
+#index_table_people .col-pco_id {
+  min-width: 0px;
+}
+#index_table_people .col-name {
+  min-width: 150px;
+}

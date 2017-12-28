@@ -33,8 +33,29 @@ menu priority: 3, label: "People"
     end
 
     index as: CheckinsIndex do
-      @people = Person.where(:people_status => "active").sorted
-      render partial: 'peopleindex' #, :locals => {:transactions => Transaction.all}
+      $people = Person.first
+      # render partial: 'peopleindex' #, :locals => {:transactions => Transaction.all}
+      selectable_column
+      column :pco_id
+      column "Name", :fullname
+      tag_column "#{Person.first.week1}", :week1checkin
+      tag_column "#{Person.first.week2}", :week2checkin
+      tag_column "#{Person.first.week3}", :week3checkin
+      tag_column "#{Person.first.week4}", :week4checkin
+      tag_column "#{Person.first.week5}", :week5checkin
+      tag_column "#{Person.first.week6}", :week6checkin
+      tag_column "#{Person.first.week7}", :week7checkin
+      tag_column "#{Person.first.week8}", :week8checkin
+      tag_column "#{Person.first.week9}", :week9checkin
+      tag_column "#{Person.first.week10}", :week10checkin
+      tag_column "#{Person.first.week11}", :week11checkin
+      tag_column "#{Person.first.week12}", :week12checkin
+      tag_column "#{Person.first.week13}", :week13checkin
+      tag_column "#{Person.first.week14}", :week14checkin
+      tag_column "#{Person.first.week15}", :week15checkin
+      tag_column "#{Person.first.week16}", :week16checkin
+      tag_column "#{Person.first.week17}", :week17checkin
+      tag_column "#{Person.first.week18}", :week18checkin
     end
 
     index as: DonationsIndex do

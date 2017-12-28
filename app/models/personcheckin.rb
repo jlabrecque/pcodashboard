@@ -1,2 +1,0 @@
-class Personcheckin < ApplicationRecord
-end

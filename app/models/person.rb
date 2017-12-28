@@ -30,9 +30,12 @@ class Person < ApplicationRecord
   scope :member, -> { where(:membership => "Member")}
 
   # scope :focallist, -> { joins(:lists).where("peoplelists.focallist = ?",TRUE) }
-
-
-
+  # # Enumerize
+   extend Enumerize
+   enumerize :week1checkin, in: [:R, :V, :N], default: :N
+  #
+  #  # Rails Enum
+   enum status: { active: 0, archived: 1 }
 
     def self.search(search)
       where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%")
