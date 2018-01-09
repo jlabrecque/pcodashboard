@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171227233350) do
+ActiveRecord::Schema.define(version: 20171231031858) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -600,6 +600,20 @@ ActiveRecord::Schema.define(version: 20171227233350) do
     t.string   "pledge_start"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+  end
+
+  create_table "rsvp_events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "name"
+    t.integer  "peoplelist_id"
+    t.string   "sdate"
+    t.string   "stime"
+    t.datetime "date"
+    t.text     "description",   limit: 4294967295
+    t.string   "info_url"
+    t.integer  "creator"
+    t.boolean  "status"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   create_table "service_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

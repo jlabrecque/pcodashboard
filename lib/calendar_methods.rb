@@ -352,3 +352,22 @@ loc_counter = 0
   end
   return @geo_array
 end
+#============================================
+def donationabbreviate(amount)
+  case
+      when amount == 0
+        abbrevamount = ""
+      when (0.01..999.99) == amount
+        abbrevamount =  number_with_precision(amount.ceil, precision: 0).to_s
+      when (1000..999999.99) == amount
+        abbrevamount =  (number_with_precision(amount.ceil, precision: 0)/1000).to_s
+        abbrevamount += "K"
+      when amount > 1000000
+        abbrevamount =  (number_with_precision(amount.ceil, precision: 0)/1000000).to_s
+        abbrevamount += "M"
+      else
+        abbrevamount = ""
+  end
+  return abbrevamount
+
+end

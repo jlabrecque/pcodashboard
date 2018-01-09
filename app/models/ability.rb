@@ -7,8 +7,7 @@ class Ability
       if user.admin?
         can :manage, :all
         # can :manage, Settings
-      end
-      if user.core?
+      elsif user.core?
         can :manage, Person
         can :manage, CheckIn
         can :manage, Donation
@@ -16,8 +15,7 @@ class Ability
         can :manage, Hgift
         can :manage, Fund
         can :manage, Peoplelist
-      end
-      if user.pledge?
+      elsif user.pledge?
         can :manage, Pledge
         can :manage, Campaign
         can :manage, PledgeReport

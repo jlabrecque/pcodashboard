@@ -269,7 +269,7 @@ config.download_links = [:csv]
   # Pagination is enabled by default for all resources.
   # You can control the default per page count for all resources here.
   #
-  config.default_per_page = 50
+  config.default_per_page = 200
   #
   # You can control the max per page count too.
   #
@@ -295,7 +295,7 @@ config.download_links = [:csv]
   # By default, the footer shows the current Active Admin version. You can
   # override the content of the footer here.
   #
-  config.footer = 'Community Christian - 2017'
+  config.footer = 'Community Christian - 2018'
 
   # == Sorting
   #

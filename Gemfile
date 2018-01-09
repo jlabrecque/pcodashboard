@@ -25,7 +25,8 @@ gem "google_visualr", "~> 2.5.1"
 gem 'gchartrb'
 gem 'google_charts'
 gem "chartkick"
-gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'activeadmin', "~> 1.0.0"
+#, github: 'gregbell/active_admin'
 gem 'active_admin_importable'
 gem 'devise'
 gem 'cancancan'
@@ -45,7 +46,7 @@ gem 'crono'
 gem 'daemons'
 gem 'haml'
 gem 'sinatra', require: nil
-gem 'activeadmin_addons'
+gem 'activeadmin_addons', "~> 1.0.1"
 gem 'enumerize'
 #gem "active_material", github: "vigetlabs/active_material"
 # Use jquery as the JavaScript library

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root to: "home#index"
+  get 'rsvp', to: 'home#rsvp'
 
   authenticate :admin_user, lambda { |u| u.admin? } do
     mount Crono::Web, at: '/crono'
