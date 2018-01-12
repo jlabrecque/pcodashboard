@@ -343,12 +343,20 @@ body.active_admin #collection_selection_toggle_panel {
 
 $r-color: #97AACC;
 $v-color: #90BB90;
+$d-color: #BDB66F;
+$k-color: #8C8540;
+$m-color: #464320;
+
 $n-color: transparent;
 
 .status_tag {
   &.r { background: $r-color; color: $r-color; font-size: 1.2em; margin: 0 0 0 0;}
   &.v { background: $v-color; color: $v-color; font-size: 1.2em; margin: 0 0 0 0;}
+  &.d { background: $d-color; color: $d-color; font-size: 1.2em; margin: 0 0 0 0;}
+  &.k { background: $k-color; color: $k-color; font-size: 1.2em; margin: 0 0 0 0;}
+  &.m { background: $m-color; color: $m-color; font-size: 1.2em; margin: 0 0 0 0;}
   &.n { background: $n-color; color: $n-color; font-size: 1.2em; margin: 0 0 0 0;}
+
 }
 
 #index_table_people .col {

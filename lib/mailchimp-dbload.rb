@@ -286,5 +286,5 @@ if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
   LOGGER.info("Script execution failed!")
   eml_body = File.read(logfile)
   LOGGER.info("Emailing log file to #{eml_address}")
-  PcocoreMailer.send_email(eml_address,eml_subject,eml_body).deliver
+  PcocoreMailer.send_email("",eml_address,eml_subject,eml_body).deliver
 end

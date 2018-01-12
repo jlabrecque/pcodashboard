@@ -50,6 +50,25 @@ class Person < ApplicationRecord
    enumerize :week16checkin, in: [:R, :V, :N], default: :N
    enumerize :week17checkin, in: [:R, :V, :N], default: :N
    enumerize :week18checkin, in: [:R, :V, :N], default: :N
+   enumerize :week1gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week2gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week3gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week4gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week5gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week6gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week7gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week8gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week9gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week10gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week11gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week12gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week13gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week14gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week15gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week16gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week17gift, in: [:D, :K, :M, :N], default: :N
+   enumerize :week18gift, in: [:D, :K, :M, :N], default: :N
+
   #
   #  # Rails Enum
    enum status: { active: 0, archived: 1 }

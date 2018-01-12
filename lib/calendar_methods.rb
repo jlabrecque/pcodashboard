@@ -354,19 +354,18 @@ loc_counter = 0
 end
 #============================================
 def donationabbreviate(amount)
+# N -> No gift, D < 1000, K gt 1000 lt 100000, M > 1000000
   case
-      when amount == 0
-        abbrevamount = ""
-      when (0.01..999.99) == amount
-        abbrevamount =  number_with_precision(amount.ceil, precision: 0).to_s
-      when (1000..999999.99) == amount
-        abbrevamount =  (number_with_precision(amount.ceil, precision: 0)/1000).to_s
-        abbrevamount += "K"
+  when amount == 0.00
+        abbrevamount = "N"
+      when (1..999) === amount
+        abbrevamount = "D"
+      when (1000..999999) == amount
+        abbrevamount = "K"
       when amount > 1000000
-        abbrevamount =  (number_with_precision(amount.ceil, precision: 0)/1000000).to_s
-        abbrevamount += "M"
+        abbrevamount = "M"
       else
-        abbrevamount = ""
+        abbrevamount = "N"
   end
   return abbrevamount
 

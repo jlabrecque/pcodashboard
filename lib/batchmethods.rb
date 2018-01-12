@@ -27,14 +27,17 @@ def email_selected(ids,inputs)
     else
 
         if inputs['to'] == "Yourself"
-          emails << current_admin_user.email
+          PcocoreMailer.send_email("",current_admin_user.email,inputs["subject"],inputs["content"]).deliver
         else
           ids.each do |pid|
               p = Person.find(pid.to_i)
               if !p.email.empty?
-                 PcocoreMailer.send_email(p.email,inputs["subject"],inputs["content"]).deliver
+                 PcocoreMailer.send_email("",p.email,inputs["subject"],inputs["content"]).deliver
+    #             logger.info("Email detail: #{pid}, #{p.fullname}, #{p.email}, #{inputs["subject"]}, #{inputs["content"]}")
+
               else
                  noemails << p.fullname
+                 logger.info("Noemail for: #{p.fullname}")
               end
           end
         end
