@@ -4,6 +4,8 @@ require 'pp'
 require 'csv'
 require 'pcocore_api.rb'
 require 'log4r'
+require 'calendar_methods.rb'
+
 
 #CONSTANTS
 page_size = 100
@@ -220,6 +222,93 @@ if dow == "Sunday"
   LOGGER.info("Household Giving report updated to database")
 
 end
+
+# Load Row Header global to all records
+@calendar,lastsunday = get_calendar()
+
+week1     = (lastsunday.to_date - 119).strftime("%m/%d")
+week2     = (lastsunday.to_date - 112).strftime("%m/%d")
+week3     = (lastsunday.to_date - 105).strftime("%m/%d")
+week4     = (lastsunday.to_date - 98).strftime("%m/%d")
+week5     = (lastsunday.to_date - 91).strftime("%m/%d")
+week6     = (lastsunday.to_date - 84).strftime("%m/%d")
+week7     = (lastsunday.to_date - 77).strftime("%m/%d")
+week8     = (lastsunday.to_date - 70).strftime("%m/%d")
+week9     = (lastsunday.to_date - 63).strftime("%m/%d")
+week10    = (lastsunday.to_date - 56).strftime("%m/%d")
+week11    = (lastsunday.to_date - 49).strftime("%m/%d")
+week12    = (lastsunday.to_date - 42).strftime("%m/%d")
+week13    = (lastsunday.to_date - 35).strftime("%m/%d")
+week14    = (lastsunday.to_date - 28).strftime("%m/%d")
+week15    = (lastsunday.to_date - 21).strftime("%m/%d")
+week16    = (lastsunday.to_date - 14).strftime("%m/%d")
+week17    = (lastsunday.to_date - 7).strftime("%m/%d")
+week18    = (lastsunday.to_date - 0).strftime("%m/%d")
+
+
+LOGGER.info("Writing Donation grid updates to Person table...")
+# Load per person checkin grid
+Person.all.each do |person|
+    @calendar,lastsunday = get_calendar()
+    stuff_donations(person.pco_id,@calendar)
+    week1donation = donationabbreviate(@calendar[(lastsunday.to_date - 119).strftime("%Y%m%d")][:amount])
+    week2donation  = donationabbreviate(@calendar[(lastsunday.to_date - 112).strftime("%Y%m%d")][:amount])
+    week3donation  = donationabbreviate(@calendar[(lastsunday.to_date - 105).strftime("%Y%m%d")][:amount])
+    week4donation  = donationabbreviate(@calendar[(lastsunday.to_date - 98).strftime("%Y%m%d")][:amount])
+    week5donation  = donationabbreviate(@calendar[(lastsunday.to_date - 91).strftime("%Y%m%d")][:amount])
+    week6donation  = donationabbreviate(@calendar[(lastsunday.to_date - 84).strftime("%Y%m%d")][:amount])
+    week7donation  = donationabbreviate(@calendar[(lastsunday.to_date - 77).strftime("%Y%m%d")][:amount])
+    week8donation  = donationabbreviate(@calendar[(lastsunday.to_date - 70).strftime("%Y%m%d")][:amount])
+    week9donation  = donationabbreviate(@calendar[(lastsunday.to_date - 63).strftime("%Y%m%d")][:amount])
+    week10donation = donationabbreviate(@calendar[(lastsunday.to_date - 56).strftime("%Y%m%d")][:amount])
+    week11donation = donationabbreviate(@calendar[(lastsunday.to_date - 49).strftime("%Y%m%d")][:amount])
+    week12donation = donationabbreviate(@calendar[(lastsunday.to_date - 42).strftime("%Y%m%d")][:amount])
+    week13donation = donationabbreviate(@calendar[(lastsunday.to_date - 35).strftime("%Y%m%d")][:amount])
+    week14donation = donationabbreviate(@calendar[(lastsunday.to_date - 28).strftime("%Y%m%d")][:amount])
+    week15donation = donationabbreviate(@calendar[(lastsunday.to_date - 21).strftime("%Y%m%d")][:amount])
+    week16donation = donationabbreviate(@calendar[(lastsunday.to_date - 14).strftime("%Y%m%d")][:amount])
+    week17donation = donationabbreviate(@calendar[(lastsunday.to_date - 7).strftime("%Y%m%d")][:amount])
+    week18donation = donationabbreviate(@calendar[(lastsunday.to_date - 0).strftime("%Y%m%d")][:amount])
+
+Person.update(person.id,
+  :week1          => week1,
+  :week1gift      => week1donation,
+  :week2          => week2,
+  :week2gift      => week2donation,
+  :week3          => week3,
+  :week3gift      => week3donation,
+  :week4          => week4,
+  :week4gift      => week4donation,
+  :week5          => week5,
+  :week5gift      => week5donation,
+  :week6          => week6,
+  :week6gift      => week6donation,
+  :week7          => week7,
+  :week7gift      => week7donation,
+  :week8          => week8,
+  :week8gift      => week8donation,
+  :week9          => week9,
+  :week9gift      => week9donation,
+  :week10         => week10,
+  :week10gift     => week10donation,
+  :week11         => week11,
+  :week11gift     => week11donation,
+  :week12         => week12,
+  :week12gift     => week12donation,
+  :week13         => week13,
+  :week13gift     => week13donation,
+  :week14         => week14,
+  :week14gift     => week14donation,
+  :week15         => week15,
+  :week15gift     => week15donation,
+  :week16         => week16,
+  :week16gift     => week16donation,
+  :week17         => week17,
+  :week17gift     => week17donation,
+  :week18         => week18,
+  :week18gift     => week18donation
+)
+ end
 
 LOGGER.info("=============================================================")
 LOGGER.info("Script ended at #{datestamp}")

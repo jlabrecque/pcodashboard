@@ -6,6 +6,7 @@ require 'pcocore_api.rb'
 require 'log4r'
 require 'dotenv'
 require 'dotenv-rails'
+require 'calendar_methods.rb'
 
 #CONSTANTS
 logfile_prefix = "checkins"
@@ -262,6 +263,96 @@ CheckIn.where(:eventtime_id => nil).each do |chk|
         chk.update(:eventtime_id => e[0].id, :checkin_time => e[0].starts_at)
      end
 end
+
+# Load Row Header global to all records
+@calendar,lastsunday = get_calendar()
+
+week1     = (lastsunday.to_date - 119).strftime("%m/%d")
+week2     = (lastsunday.to_date - 112).strftime("%m/%d")
+week3     = (lastsunday.to_date - 105).strftime("%m/%d")
+week4     = (lastsunday.to_date - 98).strftime("%m/%d")
+week5     = (lastsunday.to_date - 91).strftime("%m/%d")
+week6     = (lastsunday.to_date - 84).strftime("%m/%d")
+week7     = (lastsunday.to_date - 77).strftime("%m/%d")
+week8     = (lastsunday.to_date - 70).strftime("%m/%d")
+week9     = (lastsunday.to_date - 63).strftime("%m/%d")
+week10    = (lastsunday.to_date - 56).strftime("%m/%d")
+week11    = (lastsunday.to_date - 49).strftime("%m/%d")
+week12    = (lastsunday.to_date - 42).strftime("%m/%d")
+week13    = (lastsunday.to_date - 35).strftime("%m/%d")
+week14    = (lastsunday.to_date - 28).strftime("%m/%d")
+week15    = (lastsunday.to_date - 21).strftime("%m/%d")
+week16    = (lastsunday.to_date - 14).strftime("%m/%d")
+week17    = (lastsunday.to_date - 7).strftime("%m/%d")
+week18    = (lastsunday.to_date - 0).strftime("%m/%d")
+
+
+# Load per person checkin grid
+
+LOGGER.info("Writing Checkin grid updates to Person table...")
+
+Person.all.each do |person|
+    @calendar,lastsunday = get_calendar()
+    stuff_checkins(person.pco_id,@calendar)
+    week1checkin = @calendar[(lastsunday.to_date - 119).strftime("%Y%m%d")][:attend]
+    week2checkin  = @calendar[(lastsunday.to_date - 112).strftime("%Y%m%d")][:attend]
+    week3checkin  = @calendar[(lastsunday.to_date - 105).strftime("%Y%m%d")][:attend]
+    week4checkin  = @calendar[(lastsunday.to_date - 98).strftime("%Y%m%d")][:attend]
+    week5checkin  = @calendar[(lastsunday.to_date - 91).strftime("%Y%m%d")][:attend]
+    week6checkin  = @calendar[(lastsunday.to_date - 84).strftime("%Y%m%d")][:attend]
+    week7checkin  = @calendar[(lastsunday.to_date - 77).strftime("%Y%m%d")][:attend]
+    week8checkin  = @calendar[(lastsunday.to_date - 70).strftime("%Y%m%d")][:attend]
+    week9checkin  = @calendar[(lastsunday.to_date - 63).strftime("%Y%m%d")][:attend]
+    week10checkin = @calendar[(lastsunday.to_date - 56).strftime("%Y%m%d")][:attend]
+    week11checkin = @calendar[(lastsunday.to_date - 49).strftime("%Y%m%d")][:attend]
+    week12checkin = @calendar[(lastsunday.to_date - 42).strftime("%Y%m%d")][:attend]
+    week13checkin = @calendar[(lastsunday.to_date - 35).strftime("%Y%m%d")][:attend]
+    week14checkin = @calendar[(lastsunday.to_date - 28).strftime("%Y%m%d")][:attend]
+    week15checkin = @calendar[(lastsunday.to_date - 21).strftime("%Y%m%d")][:attend]
+    week16checkin = @calendar[(lastsunday.to_date - 14).strftime("%Y%m%d")][:attend]
+    week17checkin = @calendar[(lastsunday.to_date - 7).strftime("%Y%m%d")][:attend]
+    week18checkin = @calendar[(lastsunday.to_date - 0).strftime("%Y%m%d")][:attend]
+
+Person.update(person.id,
+  :week1          => week1,
+  :week1checkin   => week1checkin,
+  :week2          => week2,
+  :week2checkin   => week2checkin,
+  :week3          => week3,
+  :week3checkin   => week3checkin,
+  :week4          => week4,
+  :week4checkin   => week4checkin,
+  :week5          => week5,
+  :week5checkin   => week5checkin,
+  :week6          => week6,
+  :week6checkin   => week6checkin,
+  :week7          => week7,
+  :week7checkin   => week7checkin,
+  :week8          => week8,
+  :week8checkin   => week8checkin,
+  :week9          => week9,
+  :week9checkin   => week9checkin,
+  :week10         => week10,
+  :week10checkin  => week10checkin,
+  :week11         => week11,
+  :week11checkin  => week11checkin,
+  :week12         => week12,
+  :week12checkin  => week12checkin,
+  :week13         => week13,
+  :week13checkin  => week13checkin,
+  :week14         => week14,
+  :week14checkin  => week14checkin,
+  :week15         => week15,
+  :week15checkin  => week15checkin,
+  :week16         => week16,
+  :week16checkin  => week16checkin,
+  :week17         => week17,
+  :week17checkin  => week17checkin,
+  :week18         => week18,
+  :week18checkin  => week18checkin
+)
+end
+
 LOGGER.info("SCRIPT COMPLETED SUCCESSFULLY")
 if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
   LOGGER.info("Script execution failed!")
