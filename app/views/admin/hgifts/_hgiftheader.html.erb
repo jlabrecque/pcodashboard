@@ -1,0 +1,4 @@
+<h3>
+  <% prime = Metum.where(:modeltype => "hgift").last  %>
+  Last update: <%= prime.last_import %> - <%= link_to "Download Full CSV", "https://#{Setting.first.site_url}/reports/#{prime.last_id_imported}" %>
+</h3>

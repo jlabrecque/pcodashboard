@@ -677,8 +677,8 @@ def household_giving_report()
       @campus = h.primary.campus
       @last_name = h.primary.last_name
       @first_name = h.primary.first_name
+      @person_id = h.person_id
       h.members.each do |hm|
-          @person_id = hm.id
           @calendar,@lastsunday = get_calendar()
           stuff_tithe(hm.pco_id,@calendar)
                 @calendar.each do |k,v|
@@ -828,21 +828,32 @@ def household_giving_report()
                 :first_name     =>    d[3],
                 :campus         =>    d[4],
                 :family         =>    d[5],
-                :month1         =>    [@montotals_a[@montotals_count - 12][0] , d[6][@montotals_count - 12][1] ],
-                :month2         =>    [@montotals_a[@montotals_count - 11][0] , d[6][@montotals_count - 11][1] ],
-                :month3         =>    [@montotals_a[@montotals_count - 10][0] , d[6][@montotals_count - 10][1] ],
-                :month4         =>    [@montotals_a[@montotals_count - 9][0] , d[6][@montotals_count - 9][1] ],
-                :month5         =>    [@montotals_a[@montotals_count - 8][0] , d[6][@montotals_count - 8][1] ],
-                :month6         =>    [@montotals_a[@montotals_count - 7][0] , d[6][@montotals_count - 7][1] ],
-                :month7         =>    [@montotals_a[@montotals_count - 6][0] , d[6][@montotals_count - 6][1] ],
-                :month8         =>    [@montotals_a[@montotals_count - 5][0] , d[6][@montotals_count - 5][1] ],
-                :month9         =>    [@montotals_a[@montotals_count - 4][0] , d[6][@montotals_count - 4][1] ],
-                :month10        =>    [@montotals_a[@montotals_count - 3][0] , d[6][@montotals_count - 3][1] ],
-                :month11        =>    [@montotals_a[@montotals_count - 2][0] , d[6][@montotals_count - 2][1] ],
-                :month12        =>    [@montotals_a[@montotals_count - 1][0] , d[6][@montotals_count - 1][1] ],
+                :month1             =>    @montotals_a[@montotals_count - 12][0],
+                :month1gift         =>    d[6][@montotals_count - 12][1],
+                :month2             =>    @montotals_a[@montotals_count - 11][0],
+                :month2gift         =>    d[6][@montotals_count - 11][1],
+                :month3             =>    @montotals_a[@montotals_count - 10][0],
+                :month3gift         =>    d[6][@montotals_count - 10][1],
+                :month4             =>    @montotals_a[@montotals_count - 9][0],
+                :month4gift         =>    d[6][@montotals_count - 9][1],
+                :month5             =>    @montotals_a[@montotals_count - 8][0],
+                :month5gift         =>    d[6][@montotals_count - 8][1],
+                :month6             =>    @montotals_a[@montotals_count - 7][0],
+                :month6gift         =>    d[6][@montotals_count - 7][1],
+                :month7             =>    @montotals_a[@montotals_count - 6][0],
+                :month7gift         =>    d[6][@montotals_count - 6][1],
+                :month8             =>    @montotals_a[@montotals_count - 5][0],
+                :month8gift         =>    d[6][@montotals_count - 5][1],
+                :month9             =>    @montotals_a[@montotals_count - 4][0],
+                :month9gift         =>    d[6][@montotals_count - 4][1],
+                :month10            =>    @montotals_a[@montotals_count - 3][0],
+                :month10gift        =>    d[6][@montotals_count - 3][1],
+                :month11            =>    @montotals_a[@montotals_count - 2][0],
+                :month11gift        =>    d[6][@montotals_count - 2][1],
+                :month12            =>    @montotals_a[@montotals_count - 1][0],
+                :month12gift        =>    d[6][@montotals_count - 1][1],
                 :annavg         =>    annavg,
                 :lastqtravg     =>    lastqrtavg
-
               )
           end
     end
@@ -859,7 +870,7 @@ def household_giving_csv()
   CSV.open("public/reports/#{csvfilename}", "w") do |csv|
 
       m = Hgift.last
-      header = ["Last Name","First Name","Family","Campus",m.month1[0],m.month2[0],m.month3[0],m.month4[0],m.month5[0],m.month6[0],m.month7[0],m.month8[0],m.month9[0],m.month10[0],m.month11[0],m.month12[0]]
+      header = ["Last Name","First Name","Family","Campus",m.month1,m.month2,m.month3,m.month4,m.month5,m.month6,m.month7,m.month8,m.month9,m.month10,m.month11,m.month12]
       csv << header
 
       Hgift.all.each do |h|
@@ -867,18 +878,18 @@ def household_giving_csv()
         fname     = h.first_name
         family    = h.family
         campus    = h.campus
-        month1    = h.month1[1]
-        month2    = h.month2[1]
-        month3    = h.month3[1]
-        month4    = h.month4[1]
-        month5    = h.month5[1]
-        month6    = h.month6[1]
-        month7    = h.month7[1]
-        month8    = h.month8[1]
-        month9    = h.month9[1]
-        month10   = h.month10[1]
-        month11   = h.month11[1]
-        month12   = h.month12[1]
+        month1    = h.month1gift
+        month2    = h.month2gift
+        month3    = h.month3gift
+        month4    = h.month4gift
+        month5    = h.month5gift
+        month6    = h.month6gift
+        month7    = h.month7gift
+        month8    = h.month8gift
+        month9    = h.month9gift
+        month10   = h.month10gift
+        month11   = h.month11gift
+        month12   = h.month12gift
         line = [lname,fname,family,campus,month1,month2,month3,month4,month5,month6,month7,month8,month9,month10,month11,month12]
         csv << line
       end

@@ -37,7 +37,7 @@ th, td, caption {
 
 .people_show {
 	font-family: "Verdana Lucida";
-	margin-left: 50px;
+	margin-left: 200px;
 	margin-right: 50px;
 }
 .people_show_header {
@@ -161,6 +161,13 @@ span.donation_grid_dates.false {
   width: 1500px;
     background-color: #fff;
     margin: auto;
+    height: 300px;
+}
+#row2 {
+  width: 1500px;
+    background-color: #fff;
+    margin: auto;
+    height: 300px;
 }
 
 .peopleshowcolumn_header {
@@ -284,6 +291,7 @@ span.donation_grid_dates.false {
   border-style: solid;
   border-color: grey;
   border-radius: 0px;
+  border-width: 1px;
   margin-left: 10px;
   margin-right: 10px;
   width: 230px;
@@ -325,8 +333,6 @@ span.donation_grid_dates.false {
 .peopleshowcolumn_mc {
   background-color: #fff !important;
 }
-
-
 
 .personthumbnail {
   margin-left: auto;

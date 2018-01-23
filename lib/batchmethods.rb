@@ -27,12 +27,12 @@ def email_selected(ids,inputs)
     else
 
         if inputs['to'] == "Yourself"
-          PcocoreMailer.send_email("",current_admin_user.email,inputs["subject"],inputs["content"]).deliver
+          PcocoreMailer.send_email(current_admin_user.email,current_admin_user.email,inputs["subject"],inputs["content"]).deliver
         else
           ids.each do |pid|
               p = Person.find(pid.to_i)
               if !p.email.empty?
-                 PcocoreMailer.send_email("",p.email,inputs["subject"],inputs["content"]).deliver
+                 PcocoreMailer.send_email(current_admin_user.email,p.email,inputs["subject"],inputs["content"]).deliver
     #             logger.info("Email detail: #{pid}, #{p.fullname}, #{p.email}, #{inputs["subject"]}, #{inputs["content"]}")
 
               else
@@ -51,4 +51,15 @@ def email_selected(ids,inputs)
 
     return response
 
+end
+
+def email_selected_hgift(ids,inputs)
+  ## ids will be Hgift IDs -- need to convert into Person IDs
+  newids = []
+  ids.each do |hgift|
+    p = Hgift.where(:id => hgift) #gets the Hgift record
+    newids << p[0].person_id
+  end
+  response = email_selected(newids,inputs)
+  return response
 end

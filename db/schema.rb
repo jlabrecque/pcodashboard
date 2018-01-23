@@ -239,23 +239,35 @@ ActiveRecord::Schema.define(version: 20171231031858) do
     t.string   "first_name"
     t.string   "campus"
     t.string   "family"
-    t.text     "month1",     limit: 65535
-    t.text     "month2",     limit: 65535
-    t.text     "month3",     limit: 65535
-    t.text     "month4",     limit: 65535
-    t.text     "month5",     limit: 65535
-    t.text     "month6",     limit: 65535
-    t.text     "month7",     limit: 65535
-    t.text     "month8",     limit: 65535
-    t.text     "month9",     limit: 65535
-    t.text     "month10",    limit: 65535
-    t.text     "month11",    limit: 65535
-    t.text     "month12",    limit: 65535
-    t.float    "annavg",     limit: 24
-    t.float    "lastqtravg", limit: 24
-    t.float    "lastmntavg", limit: 24
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.text     "month1",      limit: 65535
+    t.float    "month1gift",  limit: 24
+    t.text     "month2",      limit: 65535
+    t.float    "month2gift",  limit: 24
+    t.text     "month3",      limit: 65535
+    t.float    "month3gift",  limit: 24
+    t.text     "month4",      limit: 65535
+    t.float    "month4gift",  limit: 24
+    t.text     "month5",      limit: 65535
+    t.float    "month5gift",  limit: 24
+    t.text     "month6",      limit: 65535
+    t.float    "month6gift",  limit: 24
+    t.text     "month7",      limit: 65535
+    t.float    "month7gift",  limit: 24
+    t.text     "month8",      limit: 65535
+    t.float    "month8gift",  limit: 24
+    t.text     "month9",      limit: 65535
+    t.float    "month9gift",  limit: 24
+    t.text     "month10",     limit: 65535
+    t.float    "month10gift", limit: 24
+    t.text     "month11",     limit: 65535
+    t.float    "month11gift", limit: 24
+    t.text     "month12",     limit: 65535
+    t.float    "month12gift", limit: 24
+    t.float    "annavg",      limit: 24
+    t.float    "lastqtravg",  limit: 24
+    t.float    "lastmntavg",  limit: 24
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "household_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
