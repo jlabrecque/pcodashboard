@@ -256,7 +256,7 @@ end
   #
   #     # Only show XML & PDF options
         #admin.download_links = [:xml, :pdf]
-config.download_links = [:csv]
+config.download_links = false
   #
   #     # Enable/disable the links based on block
   #     #   (for example, with cancan)

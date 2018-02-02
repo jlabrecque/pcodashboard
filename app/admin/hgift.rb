@@ -34,7 +34,6 @@ ActiveAdmin.register Hgift do
         number_column "#{Hgift.first.month10}",:month10gift, sortable: false, as: :currency, unit: "$", separator: ".", precision: 0
         number_column "#{Hgift.first.month11}",:month11gift, sortable: false, as: :currency, unit: "$", separator: ".", precision: 0
         number_column "#{Hgift.first.month12}",:month12gift, sortable: false, as: :currency, unit: "$", separator: ".", precision: 0
-
     end
 
     filter :last_name
