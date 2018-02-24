@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class WorkflowTest < ActiveSupport::TestCase
+class ConncardTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

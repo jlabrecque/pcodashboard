@@ -1,0 +1,16 @@
+<!-- insert_tag active_admin_form_for @conncard do |f|
+  inputs :name
+  actions
+end
+ -->
+
+<%= semantic_form_for [:admin, @conncard] do |f| %>
+  <%= f.inputs do %>
+     <%= f.input :name %>
+     <%= f.input :campus, :as => :select %>
+     <%= f.fields_for :workflows do |builder| %>
+       <%= render "question", :f => builder %>
+     <% end %>
+   <% end %>
+  <%= f.submit "Create" %>
+<% end %>

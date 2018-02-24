@@ -28,6 +28,7 @@ gem "chartkick"
 gem 'activeadmin', "~> 1.0.0"
 #, github: 'gregbell/active_admin'
 gem 'active_admin_importable'
+gem "active_admin_import"
 gem 'devise'
 gem 'cancancan'
 gem 'dotenv', :groups => [:development, :test]
@@ -36,6 +37,8 @@ gem 'gender_detector'
 gem 'dotenv-rails', :groups => [:development, :test]
 gem "kaminari"
 gem "passenger"
+gem 'active_admin_import_anything'
+#gem "jsonform-rails"
 #gem "wice_grid", '3.6.0.pre4'
 gem 'bcrypt', '~> 3.1.7'
 gem 'capistrano-rails', group: :development

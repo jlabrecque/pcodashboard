@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171231031858) do
+ActiveRecord::Schema.define(version: 20180224181902) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "namespace"
@@ -113,6 +113,26 @@ ActiveRecord::Schema.define(version: 20171231031858) do
     t.index ["pco_id"], name: "index_check_ins_on_pco_id", using: :btree
   end
 
+  create_table "conncards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "week_of"
+    t.text     "header",      limit: 4294967295
+    t.text     "cards",       limit: 4294967295
+    t.integer  "columncount"
+    t.integer  "cardcount"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  create_table "conncsvs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string   "week_of"
+    t.text     "header",      limit: 4294967295
+    t.text     "cards",       limit: 4294967295
+    t.integer  "columncount"
+    t.integer  "cardcount"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
   create_table "crono_jobs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string   "job_id",                               null: false
     t.text     "log",               limit: 4294967295
@@ -135,6 +155,22 @@ ActiveRecord::Schema.define(version: 20171231031858) do
     t.boolean  "enabled"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "ctemplates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.datetime "week_of"
+    t.text     "general",    limit: 4294967295
+    t.text     "workflows",  limit: 4294967295
+    t.text     "prayer",     limit: 4294967295
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "ctemplates_workflows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.integer  "ctemplate_id"
+    t.integer  "workflow_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "donations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
