@@ -13,6 +13,13 @@ totmembers = 0
 totprocessed = 0
 totcreated = 0
 totupdated = 0
+totwfcreated = 0
+totwfupdated = 0
+totwfscreated = 0
+totwfsupdated = 0
+totwfccreated = 0
+totwfcupdated = 0
+
 next_check = 0
 last_offset_index = 0
 $pullcount = 0
@@ -497,12 +504,86 @@ Campu.all.each do |campus|
       end
   end
 end
+
 LOGGER.info("=============================================================")
 LOGGER.info("All people and campus records processed")
 LOGGER.info("")
 LOGGER.info("#{people_geo_created} people geo records created")
 LOGGER.info("#{campus_geo_created} campus geo records created")
 LOGGER.info("=============================================================")
+
+next_check = 0
+
+#Start ...
+LOGGER.info("Beginning Workflow updates...")
+
+#if next exists (not at end)...
+  while !next_check.nil?
+    # pull groups of records each loop
+    workflowblock = workflows(page_size,offset_index)
+    next_check = workflowblock["links"]["next"]
+    workflowblock["data"].each do |wf|
+      workflow_id_pco               = wf["id"]
+      workflow_name                 = wf["attributes"]["name"]
+      workflow_completed_cards      = wf["attributes"]["completed_card_count"]
+      workflow_ready_cards          = wf["attributes"]["total_ready_card_count"]
+      workflow_created_at           = wf["attributes"]["created_at"]
+      workflow_updated_at           = wf["attributes"]["updated_at"]
+      workflowcheck = Workflow.where(:workflow_id_pco => workflow_id_pco)
+      if !workflowcheck.exists?
+        puts "Creating new Workflow #{workflow_id_pco}"
+        wfnew = Workflow.create(
+            :workflow_id_pco              => workflow_id_pco,
+            :workflow_name                => workflow_name,
+            :workflow_completed_cards     => workflow_completed_cards,
+            :workflow_ready_cards         => workflow_ready_cards,
+            :workflow_created_at          => workflow_created_at,
+            :workflow_updated_at          => workflow_updated_at
+            )
+        wfid = wfnew.id
+        totwfcreated =+ 1
+      elsif !(workflowcheck[0].workflow_updated_at == wf["attributes"]["updated_at"])
+        puts "Updating Workflow #{workflow_id_pco}"
+        wfnew = Workflow.update(workflowcheck[0]["id"],
+            :workflow_id_pco              => workflow_id_pco,
+            :workflow_name                => workflow_name,
+            :workflow_completed_cards     => workflow_completed_cards,
+            :workflow_ready_cards         => workflow_ready_cards,
+            :workflow_created_at          => workflow_created_at,
+            :workflow_updated_at          => workflow_updated_at
+            )
+        wfid = workflowcheck[0]["id"]
+        totwfupdated =+ 1
+      else
+        wfid = workflowcheck[0]["id"]
+      end
+
+      #Create Workflow Step records
+     wf["relationships"]["steps"]["data"].each do |step|
+      workflowstepcheck = Workflowstep.where(:workflow_id_pco => workflow_id_pco, :workflowstep_id_pco => step["id"])
+      if workflowstepcheck.count < 1
+        puts "Creating new Workflowstep"
+        wfstep = Workflowstep.create(
+          :workflow_id            => wfid,
+          :workflow_id_pco        => workflow_id_pco,
+          :workflowstep_id_pco    => step["id"]
+        )
+        totwfscreated += 1
+      elsif !workflowstepcheck[0]["updated_at"] == wf["attributes"]["updated_at"]
+        puts "Updating Workflowstep"
+        wfstep = Workflowstep.update(workflowstepcheck[0]["id"],
+          :workflow_id            => wfid,
+          :workflow_id_pco        => workflow_id_pco,
+          :workflowstep_id_pco    => step["id"]
+        )
+        totwfsupdated += 1
+      end
+    end
+
+    end
+    offset_index += page_size
+end
+
 
 LOGGER.info("SCRIPT COMPLETED SUCCESSFULLY")
 if !File.readlines(logfile).grep(/SCRIPT COMPLETED SUCCESSFULLY/).any?
